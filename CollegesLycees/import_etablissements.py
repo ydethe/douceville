@@ -1,3 +1,5 @@
+import pickle
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -44,57 +46,32 @@ def import_sheet(session, dfs, sheet_name, corr_dict, inv_mention=False):
 def import_geoloc(session, file):
     print("Importation données géoloc...")
 
-    from collections import defaultdict
-
-    f = open(file, 'r')
-    lines = f.readlines()
-    f.close()
-
-    id_det = "<http://data.eurecom.fr/id/school/"
-
-    geom_point = False
-    info = defaultdict(dict)
-
     irec = 0
-    for line in tqdm.tqdm(lines):
-        if '/geometrie#Point' in line:
-            geom_point = True
-        elif '/geometry/' in line:
-            geom_point = False
+    info = pickle.loads(open('data_dict.raw','rb').read())
+    for rec in tqdm.tqdm(info):
+        if not '@id' in rec.keys():
+            continue
 
-        if line.startswith(id_det):
-            tmp = line[len(id_det):].split('>')[0]
-            if '/' in tmp:
-                data_id = tmp.split('/')[-1]
-            else:
-                data_id = tmp
+        uai = rec['@id'].split('/')[-1].upper()
+        if '/geometry/' in rec['@id']:
+            lon = rec['http://data.ign.fr/ontologies/geometrie#coordX'][0]['@value']
+            lat = rec['http://data.ign.fr/ontologies/geometrie#coordY'][0]['@value']
 
-        if "ecole#denominationPrincipale" in line:
-            info[data_id]['denomination'] = line.split('"')[1].lower()
+            dat = {}
+            dat['UAI'] = uai
+            dat['latitude'] = lat
+            dat['longitude'] = lon
 
-        if "schema#code" in line:
-            info[data_id]['UAI'] = line.split('"')[1]
+        elif 'http://purl.org/dc/terms/title' in rec.keys():
+            nom = rec['http://purl.org/dc/terms/title'][0]['@value']
+            dat['UAI'] = uai
+            dat['nom'] = nom
 
-        if "title" in line:
-            info[data_id]['nom'] = line.split('"')[1]
-
-        if "geometrie#coordX" in line and not geom_point:
-            info[data_id]['longitude'] = float(line.split('"')[1])
-
-        if "geometrie#coordY" in line and not geom_point:
-            info[data_id]['latitude'] = float(line.split('"')[1])
-
-        if line.endswith(" .\n") and not line.startswith("@prefix"):
-            if 'latitude' in info[data_id].keys() and 'longitude' in info[data_id].keys() and 'denomination' in info[data_id].keys():
-                if not 'lycee' in info[data_id]['denomination']:
-                    continue
-
-                dat = info[data_id]
-                istat = session.query(Etablissement).\
-                   filter(Etablissement.UAI==dat['UAI']).\
-                   update(dat)
-                if istat != 0:
-                    irec += 1
+        istat = session.query(Etablissement).\
+            filter(Etablissement.UAI==dat['UAI']).\
+            update(dat)
+        if istat != 0:
+            irec += 1
 
     print("%i enregistrements mis à jour" % irec)
     s.commit()

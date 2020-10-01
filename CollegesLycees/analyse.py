@@ -12,11 +12,14 @@ session = sessionmaker()
 session.configure(bind=engine)
 s = session()
 
-# result = s.query(Etablissement).all()
+result = s.query(Etablissement).all()
 # result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.secteur_prive).all()
 # result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.latitude.is_(None)).all()
-result = s.query(Etablissement).filter(Etablissement.UAI == "0010076C").all()
+# result = s.query(Etablissement).filter(Etablissement.latitude.is_(None)).all()
+# result = s.query(Etablissement).filter(Etablissement.UAI == "0010076C").all()
 
-for row in result:
-    print(object_as_dict(row))
+print(len(result))
+
+# for row in result:
+#     print(object_as_dict(row))
 
