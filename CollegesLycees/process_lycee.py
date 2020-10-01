@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
-from init_db import Lycee
+from CollegesLycees.init_db import Lycee
 
 
 # https://www.education.gouv.fr/les-indicateurs-de-resultats-des-lycees-1118

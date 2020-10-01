@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
-from init_db import Lycee
+from CollegesLycees.init_db import Lycee
 
 
 engine = create_engine('sqlite:///lycee.db')

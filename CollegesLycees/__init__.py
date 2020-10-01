@@ -4,8 +4,6 @@
 """
 from pkg_resources import get_distribution
 import logging
-from datetime import datetime
-import os
 
 
 __version__ = get_distribution(__name__).version
@@ -15,7 +13,7 @@ __email__ = "yann@johncloud.fr"
 
 
 # création de l'objet logger qui va nous servir à écrire dans les logs
-logger = logging.getLogger("algebraicnumber_logger")
+logger = logging.getLogger("collegeslycees_logger")
 # on met le niveau du logger à DEBUG, comme ça il écrit tout
 logger.setLevel(logging.DEBUG)
 # logger.setLevel(logging.INFO)
