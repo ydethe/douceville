@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class Lycee(Base):
-    __tablename__ = 'lycee'
+class Etablissement(Base):
+    __tablename__ = 'etablissement'
 
     # Identification
     UAI              = Column(String, primary_key=True)
@@ -17,6 +17,11 @@ class Lycee(Base):
     latitude         = Column(Float)
     longitude        = Column(Float)
     denomination     = Column(String)
+
+    # Brevet
+    presents_brevet  = Column(Integer)
+    admis_brevet     = Column(Integer)
+    mentions_brevet  = Column(Integer)
 
     # Filiere generale et techno
     taux_2nde_gt_bac    = Column(Integer)
@@ -177,8 +182,19 @@ def to_int(x):
     return val
 
 def secteur_to_bool(x):
-    return x == 'PR'
+    return x == 'PR' or x == 'SECTEUR PRIVE'
 
+# BREVET
+corr_brevet = {}
+corr_brevet["Numero d'etablissement"]  = 'UAI' , idty
+corr_brevet["Dénomination principale"] = 'denomination', idty
+corr_brevet["Patronyme"]               = 'nom'              , idty
+corr_brevet["Secteur d'enseignement"]  = 'secteur_prive' , idty
+corr_brevet["Libellé commune"]         = 'commune'        , idty
+corr_brevet["Code département"]        = 'departement'       , to_int
+corr_brevet["Presents"]                = 'presents_brevet'               , to_int
+corr_brevet["Admis"]                   = 'admis_brevet'                  , to_int
+corr_brevet["Admis sans mention"]      = 'mentions_brevet'     , to_int
 
 # ACCES_GT
 corr_acces_gt = {}
@@ -369,7 +385,7 @@ corr_mention_pro['VA_Services_collectivite']       = 'va_mention_services_collec
 
 if __name__ == '__main__':
     from sqlalchemy import create_engine
-    engine = create_engine('sqlite:///lycee.db')
+    engine = create_engine('sqlite:///etablissements.db')
 
     from sqlalchemy.orm import sessionmaker
     session = sessionmaker()

@@ -4,33 +4,39 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
-from init_db import Lycee
+from init_db import Etablissement
+from init_db import corr_brevet
 from init_db import corr_acces_gt, corr_reussite_gt, corr_mention_gt
 from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
 
 
-def import_sheet(session, dfs, sheet_name, corr_dict):
+def import_sheet(session, dfs, sheet_name, corr_dict, inv_mention=False):
     print("Importation %s..." % sheet_name)
+
     df = dfs[sheet_name]
     n = len(df.index)
     for index, row in tqdm.tqdm(df.iterrows(), total=n):
         dat = {}
         for xl_k in corr_dict.keys():
             db_k,fct = corr_dict[xl_k]
-            try:
-                val = fct(row[xl_k])
-            except Exception as e:
-                print(row)
-                raise e
-                exit(1)
+
+            if 'admis_' in db_k:
+                k_admis = db_k
+            if 'mentions_' in db_k:
+                k_mentions = db_k
+
+            val = fct(row[xl_k])
             if not val is None:
                 dat[db_k] = val
 
-        istat = session.query(Lycee).\
-           filter(Lycee.UAI==dat['UAI']).\
+        if inv_mention and k_mentions in dat.keys() and k_admis in dat.keys():
+            dat[k_mentions] = dat[k_admis] - dat[k_mentions]
+
+        istat = session.query(Etablissement).\
+           filter(Etablissement.UAI==dat['UAI']).\
            update(dat)
         if istat == 0:
-            enr = Lycee(**dat)
+            enr = Etablissement(**dat)
             session.add(enr)
 
     session.commit()
@@ -84,8 +90,8 @@ def import_geoloc(session, file):
                     continue
 
                 dat = info[data_id]
-                istat = session.query(Lycee).\
-                   filter(Lycee.UAI==dat['UAI']).\
+                istat = session.query(Etablissement).\
+                   filter(Etablissement.UAI==dat['UAI']).\
                    update(dat)
                 if istat != 0:
                     irec += 1
@@ -98,13 +104,15 @@ def import_geoloc(session, file):
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 
 if __name__ == '__main__':
-    engine = create_engine('sqlite:///lycee.db')
+    engine = create_engine('sqlite:///etablissements.db')
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
 
-    df = pd.read_excel('ival-2018-donn-es--32258.xls', sheet_name=None)
+    df = pd.read_excel('menesr-depp-dnb-session-2018.xls', sheet_name=None)
+    import_sheet(s, df, 'Sheet', corr_brevet, inv_mention=True)
 
+    df = pd.read_excel('ival-2018-donn-es--32258.xls', sheet_name=None)
     import_sheet(s, df, 'ACCES_GT', corr_acces_gt)
     import_sheet(s, df, 'ACCES_PRO', corr_acces_pro)
     import_sheet(s, df, 'REUSSITE_GT', corr_reussite_gt)

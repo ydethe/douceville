@@ -1,19 +1,22 @@
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
-from init_db import Lycee
+from init_db import Etablissement
 
 
-engine = create_engine('sqlite:///lycee_gt_pro.db')
+def object_as_dict(obj):
+    return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
+
+engine = create_engine('sqlite:///etablissements.db')
 session = sessionmaker()
 session.configure(bind=engine)
 s = session()
 
-# result = s.query(Lycee).all()
-# result = s.query(Lycee).filter(Lycee.departement == 31).filter(Lycee.secteur_prive).all()
-result = s.query(Lycee).filter(Lycee.departement == 31).filter(Lycee.latitude.is_(None)).all()
+# result = s.query(Etablissement).all()
+# result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.secteur_prive).all()
+# result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.latitude.is_(None)).all()
+result = s.query(Etablissement).filter(Etablissement.UAI == "0010076C").all()
 
-print(len(result))
 for row in result:
-    print(row.nom)
+    print(object_as_dict(row))
 
