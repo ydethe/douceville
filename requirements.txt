@@ -1,4 +1,5 @@
-pandas
 tqdm
-xlrd
 sqlalchemy
+pandas>=0.25.3
+bottleneck>=1.2.1
+xlrd>=1.1.0

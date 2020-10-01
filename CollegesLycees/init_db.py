@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy import Column, String, Integer, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -14,6 +14,9 @@ class Lycee(Base):
     departement      = Column(Integer)
     secteur_prive    = Column(Boolean)
     commune          = Column(String)
+    latitude         = Column(Float)
+    longitude        = Column(Float)
+    denomination     = Column(String)
 
     # Filiere generale et techno
     taux_2nde_gt_bac    = Column(Integer)
