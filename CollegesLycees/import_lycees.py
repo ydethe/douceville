@@ -4,7 +4,9 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
-from init_db import Lycee, corr_acces, corr_reussite, corr_mention
+from init_db import Lycee
+from init_db import corr_acces_gt, corr_reussite_gt, corr_mention_gt
+from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
 
 
 def import_sheet(session, file, sheet_name, corr_dict):
@@ -38,8 +40,11 @@ if __name__ == '__main__':
     session.configure(bind=engine)
     s = session()
 
-    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'ACCES_GT', corr_acces)
-    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'REUSSITE_GT', corr_reussite)
-    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'MENTIONS_GT', corr_mention)
+    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'ACCES_GT', corr_acces_gt)
+    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'ACCES_PRO', corr_acces_pro)
+    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'REUSSITE_GT', corr_reussite_gt)
+    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'REUSSITE_PRO', corr_reussite_pro)
+    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'MENTIONS_GT', corr_mention_gt)
+    import_sheet(s, 'ival-2018-donn-es--32258.xls', 'MENTIONS_PRO', corr_mention_pro)
 
 
