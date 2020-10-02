@@ -11,14 +11,17 @@ from init_db import corr_brevet
 from init_db import corr_acces_gt, corr_reussite_gt, corr_mention_gt
 from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
 
+
 def insert_or_update(session, dat, no_insert=False):
     q = session.query(Etablissement).filter(Etablissement.UAI==dat['UAI'])
     if len(q.all()) != 0:
         istat = q.update(dat)
         return 1
     elif len(q.all()) == 0 and not no_insert:
-        enr = Etablissement(**dat)                                          
+        enr = Etablissement(**dat)
         session.add(enr)
+        return 0
+    else:
         return 0
 
 def import_sheet(session, dfs, sheet_name, corr_dict, inv_mention=False):
@@ -72,7 +75,7 @@ def import_geoloc(session, file):
             dat = {}
             dat['UAI'] = uai
             dat['nom'] = nom
-        
+
         if dat is None:
             continue
 
@@ -93,16 +96,17 @@ if __name__ == '__main__':
     session.configure(bind=engine)
     s = session()
 
-    df = pd.read_excel('menesr-depp-dnb-session-2018.xls', sheet_name=None)
-    import_sheet(s, df, 'Sheet', corr_brevet, inv_mention=True)
+    if False:
+        df = pd.read_excel('menesr-depp-dnb-session-2018.xls', sheet_name=None)
+        import_sheet(s, df, 'Sheet', corr_brevet, inv_mention=True)
 
-    df = pd.read_excel('ival-2018-donn-es--32258.xls', sheet_name=None)
-    import_sheet(s, df, 'ACCES_GT', corr_acces_gt)
-    import_sheet(s, df, 'ACCES_PRO', corr_acces_pro)
-    import_sheet(s, df, 'REUSSITE_GT', corr_reussite_gt)
-    import_sheet(s, df, 'REUSSITE_PRO', corr_reussite_pro)
-    import_sheet(s, df, 'MENTIONS_GT', corr_mention_gt)
-    import_sheet(s, df, 'MENTIONS_PRO', corr_mention_pro)
+        df = pd.read_excel('ival-2018-donn-es--32258.xls', sheet_name=None)
+        import_sheet(s, df, 'ACCES_GT', corr_acces_gt)
+        import_sheet(s, df, 'ACCES_PRO', corr_acces_pro)
+        import_sheet(s, df, 'REUSSITE_GT', corr_reussite_gt)
+        import_sheet(s, df, 'REUSSITE_PRO', corr_reussite_pro)
+        import_sheet(s, df, 'MENTIONS_GT', corr_mention_gt)
+        import_sheet(s, df, 'MENTIONS_PRO', corr_mention_pro)
 
     import_geoloc(s, 'dataset-564055.ttl')
 
