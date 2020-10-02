@@ -11,6 +11,15 @@ from init_db import corr_brevet
 from init_db import corr_acces_gt, corr_reussite_gt, corr_mention_gt
 from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
 
+def insert_or_update(session, dat, no_insert=False):
+    q = session.query(Etablissement).filter(Etablissement.UAI==dat['UAI'])
+    if len(q.all()) != 0:
+        istat = q.update(dat)
+        return 1
+    elif len(q.all()) == 0 and not no_insert:
+        enr = Etablissement(**dat)                                          
+        session.add(enr)
+        return 0
 
 def import_sheet(session, dfs, sheet_name, corr_dict, inv_mention=False):
     print("Importation %s..." % sheet_name)
@@ -34,12 +43,7 @@ def import_sheet(session, dfs, sheet_name, corr_dict, inv_mention=False):
         if inv_mention and k_mentions in dat.keys() and k_admis in dat.keys():
             dat[k_mentions] = dat[k_admis] - dat[k_mentions]
 
-        istat = session.query(Etablissement).\
-           filter(Etablissement.UAI==dat['UAI']).\
-           update(dat)
-        if istat == 0:
-            enr = Etablissement(**dat)
-            session.add(enr)
+        insert_or_update(s, dat)
 
     session.commit()
 
@@ -53,6 +57,7 @@ def import_geoloc(session, file):
             continue
 
         uai = rec['@id'].split('/')[-1].upper()
+        dat = None
         if '/geometry/' in rec['@id']:
             lon = rec['http://data.ign.fr/ontologies/geometrie#coordX'][0]['@value']
             lat = rec['http://data.ign.fr/ontologies/geometrie#coordY'][0]['@value']
@@ -64,12 +69,14 @@ def import_geoloc(session, file):
 
         elif 'http://purl.org/dc/terms/title' in rec.keys():
             nom = rec['http://purl.org/dc/terms/title'][0]['@value']
+            dat = {}
             dat['UAI'] = uai
             dat['nom'] = nom
+        
+        if dat is None:
+            continue
 
-        istat = session.query(Etablissement).\
-            filter(Etablissement.UAI==dat['UAI']).\
-            update(dat)
+        istat = insert_or_update(s, dat, no_insert=True)
         if istat != 0:
             irec += 1
 
