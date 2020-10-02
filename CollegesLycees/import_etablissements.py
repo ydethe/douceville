@@ -13,9 +13,12 @@ from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
 
 
 def insert_or_update(session, dat, no_insert=False):
+    if dat is None:
+        return 0
+
     q = session.query(Etablissement).filter(Etablissement.UAI==dat['UAI'])
     if len(q.all()) != 0:
-        istat = q.update(dat)
+        q.update(dat)
         return 1
     elif len(q.all()) == 0 and not no_insert:
         enr = Etablissement(**dat)
@@ -53,10 +56,12 @@ def import_sheet(session, dfs, sheet_name, corr_dict, inv_mention=False):
 def import_geoloc(session, file):
     print("Importation données géoloc...")
 
-    irec = 0
+    irec = {}
     info = pickle.loads(open('data_dict.raw','rb').read())
     for rec in tqdm.tqdm(info):
         if not '@id' in rec.keys():
+            continue
+        if False and not '0310001h' in rec['@id'].lower():
             continue
 
         uai = rec['@id'].split('/')[-1].upper()
@@ -76,14 +81,11 @@ def import_geoloc(session, file):
             dat['UAI'] = uai
             dat['nom'] = nom
 
-        if dat is None:
-            continue
-
         istat = insert_or_update(s, dat, no_insert=True)
         if istat != 0:
-            irec += 1
+            irec[uai] = 1
 
-    print("%i enregistrements mis à jour" % irec)
+    print("%i enregistrements mis à jour" % sum(irec.values()))
     s.commit()
 
 # https://www.data.gouv.fr/fr/datasets/liste-des-etablissements-des-premier-et-second-degres-pour-les-secteurs-publics-et-prives-en-france
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     session.configure(bind=engine)
     s = session()
 
-    if False:
+    if True:
         df = pd.read_excel('menesr-depp-dnb-session-2018.xls', sheet_name=None)
         import_sheet(s, df, 'Sheet', corr_brevet, inv_mention=True)
 

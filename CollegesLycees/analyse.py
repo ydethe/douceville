@@ -12,14 +12,17 @@ session = sessionmaker()
 session.configure(bind=engine)
 s = session()
 
+
 result = s.query(Etablissement).all()
-# result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.secteur_prive).all()
-# result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.latitude.is_(None)).all()
-# result = s.query(Etablissement).filter(Etablissement.latitude.is_(None)).all()
-# result = s.query(Etablissement).filter(Etablissement.UAI == "0010076C").all()
+print("%i enregistrements" % len(result))
 
-print(len(result))
+result = s.query(Etablissement).filter(Etablissement.latitude.is_(None)).all()
+print("%i enregistrements sans geoloc" % len(result))
 
-# for row in result:
-#     print(object_as_dict(row))
+result = s.query(Etablissement).filter(Etablissement.departement == 31).filter(Etablissement.latitude.is_(None)).all()
+print("%i enregistrements sans geoloc dans le 31" % len(result))
 
+result = s.query(Etablissement).filter(Etablissement.UAI == '0310001H').all()
+for row in result:
+    print(object_as_dict(row))
+    exit(0)

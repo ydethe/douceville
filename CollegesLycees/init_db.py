@@ -2,6 +2,8 @@ from sqlalchemy import Column, String, Integer, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 
+# Database initialization
+
 Base = declarative_base()
 
 class Etablissement(Base):
@@ -164,6 +166,9 @@ class Etablissement(Base):
     va_mention_services_collectivite = Column(Integer)
 
 
+def to_maj(x):
+    return x.upper()
+
 def idty(x):
     return x
 
@@ -186,7 +191,7 @@ def secteur_to_bool(x):
 
 # BREVET
 corr_brevet = {}
-corr_brevet["Numero d'etablissement"]  = 'UAI' , idty
+corr_brevet["Numero d'etablissement"]  = 'UAI' , to_maj
 corr_brevet["Dénomination principale"] = 'denomination', idty
 corr_brevet["Patronyme"]               = 'nom'              , idty
 corr_brevet["Secteur d'enseignement"]  = 'secteur_prive' , secteur_to_bool
@@ -198,7 +203,7 @@ corr_brevet["Admis sans mention"]      = 'mentions_brevet'     , to_int
 
 # ACCES_GT
 corr_acces_gt = {}
-corr_acces_gt['UAI']             = 'UAI', idty
+corr_acces_gt['UAI']             = 'UAI', to_maj
 corr_acces_gt['NOM_UAI']         = 'nom', idty
 corr_acces_gt['ACAD']            = 'academie', idty
 corr_acces_gt['DEP']             = 'departement', to_int
@@ -213,7 +218,7 @@ corr_acces_gt['VA_TERM_BAC']     = 'va_term_gt_bac'    , to_int
 
 # REUSSITE_GT
 corr_reussite_gt = {}
-corr_reussite_gt['UAI']            = 'UAI', idty
+corr_reussite_gt['UAI']            = 'UAI', to_maj
 corr_reussite_gt['NOM_UAI']        = 'nom', idty
 corr_reussite_gt['ACAD']           = 'academie', idty
 corr_reussite_gt['DEP']            = 'departement', to_int
@@ -255,7 +260,7 @@ corr_reussite_gt['VA_STHR']        = 'va_admis_sthr' , to_int
 
 # MENTION_GT
 corr_mention_gt = {}
-corr_mention_gt['UAI']            = 'UAI', idty
+corr_mention_gt['UAI']            = 'UAI', to_maj
 corr_mention_gt['NOM_UAI']        = 'nom', idty
 corr_mention_gt['ACAD']           = 'academie', idty
 corr_mention_gt['DEP']            = 'departement', to_int
@@ -286,7 +291,7 @@ corr_mention_gt['VA_STHR'] = 'va_mention_sthr', to_int
 
 # ACCES_PRO
 corr_acces_pro = {}
-corr_acces_pro['UAI']           = 'UAI', idty
+corr_acces_pro['UAI']           = 'UAI', to_maj
 corr_acces_pro['NOM_UAI']       = 'nom', idty
 corr_acces_pro['ACAD']          = 'academie', idty
 corr_acces_pro['DEP']           = 'departement', to_int
@@ -301,7 +306,7 @@ corr_acces_pro['VA_TERM_BAC']   = 'va_term_pro_bac', to_int
 
 # REUSSITE_PRO
 corr_reussite_pro = {}
-corr_reussite_pro['UAI']           = 'UAI', idty
+corr_reussite_pro['UAI']           = 'UAI', to_maj
 corr_reussite_pro['NOM_UAI']       = 'nom', idty
 corr_reussite_pro['ACAD']          = 'academie', idty
 corr_reussite_pro['DEP']           = 'departement', to_int
@@ -349,7 +354,7 @@ corr_reussite_pro['VA_Services_collectivite'] =       'va_admis_services_collect
 
 # MENTION_GT
 corr_mention_pro = {}
-corr_mention_pro['UAI']           = 'UAI', idty
+corr_mention_pro['UAI']           = 'UAI', to_maj
 corr_mention_pro['NOM_UAI']       = 'nom', idty
 corr_mention_pro['ACAD']          = 'academie', idty
 corr_mention_pro['DEP']           = 'departement', to_int
