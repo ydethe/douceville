@@ -13,9 +13,12 @@ from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
 
 
 def insert_or_update(session, dat, no_insert=False):
+    if dat is None:
+        return 0
+
     q = session.query(Etablissement).filter(Etablissement.UAI==dat['UAI'])
     if len(q.all()) != 0:
-        istat = q.update(dat)
+        q.update(dat)
         return 1
     elif len(q.all()) == 0 and not no_insert:
         enr = Etablissement(**dat)
@@ -75,9 +78,6 @@ def import_geoloc(session, file):
             dat = {}
             dat['UAI'] = uai
             dat['nom'] = nom
-
-        if dat is None:
-            continue
 
         istat = insert_or_update(s, dat, no_insert=True)
         if istat != 0:

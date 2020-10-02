@@ -2,6 +2,8 @@ from sqlalchemy import Column, String, Integer, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 
+# Database initialization
+
 Base = declarative_base()
 
 class Etablissement(Base):
