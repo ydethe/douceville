@@ -6,19 +6,18 @@ import tqdm
 from rdflib import Graph
 
 
+def create_cache():
+    g = Graph()
+    g.parse("dataset-564055.ttl",format="n3")
+
+    raw = g.serialize(format="json-ld").decode("utf-8")
+
+    info = json.loads(raw)
+        
+    pickle.dump(info, open('data_dict.raw', 'wb'))
+    
 def import_geoloc_db():
-    if False:
-        g = Graph()
-        g.parse("dataset-564055.ttl",format="n3")
-
-        raw = g.serialize(format="json-ld").decode("utf-8")
-
-        info = json.loads(raw)
-        
-        pickle.dump(info, open('data_dict.raw', 'wb'))
-        
-    else:
-        info = pickle.loads(open('data_dict.raw','rb').read())
+    info = pickle.loads(open('data_dict.raw','rb').read())
         
     db = {}
     for rec in tqdm.tqdm(info):
@@ -54,9 +53,10 @@ def import_geoloc_db():
     db['0311270M'] = {'UAI':'0311270M', 'longitude':1.522781, 'latitude':43.537348}
     db['0311843K'] = {'UAI':'0311843K', 'longitude':1.120444, 'latitude':43.413620}
     db['0311268K'] = {'UAI':'0311268K', 'longitude':0.730726, 'latitude':43.117691}
-
-    # pickle.dump(db, open('data_dict2.raw', 'wb'))
-    
+        
     return db
     
-    
+if __name__ == '__main__':
+    create_cache()
+
+

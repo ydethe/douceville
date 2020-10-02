@@ -43,9 +43,9 @@ def import_sheet(session, xls, sheet_name, corr_dict, inv_mention=False, no_inse
                 k_admis = db_k
             if 'mentions_' in db_k:
                 k_mentions = db_k
-            
+
             val = fct(row[xl_k])
-            
+
             # try:
                 # val = fct(row[xl_k])
             # except Exception as e:
@@ -67,15 +67,15 @@ def import_geoloc(session, file, no_insert):
 
     irec = {}
     info = import_geoloc_db()
-    
+
     result = s.query(Etablissement)
     for row in tqdm.tqdm(result.all()):
         uai = row.UAI
         if not uai in info.keys():
             continue
-            
+
         dat = info[uai]
-            
+
         istat = insert_or_update(s, dat, no_insert=no_insert)
         if istat != 0:
             irec[uai] = 1
@@ -96,9 +96,9 @@ def cleanup(s):
     # for row in result.all():
         # print("%s, %s, %s" % (row.UAI,row.nom,row.denomination))
     result.delete(synchronize_session=False)
-    
+
     s.commit()
-    
+
     result = s.query(Etablissement).filter(not_(or_(
         Etablissement.nom.ilike("%lycee%"),
         Etablissement.nom.ilike("%lycée%"),
@@ -112,9 +112,9 @@ def cleanup(s):
     # for row in result.all():
         # print("%s, %s, %s" % (row.UAI,row.nom,row.denomination))
     result.delete(synchronize_session=False)
-    
+
     s.commit()
-    
+
 # https://www.data.gouv.fr/fr/datasets/liste-des-etablissements-des-premier-et-second-degres-pour-les-secteurs-publics-et-prives-en-france
 # https://www.education.gouv.fr/les-indicateurs-de-resultats-des-lycees-1118
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
@@ -125,19 +125,20 @@ if __name__ == '__main__':
     session.configure(bind=engine)
     s = session()
 
-    xls = pd.ExcelFile('menesr-depp-dnb-session-2018.xls')
-    import_sheet(s, xls, 'Sheet', corr_brevet, inv_mention=True)
-    
-    xls = pd.ExcelFile('ival-2018-donn-es--32258.xls')
-    import_sheet(s, xls, 'ACCES_GT', corr_acces_gt)
-    import_sheet(s, xls, 'ACCES_PRO', corr_acces_pro)
-    import_sheet(s, xls, 'REUSSITE_GT', corr_reussite_gt)
-    import_sheet(s, xls, 'REUSSITE_PRO', corr_reussite_pro)
-    import_sheet(s, xls, 'MENTIONS_GT', corr_mention_gt)
-    import_sheet(s, xls, 'MENTIONS_PRO', corr_mention_pro)
-    
-    cleanup(s)
+    if False:
+        xls = pd.ExcelFile('menesr-depp-dnb-session-2018.xls')
+        import_sheet(s, xls, 'Sheet', corr_brevet, inv_mention=True)
+
+        xls = pd.ExcelFile('ival-2018-donn-es--32258.xls')
+        import_sheet(s, xls, 'ACCES_GT', corr_acces_gt)
+        import_sheet(s, xls, 'ACCES_PRO', corr_acces_pro)
+        import_sheet(s, xls, 'REUSSITE_GT', corr_reussite_gt)
+        import_sheet(s, xls, 'REUSSITE_PRO', corr_reussite_pro)
+        import_sheet(s, xls, 'MENTIONS_GT', corr_mention_gt)
+        import_sheet(s, xls, 'MENTIONS_PRO', corr_mention_pro)
+
+        cleanup(s)
 
     import_geoloc(s, 'data_dict2.raw', no_insert=True)
-    
-    
+
+
