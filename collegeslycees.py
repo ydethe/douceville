@@ -1,0 +1,2 @@
+﻿from CollegesLycees import app
+

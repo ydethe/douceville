@@ -7,6 +7,10 @@ import logging
 import os
 
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+from CollegesLycees.config import Config
 
 
 __version__ = get_distribution(__name__).version
@@ -40,31 +44,20 @@ logger.addHandler(stream_handler)
 # file_handler.setFormatter(formatter)
 # logger.addHandler(file_handler)
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-    )
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+# create and configure the app
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_mapping(
+    SECRET_KEY='dev',
+)
+app.config.from_object(Config)
 
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+if not test_config is None:
+    # load the test config if passed in
+    app.config.from_mapping(test_config)
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-    return app
-
+from CollegesLycees import routes, models
 
