@@ -120,12 +120,14 @@ def cleanup(s):
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 
 if __name__ == '__main__':
-    engine = create_engine('sqlite:///etablissements.db')
+    # engine = create_engine('sqlite:///etablissements.db')
+    engine = create_engine('postgresql+psycopg2://cl_user@localhost/etablissements')
+
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
 
-    if False:
+    if True:
         xls = pd.ExcelFile('menesr-depp-dnb-session-2018.xls')
         import_sheet(s, xls, 'Sheet', corr_brevet, inv_mention=True)
 

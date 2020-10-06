@@ -7,7 +7,8 @@ from init_db import Etablissement
 def object_as_dict(obj):
     return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
 
-engine = create_engine('sqlite:///etablissements.db')
+engine = create_engine('postgresql+psycopg2://cl_user@localhost/etablissements')
+# engine = create_engine('sqlite:///etablissements.db')
 session = sessionmaker()
 session.configure(bind=engine)
 s = session()

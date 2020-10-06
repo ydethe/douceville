@@ -1,5 +1,6 @@
 tqdm
 sqlalchemy
+psycopg2
 pandas
 bottleneck
 xlrd

@@ -405,7 +405,9 @@ corr_mention_pro['VA_Services_collectivite']       = 'va_mention_services_collec
 
 if __name__ == '__main__':
     from sqlalchemy import create_engine
-    engine = create_engine('sqlite:///etablissements.db')
+    # psql -d etablissements -U cl_user
+    # engine = create_engine('sqlite:///etablissements.db')
+    engine = create_engine('postgresql+psycopg2://cl_user@localhost/etablissements')
 
     from sqlalchemy.orm import sessionmaker
     session = sessionmaker()
