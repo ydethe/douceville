@@ -1,6 +1,8 @@
 tqdm
 sqlalchemy
 psycopg2
+flask-sqlalchemy
+Flask-Migrate
 pandas
 bottleneck
 xlrd
