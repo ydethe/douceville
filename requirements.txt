@@ -2,6 +2,7 @@ tqdm
 sqlalchemy
 psycopg2
 flask
+flask-shell-ipython
 flask-sqlalchemy
 Flask-Migrate
 pandas

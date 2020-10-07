@@ -1,4 +1,4 @@
 ===============
-CollgesLycees
+CollegesLycees
 ===============
 
