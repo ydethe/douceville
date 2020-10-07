@@ -13,8 +13,11 @@ from flask_migrate import Migrate
 from CollegesLycees.config import Config
 
 
-__version__ = get_distribution(__name__).version
-
+try:
+    __version__ = get_distribution(__name__).version
+except Exception as e:
+    __version__ = 'dev'
+    
 __author__ = "Y. de The"
 __email__ = "yann@johncloud.fr"
 
@@ -51,10 +54,6 @@ app.config.from_mapping(
     SECRET_KEY='dev',
 )
 app.config.from_object(Config)
-
-if not test_config is None:
-    # load the test config if passed in
-    app.config.from_mapping(test_config)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

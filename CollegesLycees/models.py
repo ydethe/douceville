@@ -9,7 +9,7 @@ class Etablissement(db.Model):
     nom              = db.Column(db.String)
     academie         = db.Column(db.String)
     departement      = db.Column(db.Integer)
-    secteur_prive    = db.Column(Boolean)
+    secteur_prive    = db.Column(db.Boolean)
     commune          = db.Column(db.String)
     latitude         = db.Column(db.Float)
     longitude        = db.Column(db.Float)
