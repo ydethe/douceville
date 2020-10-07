@@ -1,6 +1,6 @@
 tqdm
 sqlalchemy
-psycopg2
+psycopg2-binary
 flask
 flask-shell-ipython
 flask-sqlalchemy
