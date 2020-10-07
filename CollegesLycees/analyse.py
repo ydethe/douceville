@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
 
-from init_db import Etablissement
+from CollegesLycees.models import Etablissement
 
 
 def object_as_dict(obj):

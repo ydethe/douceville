@@ -1,14 +1,5 @@
 from math import isnan
 
-from sqlalchemy import Column, String, Integer, Boolean, Float
-from sqlalchemy.ext.declarative import declarative_base
-
-
-# Database initialization
-
-Base = declarative_base()
-
-
 
 def to_cap(x):
     if type(x) == type(0.):
@@ -243,14 +234,3 @@ corr_mention_pro['VA_Services_personnes']          = 'va_mention_services_person
 corr_mention_pro['Mentions_Services_collectivite'] = 'mentions_services_collectivite', to_int
 corr_mention_pro['VA_Services_collectivite']       = 'va_mention_services_collectivite', to_int
 
-
-if __name__ == '__main__':
-    from sqlalchemy import create_engine
-    # psql -d etablissements -U cl_user
-    # engine = create_engine('sqlite:///etablissements.db')
-    engine = create_engine('postgresql+psycopg2://cl_user@localhost/etablissements')
-
-    from sqlalchemy.orm import sessionmaker
-    session = sessionmaker()
-    session.configure(bind=engine)
-    Base.metadata.create_all(engine)

@@ -6,11 +6,11 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
-from init_db import Etablissement
-from init_db import corr_brevet
-from init_db import corr_acces_gt, corr_reussite_gt, corr_mention_gt
-from init_db import corr_acces_pro, corr_reussite_pro, corr_mention_pro
-from conv_rdf import import_geoloc_db
+from CollegesLycees.models import Etablissement
+from CollegesLycees.conv_utils import corr_brevet
+from CollegesLycees.conv_utils import corr_acces_gt, corr_reussite_gt, corr_mention_gt
+from CollegesLycees.conv_utils import corr_acces_pro, corr_reussite_pro, corr_mention_pro
+from CollegesLycees.conv_rdf import import_geoloc_db
 
 
 def insert_or_update(session, dat, no_insert=False):

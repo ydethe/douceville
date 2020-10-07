@@ -1,6 +1,7 @@
 tqdm
 sqlalchemy
 psycopg2
+flask
 flask-sqlalchemy
 Flask-Migrate
 pandas
@@ -8,3 +9,4 @@ bottleneck
 xlrd
 rdflib
 rdflib-jsonld
+
