@@ -1,4 +1,6 @@
-﻿from CollegesLycees import db
+﻿from sqlalchemy import inspect
+
+from CollegesLycees import db
 
 
 class Etablissement(db.Model):
@@ -161,6 +163,9 @@ class Etablissement(db.Model):
     va_mention_services_collectivite = db.Column(db.Integer)
 
     def __repr__(self):
-        return '<Etablissement {}>'.format(self.nom)
-        
+        return '<Etablissement {}, lat={}, admis_gt={}>'.format(self.nom,self.latitude,self.admis_gt)
+    
+    def asDict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+
         
