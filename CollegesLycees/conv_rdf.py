@@ -8,17 +8,17 @@ from rdflib import Graph
 
 def create_cache():
     g = Graph()
-    g.parse("dataset-564055.ttl", format="n3")
+    g.parse("CollegesLycees/dataset-564055.ttl", format="n3")
 
     raw = g.serialize(format="json-ld").decode("utf-8")
 
     info = json.loads(raw)
 
-    pickle.dump(info, open("data_dict.raw", "wb"))
+    pickle.dump(info, open("CollegesLycees/data_dict.raw", "wb"))
 
 
 def import_geoloc_db():
-    info = pickle.loads(open("data_dict.raw", "rb").read())
+    info = pickle.loads(open("CollegesLycees/data_dict.raw", "rb").read())
 
     db = {}
     for rec in tqdm.tqdm(info):
@@ -26,8 +26,8 @@ def import_geoloc_db():
             continue
 
         uai = rec["@id"].split("/")[-1].upper()
-        if uai == "0311169C":
-            print(rec)
+        # if uai == "0311169C":
+        #     print(rec)
 
         if uai in db.keys():
             dat = db[uai]

@@ -36,14 +36,10 @@ def map():
     for e in a:
         info = ""
 
-        if "caousou" in e.nom.lower():
-            print(e.admis_brevet, e.presents_brevet)
         if e.admis_brevet is None or e.presents_brevet is None:
             stat_brevet = None
         else:
             stat_brevet = e.admis_brevet / e.presents_brevet
-            if "caousou" in e.nom.lower():
-                print("stat_brevet", stat_brevet)
             info += "Réussite brevet : %i%%" % (100 * stat_brevet)
             if stat_brevet < 0.98:
                 continue
@@ -52,15 +48,11 @@ def map():
             stat_bac = None
         elif not e.mentions_gt is None:
             stat_bac = e.mentions_gt / e.presents_gt
-            if "caousou" in e.nom.lower():
-                print("stat_mention_bac", stat_bac)
             info += "\nRéussite bac GT : %i%%" % (100 * stat_bac)
             if stat_bac < 0.98:
                 continue
         elif not e.admis_gt is None:
             stat_bac = e.admis_gt / e.presents_gt
-            if "caousou" in e.nom.lower():
-                print("stat_admis_bac", stat_bac)
             info += "\nRéussite bac GT : %i%%" % (100 * stat_bac)
             if stat_bac < 0.98:
                 continue
