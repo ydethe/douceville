@@ -11,4 +11,4 @@ bottleneck
 xlrd
 rdflib
 rdflib-jsonld
-
+geojson

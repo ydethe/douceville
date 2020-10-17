@@ -8,33 +8,33 @@
     ></script>
     <script>
         let map;
+        let infowindow;
 
         function initMap() {
         
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 43.604651, lng: 1.443406 },
-            zoom: 8,
-        });
-        
-        map.data.loadGeoJson("{{ geojson_file }}");
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 43.604651, lng: 1.443406 },
+                zoom: 8,
+            });
+            infowindow = new google.maps.InfoWindow();
 
-        var oInfo = new google.maps.InfoWindow({
-          'position' : new google.maps.LatLng( 43.5942489360648, 1.47431526384671),           // position d'ancrage de l'InfoWondow sur la carte
-          'content'  : 'St Jo'// contenu qui sera affiché
-        });
+            map.data.loadGeoJson("{{ geojson_file }}");
 
-        google.maps.event.addListener( oMarker, 'click', function( data){
-          // affichage position du marker
-          oInfo.setContent( 'position :<br>' + data.latLng.toUrlValue(5));
-          oInfo.open( this.getMap(), this);
-        });
+            map.data.addListener('click', function(event) {
+              var feat = event.feature;
+              var html = "<b>"+feat.getProperty('nom')+"</b><br>"+feat.getProperty('info')+"</br>";
+              infowindow.setContent(html);
+              infowindow.setPosition(event.latLng);
+              infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+              infowindow.open(map);
+            });
 
         }
     </script>
     <style>
         /* Set the size of the div element that contains the map */
        #map {
-         height: 500px;  /* The height is 400 pixels */
+         height: 700px;  /* The height is 400 pixels */
          width: 100%;  /* The width is the width of the web page */
         }
      </style> 

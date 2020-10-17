@@ -31,14 +31,15 @@ def map():
     for e in a:
         if e.admis_brevet is None or e.presents_brevet is None:
             continue
-        if e.admis_brevet/e.presents_brevet < 0.98:
+        stat = e.admis_brevet/e.presents_brevet
+        if stat < 0.98:
             continue
         # if e.admis_gt is None or e.presents_gt is None:
         #     continue
         # if e.admis_gt/e.presents_gt < 0.98:
         #     continue
         print(e.UAI, e.nom, e.commune)
-        f = {"geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"}, "properties": {"nom": e.nom}, "type": "Feature"}
+        f = {"geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"}, "properties": {"nom": e.nom,"info":"Réussite brevet : %i%%" % (100*stat)}, "type": "Feature"}
         l_feat.append(f)
     feat_coll = FeatureCollection(l_feat)
     js = geojson.dumps(feat_coll)
