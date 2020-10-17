@@ -104,8 +104,6 @@ def cleanup(s):
             Etablissement.denomination.ilike("%hopita%"),
         )
     )
-    # for row in result.all():
-    # print("%s, %s, %s" % (row.UAI,row.nom,row.denomination))
     result.delete(synchronize_session=False)
 
     s.commit()
@@ -124,8 +122,6 @@ def cleanup(s):
             )
         )
     )
-    # for row in result.all():
-    # print("%s, %s, %s" % (row.UAI,row.nom,row.denomination))
     result.delete(synchronize_session=False)
 
     s.commit()

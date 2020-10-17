@@ -26,7 +26,8 @@ def send_static(path):
 @app.route("/map")
 def map():
     a = (
-        Etablissement.query.filter(Etablissement.departement == 31)
+        Etablissement.query
+        # .filter(Etablissement.departement == 31)
         .filter(not_(Etablissement.latitude.is_(None)))
         .all()
     )
@@ -35,6 +36,8 @@ def map():
     for e in a:
         info = ""
 
+        if "caousou" in e.nom.lower():
+            print(e.admis_brevet, e.presents_brevet)
         if e.admis_brevet is None or e.presents_brevet is None:
             stat_brevet = None
         else:
