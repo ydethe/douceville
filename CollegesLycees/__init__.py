@@ -17,8 +17,8 @@ from CollegesLycees.config import Config
 try:
     __version__ = get_distribution(__name__).version
 except Exception as e:
-    __version__ = 'dev'
-    
+    __version__ = "dev"
+
 __author__ = "Y. de The"
 __email__ = "yann@johncloud.fr"
 
@@ -53,7 +53,7 @@ logger.addHandler(stream_handler)
 # app = Flask(__name__, instance_relative_config=True, static_url_path='static')
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
-    SECRET_KEY='dev',
+    SECRET_KEY="dev",
 )
 app.config.from_object(Config)
 
