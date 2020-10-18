@@ -133,6 +133,7 @@ def cleanup(s):
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 
 if __name__ == "__main__":
+    print("Base de données :", Config.SQLALCHEMY_DATABASE_URI)
     engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
     session = sessionmaker()
@@ -140,10 +141,10 @@ if __name__ == "__main__":
     s = session()
 
     if False:
-        xls = pd.ExcelFile("CollegesLycees/menesr-depp-dnb-session-2018.xls")
+        xls = pd.ExcelFile("CollegesLycees/raw/menesr-depp-dnb-session-2018.xls")
         import_sheet(s, xls, "Sheet", corr_brevet, inv_mention=True)
 
-        xls = pd.ExcelFile("CollegesLycees/ival-2018-donn-es--32258.xls")
+        xls = pd.ExcelFile("CollegesLycees/raw/ival-2018-donn-es--32258.xls")
         import_sheet(s, xls, "ACCES_GT", corr_acces_gt)
         import_sheet(s, xls, "ACCES_PRO", corr_acces_pro)
         import_sheet(s, xls, "REUSSITE_GT", corr_reussite_gt)
@@ -153,4 +154,4 @@ if __name__ == "__main__":
 
         # cleanup(s)
 
-    import_geoloc(s, "CollegesLycees/data_dict2.raw", no_insert=True)
+    import_geoloc(s, "CollegesLycees/raw/data_dict2.raw", no_insert=True)
