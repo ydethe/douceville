@@ -28,8 +28,7 @@ def map():
     a = (
         Etablissement.query
         # .filter(Etablissement.departement == 31)
-        .filter(not_(Etablissement.latitude.is_(None)))
-        .all()
+        .filter(not_(Etablissement.latitude.is_(None))).all()
     )
 
     l_feat = []
