@@ -7,9 +7,7 @@ from CollegesLycees import db
 # - brevet
 
 # FILIERE GENERALE
-# - bac s
-# - bac l
-# - bac es
+# - bac_general
 
 # FILIERE TECHNOLOGIQUE
 # - stmg
@@ -34,30 +32,6 @@ from CollegesLycees import db
 # - services_personnes
 # - services_collectivite
 
-res_etab = db.Table(
-    "res_etab",
-    db.Column(
-        "etablissement_idx",
-        db.String,
-        db.ForeignKey("etablissement.UAI"),
-        primary_key=True,
-    ),
-    db.Column(
-        "resultat_idx", db.Integer, db.ForeignKey("resultat.idx"), primary_key=True
-    ),
-)
-
-acces_etab = db.Table(
-    "acces_etab",
-    db.Column(
-        "etablissement_idx",
-        db.String,
-        db.ForeignKey("etablissement.UAI"),
-        primary_key=True,
-    ),
-    db.Column("acces_idx", db.Integer, db.ForeignKey("acces.idx"), primary_key=True),
-)
-
 
 class Acces(db.Model):
     __tablename__ = "acces"
@@ -75,9 +49,14 @@ class Acces(db.Model):
     taux_1ere_pro_bac = db.Column(db.Integer)
     taux_term_pro_bac = db.Column(db.Integer)
 
+    etablissement_id = db.Column(
+        db.String, db.ForeignKey("etablissement.UAI"), nullable=False
+    )
+
 
 class Resultat(db.Model):
     __tablename__ = "resultat"
+    __table_args__ = (db.UniqueConstraint('diplome', 'annee', 'etablissement_id'),)
 
     idx = db.Column(db.Integer, primary_key=True, nullable=False)
     diplome = db.Column(db.String, nullable=False)
@@ -85,6 +64,10 @@ class Resultat(db.Model):
     presents = db.Column(db.Integer, nullable=False)
     admis = db.Column(db.Integer, nullable=False)
     mentions = db.Column(db.Integer)
+
+    etablissement_id = db.Column(
+        db.String, db.ForeignKey("etablissement.UAI"), nullable=False
+    )
 
 
 class Etablissement(db.Model):
@@ -99,9 +82,6 @@ class Etablissement(db.Model):
     commune = db.Column(db.String, nullable=False)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-
-    resultats = db.relationship("Resultat", secondary=res_etab)
-    acces = db.relationship("Acces", secondary=acces_etab)
 
     def __repr__(self):
         return "<Etablissement {}, lat={}>".format(self.nom, self.latitude)

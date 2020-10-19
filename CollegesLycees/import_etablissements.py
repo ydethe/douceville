@@ -7,7 +7,7 @@ import pandas as pd
 import tqdm
 
 from CollegesLycees.models import Etablissement, Resultat
-from CollegesLycees.conv_utils import corr_brevet
+from CollegesLycees.conv_utils import *
 from CollegesLycees.config import Config
 from CollegesLycees.conv_rdf import import_geoloc_db
 
@@ -17,6 +17,7 @@ def insert_or_update(session, etabl, res, no_insert=False):
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
             q.update(etabl)
+            enr = q.first()
         elif q.count() == 0 and not no_insert:
             enr = Etablissement(**etabl)
             session.add(enr)
@@ -27,17 +28,15 @@ def insert_or_update(session, etabl, res, no_insert=False):
         )
 
     if not res is None and not no_insert:
+        res["etablissement_id"] = enr.UAI
         r_res = Resultat(**res)
         session.add(r_res)
-
-    if not res is None and not etabl is None:
-        r_etabl.resultats.append(r_res)
 
 
 def import_sheet(
     session, xls, sheet_name, corr_dict, year, inv_mention=False, no_insert=False
 ):
-    print("Importation %s..." % sheet_name)
+    print("Importation %s, %s..." % (sheet_name, corr_dict["nom_diplome"]))
 
     df = pd.read_excel(xls, sheet_name)
 
@@ -52,20 +51,34 @@ def import_sheet(
             if not val is None:
                 etab[db_k] = val
 
-        res = {"diplome": corr_brevet["nom_diplome"], "annee": year}
+        res = {
+            "diplome": corr_dict["nom_diplome"],
+            "annee": year,
+            "admis": 0,
+            "presents": 0,
+            "mentions": 0,
+        }
         for xl_k in corr_dict["res"].keys():
             db_k, fct = corr_dict["res"][xl_k]
 
             val = fct(row[xl_k])
 
-            if not val is None:
+            if val is None:
+                continue
+
+            if db_k in ["admis", "presents", "mentions"]:
+                res[db_k] += val
+            else:
                 res[db_k] = val
 
-        if not "admis" in res.keys() or not "presents" in res.keys():
+        if res["admis"] == 0 or res["presents"] == 0:
             continue
 
-        if inv_mention and "mentions" in res.keys() and "admis" in res.keys():
+        if inv_mention and res["mentions"] != 0 and res["admis"] != 0:
             res["mentions"] = res["admis"] - res["mentions"]
+
+        if res["mentions"] == 0:
+            res.pop("mentions")
 
         insert_or_update(s, etab, res, no_insert=no_insert)
 
@@ -152,16 +165,22 @@ if __name__ == "__main__":
     s = session()
 
     xls = pd.ExcelFile("CollegesLycees/raw/menesr-depp-dnb-session-2018.xls")
-    # import_sheet(s, xls, "Sheet", corr_brevet, 2018, inv_mention=True, no_insert=False)
+    import_sheet(s, xls, "Sheet", corr_brevet, 2018, inv_mention=True, no_insert=False)
 
-    # xls = pd.ExcelFile("CollegesLycees/raw/ival-2018-donn-es--32258.xls")
+    xls = pd.ExcelFile("CollegesLycees/raw/ival-2018-donn-es--32258.xls")
     # import_sheet(s, xls, "ACCES_GT", corr_acces_gt)
     # import_sheet(s, xls, "ACCES_PRO", corr_acces_pro)
-    # import_sheet(s, xls, "REUSSITE_GT", corr_reussite_gt)
-    # import_sheet(s, xls, "REUSSITE_PRO", corr_reussite_pro)
+    import_sheet(s, xls, "REUSSITE_GT", corr_reussite_bac('general', ('S','L','ES')), 2018)
+
+    for b in liste_bac_techno:
+        import_sheet(s, xls, "REUSSITE_GT", corr_reussite_bac(b), 2018)
+
+    for b in liste_bac_pro:
+        import_sheet(s, xls, "REUSSITE_PRO", corr_reussite_bac(b), 2018)
+
     # import_sheet(s, xls, "MENTIONS_GT", corr_mention_gt)
     # import_sheet(s, xls, "MENTIONS_PRO", corr_mention_pro)
 
     # cleanup(s)
 
-    import_geoloc(s, "CollegesLycees/raw/data_dict2.raw", no_insert=False)
+    # import_geoloc(s, "CollegesLycees/raw/data_dict2.raw", no_insert=False)
