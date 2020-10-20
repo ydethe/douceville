@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Quick Start - Leaflet</title>
+    <title>Maillage</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
   </head>
   <body>
@@ -23,11 +24,19 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(mymap);
       
-      L.geoJSON("{{ geojson_data }}").addTo(map);
+      function onEachFeature(feature, layer) {
+          // does this feature have a property named info?
+          if (feature.properties && feature.properties.info) {
+              layer.bindPopup(feature.properties.info);
+          }
+      }
 
-      // L.marker([47.0382686, 1.1501905]).addTo(mymap)
-      //   .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
-        
+      axios.get('http://localhost:5000/points')
+      .then(response => {
+          console.log(response.data)
+          L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);
+      })
+
     </script>
   </body>
 </html>
