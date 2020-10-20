@@ -12,3 +12,5 @@ xlrd
 rdflib
 rdflib-jsonld
 geojson
+PyYaml
+

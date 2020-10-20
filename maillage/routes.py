@@ -30,6 +30,7 @@ def get_all_points():
         # .filter(Etablissement.departement == 31)
         .filter(not_(Etablissement.latitude.is_(None))).all()
     )
+    print(a)
 
     features = []
     for e in a:
