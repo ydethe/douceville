@@ -1,6 +1,6 @@
 ﻿from sqlalchemy import inspect
 
-from CollegesLycees import db
+from maillage import db
 
 
 # Diplomes :

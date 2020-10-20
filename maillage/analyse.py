@@ -1,8 +1,8 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
 
-from CollegesLycees.models import Etablissement
-from CollegesLycees.config import Config
+from analyse.models import Etablissement
+from analyse.config import Config
 
 
 def object_as_dict(obj):

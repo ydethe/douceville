@@ -70,8 +70,8 @@ liste_bac_pro = [
 
 def corr_diplome(nom, col):
     corr = defaultdict(dict)
-    
-    if nom == 'brevet':
+
+    if nom == "brevet":
         corr["nom_diplome"] = "brevet"
         corr["etabl"]["Patronyme"] = "nom", to_cap
         corr["etabl"]["Libellé académie"] = "academie", to_cap

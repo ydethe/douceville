@@ -1,5 +1,5 @@
-﻿from CollegesLycees import app, db
-from CollegesLycees.models import Etablissement, Acces, Resultat
+﻿from maillage import app, db
+from maillage.models import Etablissement, Acces, Resultat
 
 
 @app.shell_context_processor

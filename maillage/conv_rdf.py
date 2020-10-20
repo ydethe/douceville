@@ -1,22 +1,27 @@
 import json
 import pickle
 import time
+import argparse
 
 import tqdm
 from rdflib import Graph
 
 
-def create_cache():
+def create_cache(src, dst):
+    print(time.ctime(), "Creating geoloc cache 'data_dict.raw'...")
+    
     g = Graph()
-    g.parse("CollegesLycees/raw/dataset-564055.ttl", format="n3")
+    g.parse(src, format="n3")
 
     raw = g.serialize(format="json-ld").decode("utf-8")
 
     info = json.loads(raw)
 
-    pickle.dump(info, open("CollegesLycees/raw/data_dict.raw", "wb"))
+    pickle.dump(info, open(dst, "wb"))
 
-
+    print(time.ctime(), "Done.")
+    
+    
 def import_geoloc_db():
     info = pickle.loads(open("CollegesLycees/raw/data_dict.raw", "rb").read())
 
@@ -71,10 +76,20 @@ def import_geoloc_db():
     return db
 
 
-if __name__ == "__main__":
-    # db = import_geoloc_db()
-    # print(db['0311169C'])
+def conv_rdf_main():
+    # src : CollegesLycees/raw/dataset-564055.ttl
+    # dst : CollegesLycees/raw/data_dict.raw
+    
+    parser = argparse.ArgumentParser(description="Conversion rdf")
+    parser.add_argument("src", help="fichier in", type=str)
+    parser.add_argument("dst", help="fichier out", type=str)
 
-    print(time.ctime(), "Creating geoloc cache 'data_dict.raw'...")
-    create_cache()
-    print(time.ctime(), "Done.")
+    args = parser.parse_args()
+    
+    create_cache(args.src, args.dst)
+    
+    
+if __name__ == "__main__":
+    conv_rdf_main()
+    
+    

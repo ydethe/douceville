@@ -6,9 +6,9 @@ from flask import render_template
 from geojson import Feature, Point, FeatureCollection
 import geojson
 
-from CollegesLycees.config import basedir
-from CollegesLycees import app
-from CollegesLycees.models import Etablissement
+from maillage.config import basedir
+from maillage import app
+from maillage.models import Etablissement
 
 
 @app.route("/")

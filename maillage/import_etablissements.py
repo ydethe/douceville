@@ -8,12 +8,12 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
-import CollegesLycees
-from CollegesLycees.models import Etablissement, Resultat
-from CollegesLycees.conv_utils import *
-from CollegesLycees.config import Config
-from CollegesLycees.conv_rdf import import_geoloc_db
-from CollegesLycees.read_config import loadConfig
+import maillage
+from maillage.models import Etablissement, Resultat
+from maillage.conv_utils import *
+from maillage.config import Config
+from maillage.conv_rdf import import_geoloc_db
+from maillage.read_config import loadConfig
 
 
 def insert_or_update(session, etabl, res, no_insert=False):
@@ -30,7 +30,7 @@ def insert_or_update(session, etabl, res, no_insert=False):
             .filter(Etablissement.UAI == etabl["UAI"])
             .first()
         )
-    
+
     if not res is None and not no_insert:
         res["etablissement_id"] = enr.UAI
         q = (
@@ -158,43 +158,43 @@ def cleanup(session):
 # https://www.education.gouv.fr/les-indicateurs-de-resultats-des-lycees-1118
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 
-def import_main():
-    print("Maillage, version", CollegesLycees.__version__)
 
-    parser = argparse.ArgumentParser(
-        description="Maillage France"
-    )
+def import_main():
+    print("Maillage, version", maillage.__version__)
+
+    parser = argparse.ArgumentParser(description="Maillage France")
     parser.add_argument("cfg", help="fichier config", type=str)
-    
+
     args = parser.parse_args()
 
     cfg = loadConfig(args.cfg)
-    
-    
+
     print("Base de données :", Config.SQLALCHEMY_DATABASE_URI)
     engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
-    
+
     src_geoloc = None
     for src in cfg.sources:
-        if src.diplome == 'geoloc':
+        if src.diplome == "geoloc":
             src_geoloc = src.fichier
             continue
-        
+
         corr = corr_diplome(src.diplome, src.groupes)
         xls = pd.ExcelFile(src.fichier)
         for ong in src.onglets:
             rt = os.path.split(src.fichier)[-1]
-            print("Importation %s@%s, %s %i..." % (ong, rt, corr["nom_diplome"], src.annee))
+            print(
+                "Importation %s@%s, %s %i..."
+                % (ong, rt, corr["nom_diplome"], src.annee)
+            )
             import_sheet(s, xls, ong, corr, src.annee, src.inv_mention)
-        
+
     print("Importation données géoloc '%s'..." % src_geoloc)
     import_geoloc(s, src_geoloc)
-    
-    
+
+
 if __name__ == "__main__":
     import_main()
-    

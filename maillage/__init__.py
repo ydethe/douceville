@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 
-from CollegesLycees.config import Config
+from maillage.config import Config
 
 
 try:
@@ -61,4 +61,4 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
-from CollegesLycees import routes, models
+from maillage import routes, models
