@@ -31,7 +31,7 @@ class Config:
 
         if not hasattr(self, "geoloc"):
             self.geoloc = None
-            
+
         for i in range(n):
             if self.sources[i].diplome == "geoloc":
                 continue

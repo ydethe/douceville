@@ -26,4 +26,3 @@ s.query(Resultat).delete()
 s.query(Etablissement).delete()
 
 s.commit()
-

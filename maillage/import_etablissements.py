@@ -20,11 +20,11 @@ from maillage.read_config import loadConfig
 
 def insert_or_update(session, etabl, res, no_insert=False):
     for c in inspect(Etablissement).mapper.column_attrs:
-        if not getattr(Etablissement,c.key).nullable and not c.key in etabl.keys():
+        if not getattr(Etablissement, c.key).nullable and not c.key in etabl.keys():
             # print('skip22', etabl)
             etabl = None
             return
-    
+
     if not etabl is None and not no_insert:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
@@ -48,11 +48,12 @@ def insert_or_update(session, etabl, res, no_insert=False):
             r_res = Resultat(**res)
             session.add(r_res)
 
+
 def import_sheet(
     session, xls, sheet_name, skp, corr_dict, year, inv_mention=False, no_insert=False
 ):
     df = pd.read_excel(xls, sheet_name, skiprows=range(skp))
-    
+
     n = len(df.index)
     for index, row in tqdm.tqdm(df.iterrows(), total=n):
         # ==========================
@@ -66,10 +67,10 @@ def import_sheet(
                 val = fct(row[xl_k])
             else:
                 val = None
-            
+
             if not val is None:
                 etab[db_k] = val
-            
+
         # =====================
         # Analyse des résultats
         # =====================
@@ -97,28 +98,28 @@ def import_sheet(
             else:
                 res[db_k] = val
 
-        if res['admis'] == [] and res['mentions'] == [] and res['taux'] != []:
+        if res["admis"] == [] and res["mentions"] == [] and res["taux"] != []:
             adm = 0
-            for p,t in zip(res['presents'], res['taux']):
-                adm += p*t
-            res['admis'] = [int(np.round(adm/100,0))]
-        
-        res.pop('taux')
-            
+            for p, t in zip(res["presents"], res["taux"]):
+                adm += p * t
+            res["admis"] = [int(np.round(adm / 100, 0))]
+
+        res.pop("taux")
+
         for k in ["admis", "presents", "mentions"]:
             if res[k] == []:
                 res.pop(k)
             else:
                 res[k] = sum(res[k])
-            
+
         # =====================
         # Filtrage
         # =====================
-        if not 'presents' in res.keys():
+        if not "presents" in res.keys():
             # print('skip103', res)
             continue
-            
-        if inv_mention and 'mentions' in res.keys() and 'admis' in res.keys():
+
+        if inv_mention and "mentions" in res.keys() and "admis" in res.keys():
             res["mentions"] = res["admis"] - res["mentions"]
 
         # =====================
@@ -132,7 +133,7 @@ def import_sheet(
 
 def import_geoloc(session, file, no_insert=False):
     print("Importation données géoloc '%s'..." % file)
-    
+
     irec = {}
     info = import_geoloc_db(file)
 
@@ -168,6 +169,7 @@ def import_geoloc(session, file, no_insert=False):
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 # https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 
+
 def import_main():
     print("Maillage, version", maillage.__version__)
 
@@ -184,7 +186,7 @@ def import_main():
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
-    
+
     src_geoloc = None
     for src in cfg.sources:
         corr = corr_diplome(src.diplome, src.groupes)
@@ -198,7 +200,7 @@ def import_main():
                     % (ong, rt, corr["nom_diplome"], annee)
                 )
                 import_sheet(s, xls, ong, src.skiprows, corr, annee, src.inv_mention)
-    
+
     if not cfg.geoloc is None:
         import_geoloc(s, cfg.geoloc)
 

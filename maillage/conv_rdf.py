@@ -9,7 +9,7 @@ from rdflib import Graph
 
 def create_cache(src, dst):
     print(time.ctime(), "Creating geoloc cache 'data_dict.raw'...")
-    
+
     g = Graph()
     g.parse(src, format="n3")
 
@@ -20,8 +20,8 @@ def create_cache(src, dst):
     pickle.dump(info, open(dst, "wb"))
 
     print(time.ctime(), "Done.")
-    
-    
+
+
 def import_geoloc_db(fic):
     info = pickle.loads(open(fic, "rb").read())
 
@@ -77,17 +77,15 @@ def import_geoloc_db(fic):
 def conv_rdf_main():
     # src : CollegesLycees/raw/dataset-564055.ttl
     # dst : CollegesLycees/raw/data_dict.raw
-    
+
     parser = argparse.ArgumentParser(description="Conversion rdf")
     parser.add_argument("src", help="fichier in", type=str)
     parser.add_argument("dst", help="fichier out", type=str)
 
     args = parser.parse_args()
-    
+
     create_cache(args.src, args.dst)
-    
-    
+
+
 if __name__ == "__main__":
     conv_rdf_main()
-    
-    

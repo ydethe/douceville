@@ -49,8 +49,9 @@ def secteur_to_bool(x):
     else:
         return "public"
 
+
 def cp_to_dep(x):
-    if x == '-':
+    if x == "-":
         return None
     return to_int(x[:-3])
 
