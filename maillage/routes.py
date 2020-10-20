@@ -33,7 +33,7 @@ def get_all_points():
 
     features = []
     for e in a:
-        info = "<b>%s</b><br>" % e.nom
+        info = "<b>%s</b>" % e.nom
 
         stat_brevet = 0
         stat_bac = 0
@@ -46,7 +46,7 @@ def get_all_points():
         for res in results:
             if not res.admis is None:
                 stat = res.admis / res.presents
-                info += "Réussite %s : %i%%" % (res.diplome, 100 * stat)
+                info += "<br>Réussite %s : %i%%" % (res.diplome, 100 * stat)
 
         f = {
             "geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"},
