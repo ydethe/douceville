@@ -2,7 +2,7 @@ import pickle
 import argparse
 import os
 
-from sqlalchemy import create_engine, func, or_, and_, not_
+from sqlalchemy import create_engine, inspect, or_
 from sqlalchemy.orm import sessionmaker
 
 import pandas as pd
@@ -17,6 +17,12 @@ from maillage.read_config import loadConfig
 
 
 def insert_or_update(session, etabl, res, no_insert=False):
+    for c in inspect(Etablissement).mapper.column_attrs:
+        if not getattr(Etablissement,c.key).nullable and not c.key in etabl.keys():
+            # print('skip22', etabl)
+            etabl = None
+            return
+    
     if not etabl is None and not no_insert:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
@@ -25,11 +31,8 @@ def insert_or_update(session, etabl, res, no_insert=False):
         elif q.count() == 0:
             enr = Etablissement(**etabl)
             session.add(enr)
-        r_etabl = (
-            session.query(Etablissement)
-            .filter(Etablissement.UAI == etabl["UAI"])
-            .first()
-        )
+    else:
+        # print('skip29',etabl)
 
     if not res is None and not no_insert:
         res["etablissement_id"] = enr.UAI
@@ -42,21 +45,21 @@ def insert_or_update(session, etabl, res, no_insert=False):
         if q.count() != 0:
             q.update(res)
         elif q.count() == 0:
-            # print("insert")
-            # print(enr.asDict())
-            # print(res)
-            # exit(0)
             r_res = Resultat(**res)
             session.add(r_res)
-
+    else:
+        # print('skip43',res)
 
 def import_sheet(
-    session, xls, sheet_name, corr_dict, year, inv_mention=False, no_insert=False
+    session, xls, sheet_name, skp, corr_dict, year, inv_mention=False, no_insert=False
 ):
-    df = pd.read_excel(xls, sheet_name)
-
+    df = pd.read_excel(xls, sheet_name, skiprows=range(skp))
+    
     n = len(df.index)
     for index, row in tqdm.tqdm(df.iterrows(), total=n):
+        # ==========================
+        # Analyse de l'établissement
+        # ==========================
         etab = {}
         for xl_k in corr_dict["etabl"].keys():
             db_k, fct = corr_dict["etabl"][xl_k]
@@ -65,10 +68,13 @@ def import_sheet(
                 val = fct(row[xl_k])
             else:
                 val = None
-
+            
             if not val is None:
                 etab[db_k] = val
-
+            
+        # =====================
+        # Analyse des résultats
+        # =====================
         res = {
             "diplome": corr_dict["nom_diplome"],
             "annee": year,
@@ -92,9 +98,13 @@ def import_sheet(
             else:
                 res[db_k] = val
 
+        # =====================
+        # Filtrage
+        # =====================
         if res["presents"] == 0:
+            # print('skip103', res)
             continue
-
+            
         if inv_mention and res["mentions"] != 0 and res["admis"] != 0:
             res["mentions"] = res["admis"] - res["mentions"]
 
@@ -102,6 +112,9 @@ def import_sheet(
             if k in res.keys() and res[k] == 0:
                 res.pop(k)
 
+        # =====================
+        # Insertion
+        # =====================
         insert_or_update(session, etab, res, no_insert=no_insert)
 
     if not no_insert:
@@ -109,8 +122,10 @@ def import_sheet(
 
 
 def import_geoloc(session, file, no_insert=False):
+    print("Importation données géoloc '%s'..." % file)
+    
     irec = {}
-    info = import_geoloc_db()
+    info = import_geoloc_db(file)
 
     result = session.query(Etablissement)
     for row in tqdm.tqdm(result.all()):
@@ -153,11 +168,13 @@ def cleanup(session):
 # - meteo
 # - voir concurrents : jequitteparis.fr
 # - immobilier
+# - maternité
+# - age moyen
 
 # https://www.data.gouv.fr/fr/datasets/liste-des-etablissements-des-premier-et-second-degres-pour-les-secteurs-publics-et-prives-en-france
 # https://www.education.gouv.fr/les-indicateurs-de-resultats-des-lycees-1118
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
-
+# https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 
 def import_main():
     print("Maillage, version", maillage.__version__)
@@ -175,7 +192,7 @@ def import_main():
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
-
+    
     src_geoloc = None
     for src in cfg.sources:
         if src.diplome == "geoloc":
@@ -190,10 +207,10 @@ def import_main():
                 "Importation %s@%s, %s %i..."
                 % (ong, rt, corr["nom_diplome"], src.annee)
             )
-            import_sheet(s, xls, ong, corr, src.annee, src.inv_mention)
-
-    print("Importation données géoloc '%s'..." % src_geoloc)
-    import_geoloc(s, src_geoloc)
+            import_sheet(s, xls, ong, src.skiprows, corr, src.annee, src.inv_mention)
+    
+    if not src_geoloc is None:
+        import_geoloc(s, src_geoloc)
 
 
 if __name__ == "__main__":

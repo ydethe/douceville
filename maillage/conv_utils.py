@@ -49,6 +49,11 @@ def secteur_to_bool(x):
     else:
         return "public"
 
+def cp_to_dep(x):
+    if x == '-':
+        return None
+    return to_int(x[:-3])
+
 
 liste_bac_techno = ["STMG", "STL", "ST2S", "STI2D", "STD2A", "TMD", "STHR"]
 
@@ -76,12 +81,25 @@ def corr_diplome(nom, col):
         corr["etabl"]["Patronyme"] = "nom", to_cap
         corr["etabl"]["Libellé académie"] = "academie", to_cap
         corr["etabl"]["Code département"] = "departement", to_int
+        corr["etabl"]["Commune_et_arrondissement"] = "departement", cp_to_dep
+        corr["etabl"]["Commune et arrondissement"] = "departement", cp_to_dep
         corr["etabl"]["Secteur d'enseignement"] = "secteur", secteur_to_bool
+        corr["etabl"]["Secteur_d_enseignement"] = "secteur", secteur_to_bool
         corr["etabl"]["Libellé commune"] = "commune", to_cap
+        corr["etabl"]["Commune et arrondissement Lib L"] = "commune", to_cap
+        corr["etabl"]["Commune_et_arrondissement_Lib_L"] = "commune", to_cap
+        corr["etabl"]["Numéro d'établissement"] = "UAI", to_maj
         corr["etabl"]["Numero d'etablissement"] = "UAI", to_maj
+        corr["etabl"]["Numero_d_etablissement"] = "UAI", to_maj
         corr["res"]["Presents"] = "presents", to_int
+        corr["res"]["Nombre_de_presents"] = "presents", to_int
+        corr["res"]["Nombre de présents"] = "presents", to_int
         corr["res"]["Admis"] = "admis", to_int
+        corr["res"]["Nombre_total_d_admis"] = "admis", to_int
+        corr["res"]["Nombre total d'admis"] = "admis", to_int
         corr["res"]["Admis sans mention"] = "mentions", to_int
+        corr["res"]["Nombre_d_admis_sans_Mention"] = "mentions", to_int
+        corr["res"]["Nombre d'admis sans Mention"] = "mentions", to_int
     else:
         corr["nom_diplome"] = "bac_%s" % (nom.lower())
         corr["etabl"]["UAI"] = "UAI", to_maj

@@ -39,6 +39,9 @@ class Config:
             if not hasattr(src, "inv_mention"):
                 self.sources[i].inv_mention = False
 
+            if not hasattr(src, "skiprows"):
+                self.sources[i].skiprows = 0
+
     def __repr__(self):
         return str(self.__dict__)
 

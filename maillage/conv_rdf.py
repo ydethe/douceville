@@ -22,8 +22,8 @@ def create_cache(src, dst):
     print(time.ctime(), "Done.")
     
     
-def import_geoloc_db():
-    info = pickle.loads(open("CollegesLycees/raw/data_dict.raw", "rb").read())
+def import_geoloc_db(fic):
+    info = pickle.loads(open(fic, "rb").read())
 
     db = {}
     for rec in tqdm.tqdm(info):
@@ -31,8 +31,6 @@ def import_geoloc_db():
             continue
 
         uai = rec["@id"].split("/")[-1].upper()
-        # if uai == "0311169C":
-        #     print(rec)
 
         if uai in db.keys():
             dat = db[uai]

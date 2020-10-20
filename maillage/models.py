@@ -82,7 +82,7 @@ class Etablissement(db.Model):
     # Identification
     UAI = db.Column(db.String, primary_key=True)
     nom = db.Column(db.String, nullable=False)
-    academie = db.Column(db.String, nullable=False)
+    academie = db.Column(db.String)
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String, nullable=False)
     commune = db.Column(db.String, nullable=False)

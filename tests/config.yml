@@ -1,15 +1,34 @@
 ident:
   ver: 1
 sources:
- - fichier: CollegesLycees/raw/data_dict2.raw
-   diplome: geoloc
- # - fichier: CollegesLycees/raw/menesr-depp-dnb-session-2018.xls
+ # - fichier: maillage/raw/data_dict2.raw
+   # diplome: geoloc
+ # - fichier: maillage/raw/menesr-depp-dnb-session-2018.xls
    # onglets:
    # - Sheet
    # diplome: brevet
    # annee: 2018
    # inv_mention: true
- # - fichier: CollegesLycees/raw/ival-2018-donn-es--32258.xls
+ # - fichier: maillage/raw/men-dnb-session-2017.xls
+   # onglets:
+   # - Rapport 1
+   # diplome: brevet
+   # annee: 2017
+   # inv_mention: true
+ # - fichier: maillage/raw/men-dnb-session-2016.xls
+   # onglets:
+   # - Rapport 1
+   # diplome: brevet
+   # annee: 2016
+   # inv_mention: true
+ - fichier: maillage/raw/MENESR-DEPP-DNB-session-2015.xls
+   onglets:
+   - Rapport 1
+   skiprows: 3
+   diplome: brevet
+   annee: 2015
+   inv_mention: true
+ # - fichier: maillage/raw/ival-2018-donn-es--32258.xls
    # onglets:
    # - REUSSITE_GT
    # - MENTIONS_GT
@@ -19,4 +38,3 @@ sources:
    # - L
    # - ES
    # annee: 2018
-   
