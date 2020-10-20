@@ -45,8 +45,9 @@ def get_all_points():
             .all()
         )
         for res in results:
-            stat = res.admis / res.presents
-            info += "Réussite %s : %i%%" % (res.diplome, 100 * stat)
+            if not res.admis is None:
+                stat = res.admis / res.presents
+                info += "Réussite %s : %i%%" % (res.diplome, 100 * stat)
 
         f = {
             "geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"},
