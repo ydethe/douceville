@@ -1,4 +1,6 @@
 import pickle
+import argparse
+import os
 
 from sqlalchemy import create_engine, func, or_, and_, not_
 from sqlalchemy.orm import sessionmaker
@@ -6,10 +8,12 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
+import CollegesLycees
 from CollegesLycees.models import Etablissement, Resultat
 from CollegesLycees.conv_utils import *
 from CollegesLycees.config import Config
 from CollegesLycees.conv_rdf import import_geoloc_db
+from CollegesLycees.read_config import loadConfig
 
 
 def insert_or_update(session, etabl, res, no_insert=False):
@@ -49,8 +53,6 @@ def insert_or_update(session, etabl, res, no_insert=False):
 def import_sheet(
     session, xls, sheet_name, corr_dict, year, inv_mention=False, no_insert=False
 ):
-    print("Importation %s, %s..." % (sheet_name, corr_dict["nom_diplome"]))
-
     df = pd.read_excel(xls, sheet_name)
 
     n = len(df.index)
@@ -100,19 +102,17 @@ def import_sheet(
             if k in res.keys() and res[k] == 0:
                 res.pop(k)
 
-        insert_or_update(s, etab, res, no_insert=no_insert)
+        insert_or_update(session, etab, res, no_insert=no_insert)
 
     if not no_insert:
         session.commit()
 
 
-def import_geoloc(session, file, no_insert):
-    print("Importation données géoloc...")
-
+def import_geoloc(session, file, no_insert=False):
     irec = {}
     info = import_geoloc_db()
 
-    result = s.query(Etablissement)
+    result = session.query(Etablissement)
     for row in tqdm.tqdm(result.all()):
         uai = row.UAI
         if not uai in info.keys():
@@ -122,17 +122,17 @@ def import_geoloc(session, file, no_insert):
         if "denomination" in dat.keys():
             dat.pop("denomination")
 
-        istat = insert_or_update(s, dat, None, no_insert=no_insert)
+        istat = insert_or_update(session, dat, None, no_insert=no_insert)
         if istat != 0:
             irec[uai] = 1
 
     print("%i enregistrements mis à jour" % sum(irec.values()))
-    s.commit()
+    session.commit()
 
 
-def cleanup(s):
+def cleanup(session):
     print("Cleanup...")
-    result = s.query(Etablissement).filter(
+    result = session.query(Etablissement).filter(
         or_(
             Etablissement.nom.ilike("%clinique%"),
             Etablissement.nom.ilike("%hospital%"),
@@ -144,25 +144,7 @@ def cleanup(s):
     )
     result.delete(synchronize_session=False)
 
-    s.commit()
-
-    # result = s.query(Etablissement).filter(
-    #     not_(
-    #         or_(
-    #             Etablissement.nom.ilike("%lycee%"),
-    #             Etablissement.nom.ilike("%lycée%"),
-    #             Etablissement.nom.ilike("%college%"),
-    #             Etablissement.nom.ilike("%collège%"),
-    #             Etablissement.denomination.ilike("%lycee%"),
-    #             Etablissement.denomination.ilike("%lycée%"),
-    #             Etablissement.denomination.ilike("%college%"),
-    #             Etablissement.denomination.ilike("%collège%"),
-    #         )
-    #     )
-    # )
-    # result.delete(synchronize_session=False)
-
-    # s.commit()
+    session.commit()
 
 
 # Autres criteres :
@@ -176,37 +158,43 @@ def cleanup(s):
 # https://www.education.gouv.fr/les-indicateurs-de-resultats-des-lycees-1118
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 
-if __name__ == "__main__":
+def import_main():
+    print("Maillage, version", CollegesLycees.__version__)
+
+    parser = argparse.ArgumentParser(
+        description="Maillage France"
+    )
+    parser.add_argument("cfg", help="fichier config", type=str)
+    
+    args = parser.parse_args()
+
+    cfg = loadConfig(args.cfg)
+    
+    
     print("Base de données :", Config.SQLALCHEMY_DATABASE_URI)
     engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
-
-    # xls = pd.ExcelFile("CollegesLycees/raw/menesr-depp-dnb-session-2018.xls")
-    # import_sheet(s, xls, "Sheet", corr_brevet, 2018, inv_mention=True)
-
-    # xls = pd.ExcelFile("CollegesLycees/raw/ival-2018-donn-es--32258.xls")
-    # import_sheet(s, xls, "ACCES_GT", corr_acces_gt)
-    # import_sheet(s, xls, "ACCES_PRO", corr_acces_pro)
-    import_sheet(s, xls, "REUSSITE_GT", corr_bac('general', ('S','L','ES')), 2018)
-
-    # for b in liste_bac_techno:
-        # import_sheet(s, xls, "REUSSITE_GT", corr_bac(b), 2018)
-
-    # for b in liste_bac_pro:
-        # import_sheet(s, xls, "REUSSITE_PRO", corr_bac(b), 2018)
-
-    import_sheet(
-        s, xls, "MENTIONS_GT", corr_bac("general", ("S", "L", "ES")), 2018
-    )
-    # for b in liste_bac_techno:
-        # import_sheet(s, xls, "MENTIONS_GT", corr_bac(b), 2018)
-
-    # for b in liste_bac_pro:
-        # import_sheet(s, xls, "MENTIONS_PRO", corr_bac(b), 2018)
-
-    # cleanup(s)
-
-    import_geoloc(s, "CollegesLycees/raw/data_dict2.raw", no_insert=False)
+    
+    src_geoloc = None
+    for src in cfg.sources:
+        if src.diplome == 'geoloc':
+            src_geoloc = src.fichier
+            continue
+        
+        corr = corr_diplome(src.diplome, src.groupes)
+        xls = pd.ExcelFile(src.fichier)
+        for ong in src.onglets:
+            rt = os.path.split(src.fichier)[-1]
+            print("Importation %s@%s, %s %i..." % (ong, rt, corr["nom_diplome"], src.annee))
+            import_sheet(s, xls, ong, corr, src.annee, src.inv_mention)
+        
+    print("Importation données géoloc '%s'..." % src_geoloc)
+    import_geoloc(s, src_geoloc)
+    
+    
+if __name__ == "__main__":
+    import_main()
+    

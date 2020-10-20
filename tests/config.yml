@@ -1,0 +1,22 @@
+ident:
+  ver: 1
+sources:
+ - fichier: CollegesLycees/raw/data_dict2.raw
+   diplome: geoloc
+ # - fichier: CollegesLycees/raw/menesr-depp-dnb-session-2018.xls
+   # onglets:
+   # - Sheet
+   # diplome: brevet
+   # annee: 2018
+   # inv_mention: true
+ # - fichier: CollegesLycees/raw/ival-2018-donn-es--32258.xls
+   # onglets:
+   # - REUSSITE_GT
+   # - MENTIONS_GT
+   # diplome: general
+   # groupes:
+   # - S
+   # - L
+   # - ES
+   # annee: 2018
+   

@@ -67,36 +67,33 @@ liste_bac_pro = [
     "Services_collectivite",
 ]
 
-# REUSSITE/MENTION BREVET
-corr_brevet = defaultdict(dict)
-corr_brevet["nom_diplome"] = "brevet"
-corr_brevet["etabl"]["Patronyme"] = "nom", to_cap
-corr_brevet["etabl"]["Libellé académie"] = "academie", to_cap
-corr_brevet["etabl"]["Code département"] = "departement", to_int
-corr_brevet["etabl"]["Secteur d'enseignement"] = "secteur", secteur_to_bool
-corr_brevet["etabl"]["Libellé commune"] = "commune", to_cap
-corr_brevet["etabl"]["Numero d'etablissement"] = "UAI", to_maj
-corr_brevet["res"]["Presents"] = "presents", to_int
-corr_brevet["res"]["Admis"] = "admis", to_int
-corr_brevet["res"]["Admis sans mention"] = "mentions", to_int
 
-
-def corr_bac(nom, col=None):
-    if col is None:
-        col = (nom,)
-
+def corr_diplome(nom, col):
     corr = defaultdict(dict)
-    corr["nom_diplome"] = "bac_%s" % (nom.lower())
-    corr["etabl"]["UAI"] = "UAI", to_maj
-    corr["etabl"]["NOM_UAI"] = "nom", to_cap
-    corr["etabl"]["ACAD"] = "academie", to_cap
-    corr["etabl"]["DEP"] = "departement", to_int
-    corr["etabl"]["SECTEUR"] = "secteur", secteur_to_bool
-    corr["etabl"]["COMMUNE_UAI"] = "commune", to_cap
+    
+    if nom == 'brevet':
+        corr["nom_diplome"] = "brevet"
+        corr["etabl"]["Patronyme"] = "nom", to_cap
+        corr["etabl"]["Libellé académie"] = "academie", to_cap
+        corr["etabl"]["Code département"] = "departement", to_int
+        corr["etabl"]["Secteur d'enseignement"] = "secteur", secteur_to_bool
+        corr["etabl"]["Libellé commune"] = "commune", to_cap
+        corr["etabl"]["Numero d'etablissement"] = "UAI", to_maj
+        corr["res"]["Presents"] = "presents", to_int
+        corr["res"]["Admis"] = "admis", to_int
+        corr["res"]["Admis sans mention"] = "mentions", to_int
+    else:
+        corr["nom_diplome"] = "bac_%s" % (nom.lower())
+        corr["etabl"]["UAI"] = "UAI", to_maj
+        corr["etabl"]["NOM_UAI"] = "nom", to_cap
+        corr["etabl"]["ACAD"] = "academie", to_cap
+        corr["etabl"]["DEP"] = "departement", to_int
+        corr["etabl"]["SECTEUR"] = "secteur", secteur_to_bool
+        corr["etabl"]["COMMUNE_UAI"] = "commune", to_cap
 
-    for c in col:
-        corr["res"]["Presents_%s" % c] = "presents", to_int
-        corr["res"]["Admis_%s" % c] = "admis", to_int
-        corr["res"]["Mentions_%s" % c] = "mentions", to_int
+        for c in col:
+            corr["res"]["Presents_%s" % c] = "presents", to_int
+            corr["res"]["Admis_%s" % c] = "admis", to_int
+            corr["res"]["Mentions_%s" % c] = "mentions", to_int
 
     return corr
