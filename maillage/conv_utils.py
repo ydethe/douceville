@@ -73,7 +73,7 @@ liste_bac_pro = [
 ]
 
 
-def corr_diplome(nom, col):
+def corr_diplome(nom, groupe):
     corr = defaultdict(dict)
 
     if nom == "brevet":
@@ -109,9 +109,10 @@ def corr_diplome(nom, col):
         corr["etabl"]["SECTEUR"] = "secteur", secteur_to_bool
         corr["etabl"]["COMMUNE_UAI"] = "commune", to_cap
 
-        for c in col:
+        for c in groupe:
             corr["res"]["Presents_%s" % c] = "presents", to_int
             corr["res"]["Admis_%s" % c] = "admis", to_int
             corr["res"]["Mentions_%s" % c] = "mentions", to_int
+            corr["res"]["Taux_%s" % c] = "taux", to_int
 
     return corr

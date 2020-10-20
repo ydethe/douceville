@@ -2,6 +2,8 @@ import pickle
 import argparse
 import os
 
+import numpy as np
+
 from sqlalchemy import create_engine, inspect, or_
 from sqlalchemy.orm import sessionmaker
 
@@ -31,8 +33,6 @@ def insert_or_update(session, etabl, res, no_insert=False):
         elif q.count() == 0:
             enr = Etablissement(**etabl)
             session.add(enr)
-    else:
-        # print('skip29',etabl)
 
     if not res is None and not no_insert:
         res["etablissement_id"] = enr.UAI
@@ -47,8 +47,6 @@ def insert_or_update(session, etabl, res, no_insert=False):
         elif q.count() == 0:
             r_res = Resultat(**res)
             session.add(r_res)
-    else:
-        # print('skip43',res)
 
 def import_sheet(
     session, xls, sheet_name, skp, corr_dict, year, inv_mention=False, no_insert=False
@@ -78,9 +76,10 @@ def import_sheet(
         res = {
             "diplome": corr_dict["nom_diplome"],
             "annee": year,
-            "admis": 0,
-            "presents": 0,
-            "mentions": 0,
+            "admis": [],
+            "presents": [],
+            "mentions": [],
+            "taux": [],
         }
         for xl_k in corr_dict["res"].keys():
             db_k, fct = corr_dict["res"][xl_k]
@@ -93,24 +92,34 @@ def import_sheet(
             if val is None:
                 continue
 
-            if db_k in ["admis", "presents", "mentions"]:
-                res[db_k] += val
+            if db_k in ["admis", "presents", "mentions", "taux"]:
+                res[db_k].append(val)
             else:
                 res[db_k] = val
 
+        if res['admis'] == [] and res['mentions'] == [] and res['taux'] != []:
+            adm = 0
+            for p,t in zip(res['presents'], res['taux']):
+                adm += p*t
+            res['admis'] = [int(np.round(adm/100,0))]
+        
+        res.pop('taux')
+            
+        for k in ["admis", "presents", "mentions"]:
+            if res[k] == []:
+                res.pop(k)
+            else:
+                res[k] = sum(res[k])
+            
         # =====================
         # Filtrage
         # =====================
-        if res["presents"] == 0:
+        if not 'presents' in res.keys():
             # print('skip103', res)
             continue
             
-        if inv_mention and res["mentions"] != 0 and res["admis"] != 0:
+        if inv_mention and 'mentions' in res.keys() and 'admis' in res.keys():
             res["mentions"] = res["admis"] - res["mentions"]
-
-        for k in ["admis", "presents", "mentions"]:
-            if k in res.keys() and res[k] == 0:
-                res.pop(k)
 
         # =====================
         # Insertion
@@ -142,23 +151,6 @@ def import_geoloc(session, file, no_insert=False):
             irec[uai] = 1
 
     print("%i enregistrements mis à jour" % sum(irec.values()))
-    session.commit()
-
-
-def cleanup(session):
-    print("Cleanup...")
-    result = session.query(Etablissement).filter(
-        or_(
-            Etablissement.nom.ilike("%clinique%"),
-            Etablissement.nom.ilike("%hospital%"),
-            Etablissement.nom.ilike("%hopita%"),
-            Etablissement.denomination.ilike("%clinique%"),
-            Etablissement.denomination.ilike("%hospital%"),
-            Etablissement.denomination.ilike("%hopita%"),
-        )
-    )
-    result.delete(synchronize_session=False)
-
     session.commit()
 
 
@@ -195,22 +187,20 @@ def import_main():
     
     src_geoloc = None
     for src in cfg.sources:
-        if src.diplome == "geoloc":
-            src_geoloc = src.fichier
-            continue
-
         corr = corr_diplome(src.diplome, src.groupes)
-        xls = pd.ExcelFile(src.fichier)
-        for ong in src.onglets:
-            rt = os.path.split(src.fichier)[-1]
-            print(
-                "Importation %s@%s, %s %i..."
-                % (ong, rt, corr["nom_diplome"], src.annee)
-            )
-            import_sheet(s, xls, ong, src.skiprows, corr, src.annee, src.inv_mention)
+
+        for annee in src.annees:
+            xls = pd.ExcelFile(src.fichier % annee)
+            for ong in src.onglets:
+                rt = os.path.split(src.fichier % annee)[-1]
+                print(
+                    "Importation %s@%s, %s %i..."
+                    % (ong, rt, corr["nom_diplome"], annee)
+                )
+                import_sheet(s, xls, ong, src.skiprows, corr, annee, src.inv_mention)
     
-    if not src_geoloc is None:
-        import_geoloc(s, src_geoloc)
+    if not cfg.geoloc is None:
+        import_geoloc(s, cfg.geoloc)
 
 
 if __name__ == "__main__":

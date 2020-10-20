@@ -28,6 +28,10 @@ class Config:
 
     def __default_sources(self):
         n = len(self.sources)
+
+        if not hasattr(self, "geoloc"):
+            self.geoloc = None
+            
         for i in range(n):
             if self.sources[i].diplome == "geoloc":
                 continue
@@ -52,7 +56,7 @@ def loadConfigV1(info):
 
 def loadConfig(fic):
     f = open(fic, "r")
-    info = Config(yaml.load(f))
+    info = Config(yaml.load(f, Loader=yaml.FullLoader))
     f.close()
 
     info.cfgfile = fic

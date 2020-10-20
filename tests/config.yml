@@ -1,40 +1,114 @@
 ident:
   ver: 1
+geoloc: maillage/raw/data_dict.raw
 sources:
- # - fichier: maillage/raw/data_dict2.raw
-   # diplome: geoloc
- # - fichier: maillage/raw/menesr-depp-dnb-session-2018.xls
-   # onglets:
-   # - Sheet
-   # diplome: brevet
-   # annee: 2018
-   # inv_mention: true
- # - fichier: maillage/raw/men-dnb-session-2017.xls
-   # onglets:
-   # - Rapport 1
-   # diplome: brevet
-   # annee: 2017
-   # inv_mention: true
- # - fichier: maillage/raw/men-dnb-session-2016.xls
-   # onglets:
-   # - Rapport 1
-   # diplome: brevet
-   # annee: 2016
-   # inv_mention: true
- - fichier: maillage/raw/MENESR-DEPP-DNB-session-2015.xls
+ - fichier: maillage/raw/brevet_%i.xls
+   onglets:
+   - Sheet
+   diplome: brevet
+   inv_mention: true
+   annees:
+   - 2018
+ - fichier: maillage/raw/brevet_%i.xls
    onglets:
    - Rapport 1
-   skiprows: 3
    diplome: brevet
-   annee: 2015
    inv_mention: true
- # - fichier: maillage/raw/ival-2018-donn-es--32258.xls
-   # onglets:
-   # - REUSSITE_GT
-   # - MENTIONS_GT
-   # diplome: general
-   # groupes:
-   # - S
-   # - L
-   # - ES
-   # annee: 2018
+   annees:
+   - 2017
+   - 2016
+   - 2015
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - REUSSITE_GT
+   - MENTIONS_GT
+   diplome: general
+   groupes:
+   - S
+   - L
+   - ES
+   annees:
+   - 2018
+   - 2017
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - REUSSITE_PRO
+   - MENTIONS_PRO
+   diplome: pro
+   groupes:
+   - PRO
+   annees:
+   - 2018
+   - 2017
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - REUSSITE_GT
+   - MENTIONS_GT
+   diplome: techno
+   groupes:
+   - STMG
+   - STL
+   - ST2S
+   - STI2D
+   - STD2A
+   - TMD
+   - STHR
+   annees:
+   - 2018
+   - 2017
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - REUSSITE_GT
+   diplome: general
+   groupes:
+   - S
+   - L
+   - ES
+   annees:
+   - 2016
+   - 2015
+   - 2014
+   - 2013
+   - 2012
+   - 2011
+   - 2010
+   - 2009
+   - 2008
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - REUSSITE_PRO
+   diplome: pro
+   groupes:
+   - PRO
+   annees:
+   - 2016
+   - 2015
+   - 2014
+   - 2013
+   - 2012
+   - 2011
+   - 2010
+   - 2009
+   - 2008
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - REUSSITE_GT
+   diplome: techno
+   groupes:
+   - STMG
+   - STL
+   - ST2S
+   - STI2D
+   - STD2A
+   - TMD
+   - STHR
+   annees:
+   - 2016
+   - 2015
+   - 2014
+   - 2013
+   - 2012
+   - 2011
+   - 2010
+   - 2009
+   - 2008
