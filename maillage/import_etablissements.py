@@ -18,12 +18,13 @@ from maillage.conv_rdf import import_geoloc_db
 from maillage.read_config import loadConfig
 
 
-def insert_or_update(session, etabl, res, no_insert=False):
-    for c in inspect(Etablissement).mapper.column_attrs:
-        if not getattr(Etablissement, c.key).nullable and not c.key in etabl.keys():
-            # print('skip22', etabl)
-            etabl = None
-            return
+def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
+    if check_nullable:
+        for c in inspect(Etablissement).mapper.column_attrs:
+            if not getattr(Etablissement, c.key).nullable and not c.key in etabl.keys():
+                print("skip22", etabl)
+                etabl = None
+                return
 
     if not etabl is None and not no_insert:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
@@ -147,12 +148,10 @@ def import_geoloc(session, file, no_insert=False):
         if "denomination" in dat.keys():
             dat.pop("denomination")
 
-        istat = insert_or_update(session, dat, None, no_insert=no_insert)
-        if istat != 0:
-            irec[uai] = 1
+        insert_or_update(session, dat, None, check_nullable=False, no_insert=no_insert)
 
-    print("%i enregistrements mis à jour" % sum(irec.values()))
-    session.commit()
+    if not no_insert:
+        session.commit()
 
 
 # Autres criteres :

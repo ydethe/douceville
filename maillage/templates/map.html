@@ -1,45 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
-    <script defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC_Ql1NCfIGe8raJlpAEGp8x5ju0JGsGQ&callback=initMap"
-      defer
-    ></script>
-    <script>
-        let map;
-        let infowindow;
+    <title>Quick Start - Leaflet</title>
 
-        function initMap() {
-        
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 43.604651, lng: 1.443406 },
-                zoom: 8,
-            });
-            infowindow = new google.maps.InfoWindow();
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
 
-            map.data.loadGeoJson("{{ geojson_file }}");
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
-            map.data.addListener('click', function(event) {
-              var feat = event.feature;
-              var html = "<b>"+feat.getProperty('nom')+"</b><br>"+feat.getProperty('info')+"</br>";
-              infowindow.setContent(html);
-              infowindow.setPosition(event.latLng);
-              infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-              infowindow.open(map);
-            });
-
-        }
-    </script>
-    <style>
-        /* Set the size of the div element that contains the map */
-       #map {
-         height: 700px;  /* The height is 400 pixels */
-         width: 100%;  /* The width is the width of the web page */
-        }
-     </style> 
   </head>
   <body>
-    <div id="map"></div>
+    <<div id="mapid" style="width: 100%; height: 600px;"></div>
+    <script>
+    
+      var mymap = L.map('mapid').setView([47.0382686, 1.1501905], 6);
+    
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(mymap);
+      
+      L.geoJSON("{{ geojson_data }}").addTo(map);
+
+      // L.marker([47.0382686, 1.1501905]).addTo(mymap)
+      //   .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+        
+    </script>
   </body>
 </html>

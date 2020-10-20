@@ -27,6 +27,9 @@ class Config:
             self.__default_sources()
 
     def __default_sources(self):
+        if not hasattr(self, "sources"):
+            self.sources = []
+
         n = len(self.sources)
 
         if not hasattr(self, "geoloc"):
