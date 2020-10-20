@@ -64,6 +64,9 @@ def import_geoloc_db():
     db["0311270M"] = {"UAI": "0311270M", "longitude": 1.522781, "latitude": 43.537348}
     db["0311843K"] = {"UAI": "0311843K", "longitude": 1.120444, "latitude": 43.413620}
     db["0311268K"] = {"UAI": "0311268K", "longitude": 0.730726, "latitude": 43.117691}
+    db["0312058U"] = {"UAI": "0312058U", "longitude": 0.952023, "latitude": 43.081886}
+    db["0310087B"] = {"UAI": "0310087B", "longitude": 1.474957, "latitude": 43.549452}
+    db["0311879Z"] = {"UAI": "0311879Z", "longitude": 1.551114, "latitude": 43.473410}
 
     return db
 

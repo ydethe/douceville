@@ -53,21 +53,27 @@ class Acces(db.Model):
         db.String, db.ForeignKey("etablissement.UAI"), nullable=False
     )
 
+    def asDict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+
 
 class Resultat(db.Model):
     __tablename__ = "resultat"
-    __table_args__ = (db.UniqueConstraint('diplome', 'annee', 'etablissement_id'),)
+    __table_args__ = (db.UniqueConstraint("diplome", "annee", "etablissement_id"),)
 
     idx = db.Column(db.Integer, primary_key=True, nullable=False)
     diplome = db.Column(db.String, nullable=False)
     annee = db.Column(db.Integer, nullable=False)
     presents = db.Column(db.Integer, nullable=False)
-    admis = db.Column(db.Integer, nullable=False)
+    admis = db.Column(db.Integer)
     mentions = db.Column(db.Integer)
 
     etablissement_id = db.Column(
         db.String, db.ForeignKey("etablissement.UAI"), nullable=False
     )
+
+    def asDict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 
 class Etablissement(db.Model):

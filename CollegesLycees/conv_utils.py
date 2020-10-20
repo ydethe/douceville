@@ -81,7 +81,7 @@ corr_brevet["res"]["Admis"] = "admis", to_int
 corr_brevet["res"]["Admis sans mention"] = "mentions", to_int
 
 
-def corr_reussite_bac(nom, col=None):
+def corr_bac(nom, col=None):
     if col is None:
         col = (nom,)
 
@@ -97,24 +97,6 @@ def corr_reussite_bac(nom, col=None):
     for c in col:
         corr["res"]["Presents_%s" % c] = "presents", to_int
         corr["res"]["Admis_%s" % c] = "admis", to_int
-
-    return corr
-
-def corr_mention_bac(nom, col=None):
-    if col is None:
-        col = (nom,)
-
-    corr = defaultdict(dict)
-    corr["nom_diplome"] = "bac_%s" % (nom.lower())
-    corr["etabl"]["UAI"] = "UAI", to_maj
-    corr["etabl"]["NOM_UAI"] = "nom", to_cap
-    corr["etabl"]["ACAD"] = "academie", to_cap
-    corr["etabl"]["DEP"] = "departement", to_int
-    corr["etabl"]["SECTEUR"] = "secteur", secteur_to_bool
-    corr["etabl"]["COMMUNE_UAI"] = "commune", to_cap
-
-    for c in col:
-        corr["res"]["Presents_%s" % c] = "presents", to_int
-        corr["res"]["Admis_%s" % c] = "admis", to_int
+        corr["res"]["Mentions_%s" % c] = "mentions", to_int
 
     return corr

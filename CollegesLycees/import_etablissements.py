@@ -13,12 +13,12 @@ from CollegesLycees.conv_rdf import import_geoloc_db
 
 
 def insert_or_update(session, etabl, res, no_insert=False):
-    if not etabl is None:
+    if not etabl is None and not no_insert:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
             q.update(etabl)
             enr = q.first()
-        elif q.count() == 0 and not no_insert:
+        elif q.count() == 0:
             enr = Etablissement(**etabl)
             session.add(enr)
         r_etabl = (
@@ -26,11 +26,24 @@ def insert_or_update(session, etabl, res, no_insert=False):
             .filter(Etablissement.UAI == etabl["UAI"])
             .first()
         )
-
+    
     if not res is None and not no_insert:
         res["etablissement_id"] = enr.UAI
-        r_res = Resultat(**res)
-        session.add(r_res)
+        q = (
+            session.query(Resultat)
+            .filter(Resultat.annee == res["annee"])
+            .filter(Resultat.diplome == res["diplome"])
+            .filter(Resultat.etablissement_id == res["etablissement_id"])
+        )
+        if q.count() != 0:
+            q.update(res)
+        elif q.count() == 0:
+            # print("insert")
+            # print(enr.asDict())
+            # print(res)
+            # exit(0)
+            r_res = Resultat(**res)
+            session.add(r_res)
 
 
 def import_sheet(
@@ -46,7 +59,10 @@ def import_sheet(
         for xl_k in corr_dict["etabl"].keys():
             db_k, fct = corr_dict["etabl"][xl_k]
 
-            val = fct(row[xl_k])
+            if xl_k in row.keys():
+                val = fct(row[xl_k])
+            else:
+                val = None
 
             if not val is None:
                 etab[db_k] = val
@@ -61,7 +77,10 @@ def import_sheet(
         for xl_k in corr_dict["res"].keys():
             db_k, fct = corr_dict["res"][xl_k]
 
-            val = fct(row[xl_k])
+            if xl_k in row.keys():
+                val = fct(row[xl_k])
+            else:
+                val = None
 
             if val is None:
                 continue
@@ -71,14 +90,15 @@ def import_sheet(
             else:
                 res[db_k] = val
 
-        if res["admis"] == 0 or res["presents"] == 0:
+        if res["presents"] == 0:
             continue
 
         if inv_mention and res["mentions"] != 0 and res["admis"] != 0:
             res["mentions"] = res["admis"] - res["mentions"]
 
-        if res["mentions"] == 0:
-            res.pop("mentions")
+        for k in ["admis", "presents", "mentions"]:
+            if k in res.keys() and res[k] == 0:
+                res.pop(k)
 
         insert_or_update(s, etab, res, no_insert=no_insert)
 
@@ -164,23 +184,29 @@ if __name__ == "__main__":
     session.configure(bind=engine)
     s = session()
 
-    xls = pd.ExcelFile("CollegesLycees/raw/menesr-depp-dnb-session-2018.xls")
-    import_sheet(s, xls, "Sheet", corr_brevet, 2018, inv_mention=True, no_insert=False)
+    # xls = pd.ExcelFile("CollegesLycees/raw/menesr-depp-dnb-session-2018.xls")
+    # import_sheet(s, xls, "Sheet", corr_brevet, 2018, inv_mention=True)
 
-    xls = pd.ExcelFile("CollegesLycees/raw/ival-2018-donn-es--32258.xls")
+    # xls = pd.ExcelFile("CollegesLycees/raw/ival-2018-donn-es--32258.xls")
     # import_sheet(s, xls, "ACCES_GT", corr_acces_gt)
     # import_sheet(s, xls, "ACCES_PRO", corr_acces_pro)
-    import_sheet(s, xls, "REUSSITE_GT", corr_reussite_bac('general', ('S','L','ES')), 2018)
+    import_sheet(s, xls, "REUSSITE_GT", corr_bac('general', ('S','L','ES')), 2018)
 
-    for b in liste_bac_techno:
-        import_sheet(s, xls, "REUSSITE_GT", corr_reussite_bac(b), 2018)
+    # for b in liste_bac_techno:
+        # import_sheet(s, xls, "REUSSITE_GT", corr_bac(b), 2018)
 
-    for b in liste_bac_pro:
-        import_sheet(s, xls, "REUSSITE_PRO", corr_reussite_bac(b), 2018)
+    # for b in liste_bac_pro:
+        # import_sheet(s, xls, "REUSSITE_PRO", corr_bac(b), 2018)
 
-    # import_sheet(s, xls, "MENTIONS_GT", corr_mention_gt)
-    # import_sheet(s, xls, "MENTIONS_PRO", corr_mention_pro)
+    import_sheet(
+        s, xls, "MENTIONS_GT", corr_bac("general", ("S", "L", "ES")), 2018
+    )
+    # for b in liste_bac_techno:
+        # import_sheet(s, xls, "MENTIONS_GT", corr_bac(b), 2018)
+
+    # for b in liste_bac_pro:
+        # import_sheet(s, xls, "MENTIONS_PRO", corr_bac(b), 2018)
 
     # cleanup(s)
 
-    # import_geoloc(s, "CollegesLycees/raw/data_dict2.raw", no_insert=False)
+    import_geoloc(s, "CollegesLycees/raw/data_dict2.raw", no_insert=False)
