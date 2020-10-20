@@ -27,10 +27,9 @@ def send_static(path):
 def get_all_points():
     a = (
         Etablissement.query
-        # .filter(Etablissement.departement == 31)
+        .filter(Etablissement.departement == 31)
         .filter(not_(Etablissement.latitude.is_(None))).all()
     )
-    print(a)
 
     features = []
     for e in a:
