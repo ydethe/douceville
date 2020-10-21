@@ -12,12 +12,17 @@ Résultats du bac (général, techno, pro) `<https://www.education.gouv.fr/les-i
 
 Résultats du brevet `<https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement>`_
 
+Immobilier `<https://www.data.gouv.fr/fr/reuses/extension-web-pour-investisseur-immobilier-toutes-les-donnees-immobilieres-integrees-a-votre-navigateur>`_
+
 A venir
 *******
 - RSA
 - lieux de culte
 - meteo
-- voir concurrents : jequitteparis.fr
+- voir concurrents :
+   - `<paris-jetequitte.com>`_
+   - `<map.datafrance.info>`_
 - immobilier
 - maternité
 - age moyen
+- acces fibre / 4G
