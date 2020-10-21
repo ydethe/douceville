@@ -12,5 +12,12 @@ Résultats du bac (général, techno, pro) `<https://www.education.gouv.fr/les-i
 
 Résultats du brevet `<https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement>`_
 
-
-
+A venir
+*******
+- RSA
+- lieux de culte
+- meteo
+- voir concurrents : jequitteparis.fr
+- immobilier
+- maternité
+- age moyen
