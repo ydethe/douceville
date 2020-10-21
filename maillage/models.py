@@ -1,4 +1,5 @@
 ﻿from sqlalchemy import inspect
+from geoalchemy2.types import Geometry
 
 from maillage import db
 
@@ -82,12 +83,16 @@ class Etablissement(db.Model):
     # Identification
     UAI = db.Column(db.String, primary_key=True)
     nom = db.Column(db.String, nullable=False)
+    adresse = db.Column(db.String)
+    lieu_dit = db.Column(db.String)
+    code_postal = db.Column(db.String)
     academie = db.Column(db.String)
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String, nullable=False)
     commune = db.Column(db.String, nullable=False)
-    latitude = db.Column(db.Float)
-    longitude = db.Column(db.Float)
+    ouverture = db.Column(db.DateTime())
+    # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
+    position = db.Column(Geometry("POINT"))
 
     def __repr__(self):
         return "<Etablissement {}, lat={}>".format(self.nom, self.latitude)

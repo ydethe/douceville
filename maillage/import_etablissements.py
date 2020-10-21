@@ -14,7 +14,7 @@ import maillage
 from maillage.models import Etablissement, Resultat
 from maillage.conv_utils import *
 from maillage.config import Config
-from maillage.conv_rdf import import_geoloc_db
+from maillage.read_geoloc_ecoles import import_geoloc_db
 from maillage.read_config import loadConfig
 
 
@@ -135,20 +135,73 @@ def import_sheet(
 def import_geoloc(session, file, no_insert=False):
     print("Importation données géoloc '%s'..." % file)
 
-    irec = {}
-    info = import_geoloc_db(file)
+    df = pd.read_excel(
+        file,
+        names=[
+            "UAI",
+            "nom",
+            "unused1",
+            "unused2",
+            "unused3",
+            "adresse",
+            "lieu_dit",
+            "unused6",
+            "code_postal",
+            "unused8",
+            "commune",
+            "unused10",
+            "unused11",
+            "unused12",
+            "latitude",
+            "longitude",
+            "unused15",
+            "unused16",
+            "unused17",
+            "unused18",
+            "unused19",
+            "unused_etat",
+            "unused33",
+            "unused22",
+            "unused23",
+            "unused24",
+            "unused25",
+            "unused26",
+            "academie",
+            "unused28",
+            "unused29",
+            "secteur",
+            "unused31",
+            "unused32",
+            "ouverture",
+        ],
+    )
 
-    result = session.query(Etablissement)
-    for row in tqdm.tqdm(result.all()):
-        uai = row.UAI
-        if not uai in info.keys():
+    n = len(df.index)
+    for index, row in tqdm.tqdm(df.iterrows(), total=n):
+        etab = {}
+        if row["unused_etat"] != "OUVERT":
             continue
 
-        dat = info[uai]
-        if "denomination" in dat.keys():
-            dat.pop("denomination")
+        for k in row.keys():
+            if "unused" in k:
+                continue
 
-        insert_or_update(session, dat, None, check_nullable=False, no_insert=no_insert)
+            if k == "secteur":
+                etab[k] = secteur_to_bool(row[k])
+            elif k == "nom":
+                etab[k] = to_cap(row[k])
+            elif k == "adresse":
+                etab[k] = to_cap(row[k])
+            else:
+                etab[k] = row[k]
+
+        lat = etab.pop("latitude")
+        lon = etab.pop("longitude")
+        if not isnan(lat) and not isnan(lon):
+            etab["position"] = "POINT(%f %f)" % (lon, lat)
+
+        q = session.query(Etablissement).filter(Etablissement.UAI == etab["UAI"])
+        q.update(etab)
 
     if not no_insert:
         session.commit()

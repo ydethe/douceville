@@ -1,6 +1,6 @@
 ident:
   ver: 1
-geoloc: maillage/raw/data_dict.raw
+geoloc: maillage/raw/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.xlsx
 sources:
  - fichier: maillage/raw/brevet_%i.xls
    onglets:

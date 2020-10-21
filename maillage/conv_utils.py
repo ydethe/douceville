@@ -18,6 +18,10 @@ def to_maj(x):
     return str(x).upper()
 
 
+def to_min(x):
+    return str(x).lower()
+
+
 def idty(x):
     return x
 
@@ -44,10 +48,14 @@ def to_int(x):
 
 
 def secteur_to_bool(x):
-    if x == "PR" or x == "SECTEUR PRIVE":
-        return "prive"
-    else:
+    if x == "SANS OBJET":
         return "public"
+    elif x == "PR" or x == "SECTEUR PRIVE":
+        return "prive"
+    elif x == "PU" or x == "SECTEUR PUBLIC":
+        return "public"
+    else:
+        return x.lower()
 
 
 def cp_to_dep(x):
