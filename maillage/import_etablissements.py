@@ -14,7 +14,6 @@ import maillage
 from maillage.models import Etablissement, Resultat
 from maillage.conv_utils import *
 from maillage.config import Config
-from maillage.read_geoloc_ecoles import import_geoloc_db
 from maillage.read_config import loadConfig
 
 
@@ -157,7 +156,7 @@ def import_geoloc(session, file, no_insert=False):
             "unused15",
             "unused16",
             "unused17",
-            "unused18",
+            "nature",
             "unused19",
             "unused_etat",
             "unused33",
@@ -192,6 +191,14 @@ def import_geoloc(session, file, no_insert=False):
                 etab[k] = to_cap(row[k])
             elif k == "adresse":
                 etab[k] = to_cap(row[k])
+            elif k == "nature":
+                etab[k] = to_min(row[k])
+            elif k == "lieu_dit":
+                ld = row[k]
+                if type(ld) == type(''):
+                    etab[k] = to_min(row[k])
+                else:
+                    etab[k] = None
             else:
                 etab[k] = row[k]
 

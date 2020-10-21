@@ -87,6 +87,7 @@ class Etablissement(db.Model):
     lieu_dit = db.Column(db.String)
     code_postal = db.Column(db.String)
     academie = db.Column(db.String)
+    nature = db.Column(db.String)
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String, nullable=False)
     commune = db.Column(db.String, nullable=False)
