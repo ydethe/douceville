@@ -10,6 +10,8 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+    <script src="http://matchingnotes.com/javascripts/leaflet-google.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
   </head>
@@ -18,7 +20,7 @@
     <script>
     
       var mymap = L.map('mapid').setView([47.0382686, 1.1501905], 6);
-    
+      
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -31,7 +33,7 @@
           }
       }
 
-      axios.get('http://192.168.1.81:5000/points')
+      axios.get('{{ points_request}}')
       .then(response => {
           console.log(response.data)
           L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);

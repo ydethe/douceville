@@ -1,4 +1,5 @@
 tqdm
+GeoAlchemy2
 sqlalchemy
 psycopg2-binary
 flask
@@ -13,4 +14,4 @@ rdflib
 rdflib-jsonld
 geojson
 PyYaml
-
+gevent

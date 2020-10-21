@@ -2,13 +2,13 @@ ident:
   ver: 1
 geoloc: maillage/raw/data_dict.raw
 # sources:
-#  - fichier: maillage/raw/brevet_%i.xls
-#    onglets:
-#    - Sheet
-#    diplome: brevet
-#    inv_mention: true
-#    annees:
-#    - 2018
+ # - fichier: maillage/raw/brevet_%i.xls
+   # onglets:
+   # - Sheet
+   # diplome: brevet
+   # inv_mention: true
+   # annees:
+   # - 2018
 #  - fichier: maillage/raw/brevet_%i.xls
 #    onglets:
 #    - Rapport 1
@@ -18,43 +18,43 @@ geoloc: maillage/raw/data_dict.raw
 #    - 2017
 #    - 2016
 #    - 2015
-#  - fichier: maillage/raw/bac_%i.xls
-#    onglets:
-#    - REUSSITE_GT
-#    - MENTIONS_GT
-#    diplome: general
-#    groupes:
-#    - S
-#    - L
-#    - ES
-#    annees:
-#    - 2018
+ # - fichier: maillage/raw/bac_%i.xls
+   # onglets:
+   # - MENTIONS_GT
+   # - REUSSITE_GT
+   # diplome: general
+   # groupes:
+   # - S
+   # - L
+   # - ES
+   # annees:
+   # - 2018
 #    - 2017
-#  - fichier: maillage/raw/bac_%i.xls
-#    onglets:
-#    - REUSSITE_PRO
-#    - MENTIONS_PRO
-#    diplome: pro
-#    groupes:
-#    - PRO
-#    annees:
-#    - 2018
+ # - fichier: maillage/raw/bac_%i.xls
+   # onglets:
+   # - MENTIONS_PRO
+   # - REUSSITE_PRO
+   # diplome: pro
+   # groupes:
+   # - PRO
+   # annees:
+   # - 2018
 #    - 2017
-#  - fichier: maillage/raw/bac_%i.xls
-#    onglets:
-#    - REUSSITE_GT
-#    - MENTIONS_GT
-#    diplome: techno
-#    groupes:
-#    - STMG
-#    - STL
-#    - ST2S
-#    - STI2D
-#    - STD2A
-#    - TMD
-#    - STHR
-#    annees:
-#    - 2018
+ # - fichier: maillage/raw/bac_%i.xls
+   # onglets:
+   # - MENTIONS_GT
+   # - REUSSITE_GT
+   # diplome: techno
+   # groupes:
+   # - STMG
+   # - STL
+   # - ST2S
+   # - STI2D
+   # - STD2A
+   # - TMD
+   # - STHR
+   # annees:
+   # - 2018
 #    - 2017
 #  - fichier: maillage/raw/bac_%i.xls
 #    onglets:

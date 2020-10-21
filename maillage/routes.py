@@ -6,7 +6,7 @@ from flask import render_template, jsonify
 from geojson import Feature, Point, FeatureCollection
 import geojson
 
-from maillage.config import basedir
+from maillage.config import Config, basedir
 from maillage import app
 from maillage.models import Etablissement, Resultat
 
@@ -26,9 +26,9 @@ def send_static(path):
 @app.route("/points", methods=["GET"])
 def get_all_points():
     a = (
-        Etablissement.query
-        .filter(Etablissement.departement == 31)
-        .filter(not_(Etablissement.latitude.is_(None))).all()
+        Etablissement.query.filter(Etablissement.departement == 31)
+        .filter(not_(Etablissement.latitude.is_(None)))
+        .all()
     )
 
     features = []
@@ -46,6 +46,8 @@ def get_all_points():
         for res in results:
             if not res.admis is None:
                 stat = res.admis / res.presents
+                if stat > 1 or stat < 0.3:
+                    print(res)
                 info += "<br>Réussite %s : %i%%" % (res.diplome, 100 * stat)
 
         f = {
@@ -60,4 +62,6 @@ def get_all_points():
 
 @app.route("/map")
 def map():
-    return render_template("map.html")
+    return render_template(
+        "map.html", points_request="http://%s:%i/points" % (Config.HOST, Config.PORT)
+    )
