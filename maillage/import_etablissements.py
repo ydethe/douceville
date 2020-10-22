@@ -18,7 +18,7 @@ from maillage.read_config import loadConfig
 from maillage.conv_rdf import import_geoloc_db
 
 
-def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
+def insert_or_update(session, etabl, res, check_nullable=True):
     if check_nullable and not etabl is None:
         for c in inspect(Etablissement).mapper.column_attrs:
             if not getattr(Etablissement, c.key).nullable:
@@ -26,7 +26,7 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
                     etabl = None
                     break
 
-    if not etabl is None and not no_insert:
+    if not etabl is None:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
             old_rec = q.first().asDict()
@@ -34,7 +34,7 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
             nk = set(etabl.keys())
             ck = ok.intersection(nk)
             for k in ck:
-                if not k in ['nom','latitude','longitude'] and old_rec[k] != etabl[k]:
+                if not k in ["nom", "latitude", "longitude"] and old_rec[k] != etabl[k]:
                     # print(old_rec)
                     # print(etabl)
                     # exit(1)
@@ -46,7 +46,9 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
             enr = Etablissement(**etabl)
             session.add(enr)
 
-    if not res is None and not no_insert:
+        session.commit()
+
+    if not res is None:
         q = session.query(Etablissement).filter(
             Etablissement.UAI == res["etablissement_id"]
         )
@@ -67,6 +69,8 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
             r_res = Resultat(**res)
             session.add(r_res)
 
+        session.commit()
+
 
 def import_sheet(
     session,
@@ -76,7 +80,6 @@ def import_sheet(
     corr_dict,
     year,
     inv_mention=False,
-    no_insert=False,
     geoloc2=None,
     row_limit=None,
 ):
@@ -91,11 +94,11 @@ def import_sheet(
         # ==========================
         # Analyse de l'établissement
         # ==========================
-        if corr_dict["nom_diplome"] == 'brevet':
-            etab = {'nature':'college'}
-        elif 'bac' in corr_dict["nom_diplome"]:
-            etab = {'nature':'lycee'}
-        
+        if corr_dict["nom_diplome"] == "brevet":
+            etab = {"nature": "college"}
+        elif "bac" in corr_dict["nom_diplome"]:
+            etab = {"nature": "lycee"}
+
         for xl_k in corr_dict["etabl"].keys():
             db_k, fct = corr_dict["etabl"][xl_k]
 
@@ -107,14 +110,14 @@ def import_sheet(
             if not val is None:
                 etab[db_k] = val
 
-        if not 'UAI' in etab.keys():
-            print(index,row,etab)
+        if not "UAI" in etab.keys():
+            print(index, row, etab)
 
-        uai = etab['UAI']
+        uai = etab["UAI"]
         if not geoloc2 is None:
-            if uai in geoloc2.keys() and 'latitude' in geoloc2[uai].keys():
-                etab['latitude'] = geoloc2[uai]['latitude']
-                etab['longitude'] = geoloc2[uai]['longitude']
+            if uai in geoloc2.keys() and "latitude" in geoloc2[uai].keys():
+                etab["latitude"] = geoloc2[uai]["latitude"]
+                etab["longitude"] = geoloc2[uai]["longitude"]
             else:
                 etab = None
 
@@ -173,16 +176,15 @@ def import_sheet(
         # =====================
         # Insertion
         # =====================
-        insert_or_update(session, etab, res, check_nullable=True, no_insert=no_insert)
+        insert_or_update(session, etab, res, check_nullable=True)
 
         if not row_limit is None and index >= row_limit:
             break
 
-    if not no_insert:
-        session.commit()
+    session.commit()
 
 
-def import_geoloc(session, file, no_insert=False, row_limit=None):
+def import_geoloc(session, file, row_limit=None):
     print("Importation données géoloc '%s'..." % file)
 
     df = pd.read_pickle(file)
@@ -243,13 +245,12 @@ def import_geoloc(session, file, no_insert=False, row_limit=None):
             val = fct(row.values[i])
             etab[k] = val
 
-        insert_or_update(session, etab, None, check_nullable=True, no_insert=no_insert)
+        insert_or_update(session, etab, None, check_nullable=True)
 
         if not row_limit is None and index >= row_limit:
             break
 
-    if not no_insert:
-        session.commit()
+    session.commit()
 
 
 # Autres criteres :

@@ -14,4 +14,3 @@ class Config(object):
     # HOST = "https://johncloud.fr"
     # PORT = 8000
     SECRET_KEY = "ITSASECRET"
-

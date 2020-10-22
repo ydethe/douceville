@@ -52,8 +52,9 @@ def to_int(x):
 def to_nature(x):
     return to_min(x)
 
+
 def secteur_to_bool(x):
-    if type(x) != type(''):
+    if type(x) != type(""):
         return None
     elif x == "SANS OBJET":
         return "public"
