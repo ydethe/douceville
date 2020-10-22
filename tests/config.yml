@@ -2,7 +2,7 @@ ident:
   ver: 2
 options:
  - row_limit: 10
-geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
+# geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
 geoloc2: maillage/raw/dataset.raw
 sources:
  - fichier: maillage/raw/brevet_%i.xls
@@ -20,6 +20,13 @@ sources:
    annees:
    - 2017
    - 2016
+ - fichier: maillage/raw/brevet_%i.xls
+   onglets:
+   - Rapport 1
+   diplome: brevet
+   inv_mention: true
+   skiprows: 3
+   annees:
    - 2015
  - fichier: maillage/raw/bac_%i.xls
    onglets:

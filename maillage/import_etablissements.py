@@ -107,6 +107,9 @@ def import_sheet(
             if not val is None:
                 etab[db_k] = val
 
+        if not 'UAI' in etab.keys():
+            print(index,row,etab)
+
         uai = etab['UAI']
         if not geoloc2 is None:
             if uai in geoloc2.keys() and 'latitude' in geoloc2[uai].keys():
