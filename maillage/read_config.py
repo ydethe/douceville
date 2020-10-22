@@ -35,6 +35,9 @@ def loadConfigV1(info):
     if not hasattr(info, "geoloc"):
         info.geoloc = None
 
+    if not hasattr(info, "geoloc2"):
+        info.geoloc2 = None
+
     for i in range(n):
         src = info.sources[i]
         if not hasattr(src, "groupes"):

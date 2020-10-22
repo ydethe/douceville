@@ -15,6 +15,7 @@ from maillage.models import Etablissement, Resultat
 from maillage.conv_utils import *
 from maillage.config import Config
 from maillage.read_config import loadConfig
+from maillage.conv_rdf import import_geoloc_db
 
 
 def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
@@ -28,6 +29,16 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
     if not etabl is None and not no_insert:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
+            old_rec = q.first().asDict()
+            ok = set(old_rec.keys())
+            nk = set(etabl.keys())
+            ck = ok.intersection(nk)
+            for k in ck:
+                if old_rec[k] != etabl[k]:
+                    print(old_rec)
+                    print(etabl)
+                    exit(1)
+
             q.update(etabl)
             enr = q.first()
         elif q.count() == 0:
@@ -65,6 +76,7 @@ def import_sheet(
     year,
     inv_mention=False,
     no_insert=False,
+    geoloc2=None,
     row_limit=None,
 ):
     df = pd.read_excel(xls, sheet_name, skiprows=range(skp))
@@ -94,6 +106,14 @@ def import_sheet(
             if not val is None:
                 etab[db_k] = val
 
+        uai = etab['UAI']
+        if not geoloc2 is None:
+            if uai in geoloc2.keys() and 'latitude' in geoloc2[uai].keys():
+                etab['latitude'] = geoloc2[uai]['latitude']
+                etab['longitude'] = geoloc2[uai]['longitude']
+            else:
+                etab = None
+
         # =====================
         # Analyse des résultats
         # =====================
@@ -104,7 +124,7 @@ def import_sheet(
             "presents": [],
             "mentions": [],
             "taux": [],
-            "etablissement_id": etab["UAI"],
+            "etablissement_id": uai,
         }
         for xl_k in corr_dict["res"].keys():
             db_k, fct = corr_dict["res"][xl_k]
@@ -263,6 +283,9 @@ def import_main():
     if not cfg.geoloc is None:
         import_geoloc(s, cfg.geoloc, row_limit=cfg.options["row_limit"])
 
+    if not cfg.geoloc2 is None:
+        gl2 = import_geoloc_db(cfg.geoloc2)
+
     for src in cfg.sources:
         corr = corr_diplome(src.diplome, src.groupes)
 
@@ -282,6 +305,7 @@ def import_main():
                     corr,
                     annee,
                     src.inv_mention,
+                    geoloc2=gl2,
                     row_limit=cfg.options["row_limit"],
                 )
 
