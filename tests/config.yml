@@ -2,14 +2,14 @@ ident:
   ver: 1
 # geoloc: maillage/raw/simple.xlsx
 geoloc: maillage/raw/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.xlsx
-# sources:
- # - fichier: maillage/raw/brevet_%i.xls
-   # onglets:
-   # - Sheet
-   # diplome: brevet
-   # inv_mention: true
-   # annees:
-   # - 2018
+sources:
+ - fichier: maillage/raw/brevet_%i.xls
+   onglets:
+   - Sheet
+   diplome: brevet
+   inv_mention: true
+   annees:
+   - 2018
  # - fichier: maillage/raw/brevet_%i.xls
    # onglets:
    # - Rapport 1
@@ -19,43 +19,43 @@ geoloc: maillage/raw/fr-en-adresse-et-geolocalisation-etablissements-premier-et-
    # - 2017
    # - 2016
    # - 2015
- # - fichier: maillage/raw/bac_%i.xls
-   # onglets:
-   # - MENTIONS_GT
-   # - REUSSITE_GT
-   # diplome: general
-   # groupes:
-   # - S
-   # - L
-   # - ES
-   # annees:
-   # - 2018
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - MENTIONS_GT
+   - REUSSITE_GT
+   diplome: general
+   groupes:
+   - S
+   - L
+   - ES
+   annees:
+   - 2018
    # - 2017
- # - fichier: maillage/raw/bac_%i.xls
-   # onglets:
-   # - MENTIONS_PRO
-   # - REUSSITE_PRO
-   # diplome: pro
-   # groupes:
-   # - PRO
-   # annees:
-   # - 2018
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - MENTIONS_PRO
+   - REUSSITE_PRO
+   diplome: pro
+   groupes:
+   - PRO
+   annees:
+   - 2018
    # - 2017
- # - fichier: maillage/raw/bac_%i.xls
-   # onglets:
-   # - MENTIONS_GT
-   # - REUSSITE_GT
-   # diplome: techno
-   # groupes:
-   # - STMG
-   # - STL
-   # - ST2S
-   # - STI2D
-   # - STD2A
-   # - TMD
-   # - STHR
-   # annees:
-   # - 2018
+ - fichier: maillage/raw/bac_%i.xls
+   onglets:
+   - MENTIONS_GT
+   - REUSSITE_GT
+   diplome: techno
+   groupes:
+   - STMG
+   - STL
+   - ST2S
+   - STI2D
+   - STD2A
+   - TMD
+   - STHR
+   annees:
+   - 2018
    # - 2017
  # - fichier: maillage/raw/bac_%i.xls
    # onglets:

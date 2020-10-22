@@ -82,18 +82,18 @@ class Etablissement(db.Model):
     # Identification
     UAI = db.Column(db.String(10), primary_key=True)
     nom = db.Column(db.String(191), nullable=False)
-    adresse = db.Column(db.String(191))
+    adresse = db.Column(db.String(191), nullable=False)
     lieu_dit = db.Column(db.String(191))
-    code_postal = db.Column(db.String(6))
-    academie = db.Column(db.String(191))
-    nature = db.Column(db.String(191))
+    code_postal = db.Column(db.String(6), nullable=False)
+    academie = db.Column(db.String(191), nullable=False)
+    nature = db.Column(db.String(191), nullable=False)
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String(191), nullable=False)
     commune = db.Column(db.String(191), nullable=False)
-    ouverture = db.Column(db.DateTime())
+    ouverture = db.Column(db.DateTime(), nullable=False)
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-    latitude = db.Column(db.Float)
-    longitude = db.Column(db.Float)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return "<Etablissement {}, lat={}>".format(self.nom, self.latitude)

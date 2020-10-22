@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 from sqlalchemy import not_, or_
 
@@ -26,7 +26,8 @@ def send_static(path):
 @app.route("/points", methods=["GET"])
 def get_all_points():
     a = (
-        Etablissement.query.filter(Etablissement.departement == 31)
+        Etablissement.query
+        # .filter(Etablissement.departement == 31)
         .filter(not_(Etablissement.latitude.is_(None)))
         .all()
     )

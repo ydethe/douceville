@@ -29,6 +29,8 @@ def idty(x):
 def to_float(x):
     try:
         val = float(x)
+        if isnan(val):
+            val = None
     except Exception as e:
         val = None
     return val
@@ -62,6 +64,15 @@ def cp_to_dep(x):
     if x == "-":
         return None
     return to_int(x[:-3])
+
+
+def to_lieu_dit(x):
+    ld = x
+    if type(ld) == type(''):
+        res = to_min(x)
+    else:
+        res = None
+    return res
 
 
 liste_bac_techno = ["STMG", "STL", "ST2S", "STI2D", "STD2A", "TMD", "STHR"]

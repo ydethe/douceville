@@ -18,12 +18,12 @@ from maillage.read_config import loadConfig
 
 
 def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
-    if check_nullable:
+    if check_nullable and not etabl is None:
         for c in inspect(Etablissement).mapper.column_attrs:
-            if not getattr(Etablissement, c.key).nullable and not c.key in etabl.keys():
-                print("skip22", etabl)
-                etabl = None
-                return
+            if not getattr(Etablissement, c.key).nullable:
+                if not c.key in etabl.keys() or etabl[c.key] is None:
+                    etabl = None
+                    break
 
     if not etabl is None and not no_insert:
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
@@ -35,7 +35,7 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
             session.add(enr)
 
     if not res is None and not no_insert:
-        res["etablissement_id"] = enr.UAI
+        res["etablissement_id"] = etabl['UAI']
         q = (
             session.query(Resultat)
             .filter(Resultat.annee == res["annee"])
@@ -68,7 +68,7 @@ def import_sheet(
             else:
                 val = None
 
-            if not val is None:
+            if not val is None and db_k == 'UAI':
                 etab[db_k] = val
 
         # =====================
@@ -125,7 +125,7 @@ def import_sheet(
         # =====================
         # Insertion
         # =====================
-        insert_or_update(session, etab, res, no_insert=no_insert)
+        insert_or_update(session, etab, res, check_nullable=False, no_insert=no_insert)
 
     if not no_insert:
         session.commit()
@@ -134,83 +134,65 @@ def import_sheet(
 def import_geoloc(session, file, no_insert=False):
     print("Importation données géoloc '%s'..." % file)
 
-    df = pd.read_excel(
-        file,
-        names=[
-            "UAI",
-            "nom",
-            "unused1",
-            "unused2",
-            "unused3",
-            "adresse",
-            "lieu_dit",
-            "unused6",
-            "code_postal",
-            "unused8",
-            "commune",
-            "unused10",
-            "unused11",
-            "unused12",
-            "latitude",
-            "longitude",
-            "unused15",
-            "unused16",
-            "unused17",
-            "nature",
-            "unused19",
-            "unused_etat",
-            "unused33",
-            "unused22",
-            "unused23",
-            "unused24",
-            "unused25",
-            "unused26",
-            "academie",
-            "unused28",
-            "unused29",
-            "secteur",
-            "unused31",
-            "unused32",
-            "ouverture",
-        ],
-    )
+    if not os.path.exists('cached_dataframe.pkl'):
+        df = pd.read_excel(file)
+        df.to_pickle('cached_dataframe.pkl')
+    else:
+        df = pd.read_pickle('cached_dataframe.pkl')
+
+    names=[
+        ("UAI",to_maj),
+        ("nom",to_cap),
+        ("unused1",None),
+        ("unused2",None),
+        ("unused3",None),
+        ("adresse",to_cap),
+        ("lieu_dit",to_lieu_dit),
+        ("unused6",None),
+        ("code_postal",to_maj),
+        ("unused8",None),
+        ("commune",to_cap),
+        ("unused10",None),
+        ("unused11",None),
+        ("unused12",None),
+        ("latitude",to_float),
+        ("longitude",to_float),
+        ("unused15",None),
+        ("unused16",None),
+        ("unused17",None),
+        ("nature",to_min),
+        ("unused19",None),
+        ("unused_etat",to_min),
+        ("departement",to_maj),
+        ("unused22",None),
+        ("unused23",None),
+        ("unused24",None),
+        ("unused25",None),
+        ("unused26",None),
+        ("academie",to_cap),
+        ("unused28",None),
+        ("unused29",None),
+        ("secteur",to_min),
+        ("unused31",None),
+        ("unused32",None),
+        ("ouverture",idty),
+    ]
 
     n = len(df.index)
     for index, row in tqdm.tqdm(df.iterrows(), total=n):
         etab = {}
-        if row["unused_etat"] != "OUVERT":
+
+        if row["Etat établissement"] != "OUVERT":
             continue
 
-        for k in row.keys():
+        for i,(k,fct) in enumerate(names):
             if "unused" in k:
                 continue
 
-            if k == "secteur":
-                etab[k] = secteur_to_bool(row[k])
-            elif k == "nom":
-                etab[k] = to_cap(row[k])
-            elif k == "adresse":
-                etab[k] = to_cap(row[k])
-            elif k == "nature":
-                etab[k] = to_min(row[k])
-            elif k == "lieu_dit":
-                ld = row[k]
-                if type(ld) == type(''):
-                    etab[k] = to_min(row[k])
-                else:
-                    etab[k] = None
-            else:
-                etab[k] = row[k]
+            val = fct(row.values[i])
+            etab[k] = val
 
-        lat = etab["latitude"]
-        lon = etab["longitude"]
-        if isnan(lat):
-            etab["latitude"] = None
-        if isnan(lon):
-            etab["longitude"] = None
-
-        q = session.query(Etablissement).filter(Etablissement.UAI == etab["UAI"])
-        q.update(etab)
+        insert_or_update(session, etab, None, check_nullable=True, no_insert=no_insert)
 
     if not no_insert:
         session.commit()
@@ -248,7 +230,9 @@ def import_main():
     session.configure(bind=engine)
     s = session()
 
-    src_geoloc = None
+    if not cfg.geoloc is None:
+        import_geoloc(s, cfg.geoloc)
+
     for src in cfg.sources:
         corr = corr_diplome(src.diplome, src.groupes)
 
@@ -261,9 +245,6 @@ def import_main():
                     % (ong, rt, corr["nom_diplome"], annee)
                 )
                 import_sheet(s, xls, ong, src.skiprows, corr, annee, src.inv_mention)
-
-    if not cfg.geoloc is None:
-        import_geoloc(s, cfg.geoloc)
 
 
 if __name__ == "__main__":
