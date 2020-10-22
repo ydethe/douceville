@@ -1,7 +1,7 @@
 ident:
   ver: 2
 options:
- - row_limit: 10
+#  - row_limit: 10
 # geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
 geoloc2: maillage/raw/dataset.raw
 sources:

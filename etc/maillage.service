@@ -1,0 +1,16 @@
+# /etc/systemd/system/maillage.service
+
+[Unit]
+Description=Gunicorn instance to serve maillage
+After=network.target
+
+[Service]
+User=ydethe
+Group=ydethe
+WorkingDirectory=/home/ydethe/repos/collegeslycees
+# Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
+ExecStart=/home/ydethe/.local/bin/uwsgi etc/uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
+
