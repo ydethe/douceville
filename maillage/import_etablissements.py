@@ -202,10 +202,12 @@ def import_geoloc(session, file, no_insert=False):
             else:
                 etab[k] = row[k]
 
-        lat = etab.pop("latitude")
-        lon = etab.pop("longitude")
-        if not isnan(lat) and not isnan(lon):
-            etab["position"] = "POINT(%f %f)" % (lon, lat)
+        lat = etab["latitude"]
+        lon = etab["longitude"]
+        if isnan(lat):
+            etab["latitude"] = None
+        if isnan(lon):
+            etab["longitude"] = None
 
         q = session.query(Etablissement).filter(Etablissement.UAI == etab["UAI"])
         q.update(etab)
