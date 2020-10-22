@@ -1,12 +1,8 @@
-import os
-
-from sqlalchemy import not_, or_
+from sqlalchemy import not_
 
 from flask import render_template, jsonify
-from geojson import Feature, Point, FeatureCollection
-import geojson
 
-from maillage.config import Config, basedir
+from maillage.config import Config
 from maillage import app
 from maillage.models import Etablissement, Resultat
 
@@ -16,11 +12,6 @@ from maillage.models import Etablissement, Resultat
 def index():
     user = {"username": "Yann"}
     return render_template("index.html", title="Home", user=user)
-
-
-@app.route("/static/<path:path>")
-def send_static(path):
-    return send_from_directory("static", path)
 
 
 @app.route("/points", methods=["GET"])
@@ -35,9 +26,6 @@ def get_all_points():
     features = []
     for e in a:
         info = "<b>%s</b>" % e.nom
-
-        stat_brevet = 0
-        stat_bac = 0
 
         results = (
             Resultat.query.filter(Resultat.etablissement_id == e.UAI)
@@ -64,5 +52,5 @@ def get_all_points():
 @app.route("/map")
 def map():
     return render_template(
-        "map.html", points_request="http://%s:%i/points" % (Config.HOST, Config.PORT)
+        "map.html", points_request="%s:%i/points" % (Config.HOST, Config.PORT)
     )
