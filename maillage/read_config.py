@@ -52,10 +52,13 @@ def loadConfigV1(info):
 def loadConfigV2(info):
     info = loadConfigV1(info)
 
-    opts = defaultdict(None)
-    for opt in info.options:
-        opts.update(opt.__dict__)
+    opts = defaultdict(lambda : None)
+    if not info.options is None:
+        for opt in info.options:
+            opts.update(opt.__dict__)
+
     info.options = opts
+
     return info
 
 

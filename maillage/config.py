@@ -11,6 +11,6 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # HOST = "http://ydethe.pythonanywhere.com"
     # PORT = 80
-    HOST = "localhost"
+    HOST = "https://localhost"
     PORT = 5000
     SECRET_KEY = "ITSASECRET"

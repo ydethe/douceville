@@ -182,7 +182,7 @@ def import_geoloc(session, file, no_insert=False, row_limit=None):
         ("nature", to_min),
         ("unused19", None),
         ("unused_etat", to_min),
-        ("departement", to_maj),
+        ("departement", cp_to_dep),
         ("unused22", None),
         ("unused23", None),
         ("unused24", None),

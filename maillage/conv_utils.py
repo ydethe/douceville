@@ -63,7 +63,12 @@ def secteur_to_bool(x):
 def cp_to_dep(x):
     if x == "-":
         return None
-    return to_int(x[:-3])
+    if len(x) > 4:
+        return to_int(x[:-3])
+    elif len(x) == 2:
+        return to_int(x)
+    else:
+        return None
 
 
 def to_lieu_dit(x):
