@@ -14,11 +14,12 @@ def index():
     return render_template("index.html", title="Home", user=user)
 
 
-@app.route("/points", methods=["GET"])
-def get_all_points():
+@app.route("/points/<int:year>/<nature>/<int:departement>/<int:stat_min>", methods=["GET"])
+def get_all_points(year, nature, departement, stat_min):
     a = (
         Etablissement.query
-        # .filter(Etablissement.departement == 31)
+        .filter(Etablissement.departement == departement)
+        .filter(Etablissement.nature == nature)
         .filter(not_(Etablissement.latitude.is_(None)))
         .all()
     )
@@ -29,28 +30,29 @@ def get_all_points():
 
         results = (
             Resultat.query.filter(Resultat.etablissement_id == e.UAI)
-            .filter(Resultat.annee == 2018)
+            .filter(Resultat.annee == year)
             .all()
         )
+
+        stat = 0
         for res in results:
             if not res.admis is None:
-                stat = res.admis / res.presents
-                if stat > 1 or stat < 0.3:
-                    print(res)
-                info += "<br>Réussite %s : %i%%" % (res.diplome, 100 * stat)
+                stat = int(100*res.admis / res.presents)
+                info += "<br>Réussite %s : %i%%" % (res.diplome, stat)
 
-        f = {
-            "geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"},
-            "properties": {"info": info},
-            "type": "Feature",
-        }
-        features.append(f)
+        if stat >= stat_min:
+            f = {
+                "geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"},
+                "properties": {"info": info},
+                "type": "Feature",
+            }
+            features.append(f)
 
     return jsonify(features)
 
 
-@app.route("/map")
-def map():
+@app.route("/map/<int:year>/<nature>/<int:departement>/<int:stat_min>")
+def map(year, nature, departement, stat_min):
     return render_template(
-        "map.html", points_request="%s:%i/points" % (Config.HOST, Config.PORT)
+        "map.html", points_request="%s:%i/points/%i/%s/%i/%i" % (Config.HOST, Config.PORT, year, nature, departement, stat_min)
     )
