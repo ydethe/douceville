@@ -49,8 +49,13 @@ def to_int(x):
     return val
 
 
+def to_nature(x):
+    return to_min(x)
+
 def secteur_to_bool(x):
-    if x == "SANS OBJET":
+    if type(x) != type(''):
+        return None
+    elif x == "SANS OBJET":
         return "public"
     elif x == "PR" or x == "SECTEUR PRIVE":
         return "prive"
