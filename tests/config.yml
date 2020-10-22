@@ -2,7 +2,7 @@ ident:
   ver: 2
 options:
 #  - row_limit: 10
-geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
+# geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
 sources:
  - fichier: maillage/raw/brevet_%i.xls
    onglets:

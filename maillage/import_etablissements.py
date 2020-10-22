@@ -78,7 +78,11 @@ def import_sheet(
         # ==========================
         # Analyse de l'établissement
         # ==========================
-        etab = {}
+        if corr_dict["nom_diplome"] == 'brevet':
+            etab = {'nature':'college'}
+        elif 'bac' in corr_dict["nom_diplome"]:
+            etab = {'nature':'lycee'}
+        
         for xl_k in corr_dict["etabl"].keys():
             db_k, fct = corr_dict["etabl"][xl_k]
 
@@ -145,7 +149,7 @@ def import_sheet(
         # =====================
         # Insertion
         # =====================
-        insert_or_update(session, None, res, check_nullable=False, no_insert=no_insert)
+        insert_or_update(session, etab, res, check_nullable=False, no_insert=no_insert)
 
         if not row_limit is None and index >= row_limit:
             break

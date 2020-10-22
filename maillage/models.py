@@ -84,7 +84,7 @@ class Etablissement(db.Model):
     nom = db.Column(db.String(191), nullable=False)
     adresse = db.Column(db.String(191))
     lieu_dit = db.Column(db.String(191))
-    code_postal = db.Column(db.String(6), nullable=False)
+    code_postal = db.Column(db.String(6))
     academie = db.Column(db.String(191), nullable=False)
     nature = db.Column(db.String(191), nullable=False)
     departement = db.Column(db.Integer, nullable=False)
