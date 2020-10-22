@@ -34,10 +34,11 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
             nk = set(etabl.keys())
             ck = ok.intersection(nk)
             for k in ck:
-                if old_rec[k] != etabl[k]:
-                    print(old_rec)
-                    print(etabl)
-                    exit(1)
+                if not k in ['nom','latitude','longitude'] and old_rec[k] != etabl[k]:
+                    # print(old_rec)
+                    # print(etabl)
+                    # exit(1)
+                    pass
 
             q.update(etabl)
             enr = q.first()
@@ -169,7 +170,7 @@ def import_sheet(
         # =====================
         # Insertion
         # =====================
-        insert_or_update(session, etab, res, check_nullable=False, no_insert=no_insert)
+        insert_or_update(session, etab, res, check_nullable=True, no_insert=no_insert)
 
         if not row_limit is None and index >= row_limit:
             break
