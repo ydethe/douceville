@@ -82,7 +82,7 @@ class Etablissement(db.Model):
     # Identification
     UAI = db.Column(db.String(10), primary_key=True)
     nom = db.Column(db.String(191), nullable=False)
-    adresse = db.Column(db.String(191), nullable=False)
+    adresse = db.Column(db.String(191))
     lieu_dit = db.Column(db.String(191))
     code_postal = db.Column(db.String(6), nullable=False)
     academie = db.Column(db.String(191), nullable=False)
@@ -90,7 +90,7 @@ class Etablissement(db.Model):
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String(191), nullable=False)
     commune = db.Column(db.String(191), nullable=False)
-    ouverture = db.Column(db.DateTime(), nullable=False)
+    ouverture = db.Column(db.DateTime())
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
