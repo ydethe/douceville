@@ -1,17 +1,19 @@
-from sqlalchemy import not_
+from sqlalchemy import not_, distinct
 
 from flask import render_template, jsonify
 
 from maillage.config import Config
 from maillage import app
-from maillage.models import Etablissement, Resultat
+from maillage.models import db, Etablissement, Resultat
 
 
 @app.route("/")
 @app.route("/index")
 def index():
     user = {"username": "Yann"}
-    return render_template("index.html", title="Home", user=user)
+    r = db.session.query(distinct(Etablissement.nature)).all()
+
+    return render_template("index.html", title="Home", user=user, natures=[x[0] for x in r])
 
 
 @app.route("/points/<int:year>/<nature>/<int:departement>/<int:stat_min>", methods=["GET"])
