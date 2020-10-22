@@ -114,6 +114,9 @@ def import_sheet(
             print(index, row, etab)
 
         uai = etab["UAI"]
+        if uai[:2] == '97':
+            continue
+
         if not geoloc2 is None:
             if uai in geoloc2.keys() and "latitude" in geoloc2[uai].keys():
                 etab["latitude"] = geoloc2[uai]["latitude"]
@@ -245,6 +248,9 @@ def import_geoloc(session, file, row_limit=None):
             val = fct(row.values[i])
             etab[k] = val
 
+        if etab['UAI'][:2] == '97':
+            continue
+            
         insert_or_update(session, etab, None, check_nullable=True)
 
         if not row_limit is None and index >= row_limit:
