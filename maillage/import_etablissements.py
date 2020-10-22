@@ -35,7 +35,14 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
             session.add(enr)
 
     if not res is None and not no_insert:
-        res["etablissement_id"] = etabl['UAI']
+        q = session.query(Etablissement).filter(
+            Etablissement.UAI == res["etablissement_id"]
+        )
+        if q.count() == 0:
+            print("[WARNING]Le resultat suivant ne correspond a aucun etablissement")
+            print("[WARNING]", res)
+            return
+
         q = (
             session.query(Resultat)
             .filter(Resultat.annee == res["annee"])
@@ -50,11 +57,23 @@ def insert_or_update(session, etabl, res, check_nullable=True, no_insert=False):
 
 
 def import_sheet(
-    session, xls, sheet_name, skp, corr_dict, year, inv_mention=False, no_insert=False
+    session,
+    xls,
+    sheet_name,
+    skp,
+    corr_dict,
+    year,
+    inv_mention=False,
+    no_insert=False,
+    row_limit=None,
 ):
     df = pd.read_excel(xls, sheet_name, skiprows=range(skp))
 
-    n = len(df.index)
+    if row_limit is None:
+        n = len(df.index)
+    else:
+        n = row_limit
+
     for index, row in tqdm.tqdm(df.iterrows(), total=n):
         # ==========================
         # Analyse de l'établissement
@@ -68,7 +87,7 @@ def import_sheet(
             else:
                 val = None
 
-            if not val is None and db_k == 'UAI':
+            if not val is None:
                 etab[db_k] = val
 
         # =====================
@@ -81,6 +100,7 @@ def import_sheet(
             "presents": [],
             "mentions": [],
             "taux": [],
+            "etablissement_id": etab["UAI"],
         }
         for xl_k in corr_dict["res"].keys():
             db_k, fct = corr_dict["res"][xl_k]
@@ -125,67 +145,70 @@ def import_sheet(
         # =====================
         # Insertion
         # =====================
-        insert_or_update(session, etab, res, check_nullable=False, no_insert=no_insert)
+        insert_or_update(session, None, res, check_nullable=False, no_insert=no_insert)
+
+        if not row_limit is None and index >= row_limit:
+            break
 
     if not no_insert:
         session.commit()
 
 
-def import_geoloc(session, file, no_insert=False):
+def import_geoloc(session, file, no_insert=False, row_limit=None):
     print("Importation données géoloc '%s'..." % file)
 
-    if not os.path.exists('cached_dataframe.pkl'):
-        df = pd.read_excel(file)
-        df.to_pickle('cached_dataframe.pkl')
-    else:
-        df = pd.read_pickle('cached_dataframe.pkl')
+    df = pd.read_pickle(file)
 
-    names=[
-        ("UAI",to_maj),
-        ("nom",to_cap),
-        ("unused1",None),
-        ("unused2",None),
-        ("unused3",None),
-        ("adresse",to_cap),
-        ("lieu_dit",to_lieu_dit),
-        ("unused6",None),
-        ("code_postal",to_maj),
-        ("unused8",None),
-        ("commune",to_cap),
-        ("unused10",None),
-        ("unused11",None),
-        ("unused12",None),
-        ("latitude",to_float),
-        ("longitude",to_float),
-        ("unused15",None),
-        ("unused16",None),
-        ("unused17",None),
-        ("nature",to_min),
-        ("unused19",None),
-        ("unused_etat",to_min),
-        ("departement",to_maj),
-        ("unused22",None),
-        ("unused23",None),
-        ("unused24",None),
-        ("unused25",None),
-        ("unused26",None),
-        ("academie",to_cap),
-        ("unused28",None),
-        ("unused29",None),
-        ("secteur",to_min),
-        ("unused31",None),
-        ("unused32",None),
-        ("ouverture",idty),
+    names = [
+        ("UAI", to_maj),
+        ("nom", to_cap),
+        ("unused1", None),
+        ("unused2", None),
+        ("unused3", None),
+        ("adresse", to_cap),
+        ("lieu_dit", to_lieu_dit),
+        ("unused6", None),
+        ("code_postal", to_maj),
+        ("unused8", None),
+        ("commune", to_cap),
+        ("unused10", None),
+        ("unused11", None),
+        ("unused12", None),
+        ("latitude", to_float),
+        ("longitude", to_float),
+        ("unused15", None),
+        ("unused16", None),
+        ("unused17", None),
+        ("nature", to_min),
+        ("unused19", None),
+        ("unused_etat", to_min),
+        ("departement", to_maj),
+        ("unused22", None),
+        ("unused23", None),
+        ("unused24", None),
+        ("unused25", None),
+        ("unused26", None),
+        ("academie", to_cap),
+        ("unused28", None),
+        ("unused29", None),
+        ("secteur", to_min),
+        ("unused31", None),
+        ("unused32", None),
+        ("ouverture", idty),
     ]
 
-    n = len(df.index)
+    if row_limit is None:
+        n = len(df.index)
+    else:
+        n = row_limit
+
     for index, row in tqdm.tqdm(df.iterrows(), total=n):
         etab = {}
 
         if row["Etat établissement"] != "OUVERT":
             continue
 
-        for i,(k,fct) in enumerate(names):
+        for i, (k, fct) in enumerate(names):
             if "unused" in k:
                 continue
 
@@ -193,6 +216,9 @@ def import_geoloc(session, file, no_insert=False):
             etab[k] = val
 
         insert_or_update(session, etab, None, check_nullable=True, no_insert=no_insert)
+
+        if not row_limit is None and index >= row_limit:
+            break
 
     if not no_insert:
         session.commit()
@@ -231,7 +257,7 @@ def import_main():
     s = session()
 
     if not cfg.geoloc is None:
-        import_geoloc(s, cfg.geoloc)
+        import_geoloc(s, cfg.geoloc, row_limit=cfg.options["row_limit"])
 
     for src in cfg.sources:
         corr = corr_diplome(src.diplome, src.groupes)
@@ -244,7 +270,16 @@ def import_main():
                     "Importation %s@%s, %s %i..."
                     % (ong, rt, corr["nom_diplome"], annee)
                 )
-                import_sheet(s, xls, ong, src.skiprows, corr, annee, src.inv_mention)
+                import_sheet(
+                    s,
+                    xls,
+                    ong,
+                    src.skiprows,
+                    corr,
+                    annee,
+                    src.inv_mention,
+                    row_limit=cfg.options["row_limit"],
+                )
 
 
 if __name__ == "__main__":

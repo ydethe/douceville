@@ -1,7 +1,8 @@
 ident:
-  ver: 1
-# geoloc: maillage/raw/simple.xlsx
-geoloc: maillage/raw/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.xlsx
+  ver: 2
+options:
+ - row_limit: 10
+geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
 sources:
  - fichier: maillage/raw/brevet_%i.xls
    onglets:

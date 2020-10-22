@@ -68,7 +68,7 @@ def cp_to_dep(x):
 
 def to_lieu_dit(x):
     ld = x
-    if type(ld) == type(''):
+    if type(ld) == type(""):
         res = to_min(x)
     else:
         res = None
