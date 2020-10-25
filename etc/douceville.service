@@ -1,4 +1,4 @@
-# /etc/systemd/system/maillage.service
+# /etc/systemd/system/douceville.service
 
 [Unit]
 Description=Gunicorn instance to serve maillage
@@ -7,7 +7,7 @@ After=network.target
 [Service]
 User=ydethe
 Group=ydethe
-WorkingDirectory=/home/ydethe/repos/maillage
+WorkingDirectory=/home/ydethe/douceville
 # Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
 ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
 

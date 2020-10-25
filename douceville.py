@@ -1,5 +1,5 @@
-﻿from maillage import app, db
-from maillage.models import Etablissement, Acces, Resultat
+﻿from douceville import app, db
+from douceville.models import Etablissement, Acces, Resultat
 
 
 @app.shell_context_processor
@@ -10,3 +10,4 @@ def make_shell_context():
         "Acces": Acces,
         "Resultat": Resultat,
     }
+

@@ -42,11 +42,11 @@ logger.addHandler(stream_handler)
 
 # now = datetime.now()
 # sd = now.strftime("%Y_%m_%d_%H_%M_%S")
-# file_handler = logging.FileHandler(
-# "logs/sc_%s.log" % sd, mode="w", encoding="utf-8", delay=False
-# )
-# file_handler.setFormatter(formatter)
-# logger.addHandler(file_handler)
+file_handler = logging.FileHandler(
+"douceville.log", mode="w", encoding="utf-8", delay=False
+)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 
 # create and configure the app
