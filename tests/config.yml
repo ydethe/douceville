@@ -2,17 +2,17 @@ ident:
   ver: 2
 options:
 #  - row_limit: 10
-# geoloc: maillage/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
-geoloc2: maillage/raw/dataset.raw
+# geoloc: douceville/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
+geoloc2: douceville/raw/dataset.raw
 sources:
- - fichier: maillage/raw/brevet_%i.xls
+ - fichier: douceville/raw/brevet_%i.xls
    onglets:
    - Sheet
    diplome: brevet
    inv_mention: true
    annees:
    - 2018
- - fichier: maillage/raw/brevet_%i.xls
+ - fichier: douceville/raw/brevet_%i.xls
    onglets:
    - Rapport 1
    diplome: brevet
@@ -20,7 +20,7 @@ sources:
    annees:
    - 2017
    - 2016
- - fichier: maillage/raw/brevet_%i.xls
+ - fichier: douceville/raw/brevet_%i.xls
    onglets:
    - Rapport 1
    diplome: brevet
@@ -28,7 +28,7 @@ sources:
    skiprows: 3
    annees:
    - 2015
- - fichier: maillage/raw/bac_%i.xls
+ - fichier: douceville/raw/bac_%i.xls
    onglets:
    - MENTIONS_GT
    - REUSSITE_GT
@@ -40,7 +40,7 @@ sources:
    annees:
    - 2018
    - 2017
- - fichier: maillage/raw/bac_%i.xls
+ - fichier: douceville/raw/bac_%i.xls
    onglets:
    - MENTIONS_PRO
    - REUSSITE_PRO
@@ -50,7 +50,7 @@ sources:
    annees:
    - 2018
    - 2017
- - fichier: maillage/raw/bac_%i.xls
+ - fichier: douceville/raw/bac_%i.xls
    onglets:
    - MENTIONS_GT
    - REUSSITE_GT
@@ -66,7 +66,7 @@ sources:
    annees:
    - 2018
    - 2017
- - fichier: maillage/raw/bac_%i.xls
+ - fichier: douceville/raw/bac_%i.xls
    onglets:
    - REUSSITE_GT
    diplome: general
@@ -84,7 +84,7 @@ sources:
    - 2010
    - 2009
    - 2008
- - fichier: maillage/raw/bac_%i.xls
+ - fichier: douceville/raw/bac_%i.xls
    onglets:
    - REUSSITE_PRO
    diplome: pro
@@ -100,7 +100,7 @@ sources:
    - 2010
    - 2009
    - 2008
- - fichier: maillage/raw/bac_%i.xls
+ - fichier: douceville/raw/bac_%i.xls
    onglets:
    - REUSSITE_GT
    diplome: techno
