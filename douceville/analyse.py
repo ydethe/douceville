@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
-from geoalchemy2.shape import to_shape
+# from geoalchemy2.shape import to_shape
 
 from douceville.models import Etablissement
 from douceville.config import Config
@@ -19,13 +19,13 @@ s = session()
 result = s.query(Etablissement)
 print("%i enregistrements" % result.count())
 
-result = s.query(Etablissement).filter(Etablissement.position.is_(None))
+result = s.query(Etablissement).filter(Etablissement.latitude.is_(None))
 print("%i enregistrements sans geoloc" % result.count())
 
 result = (
     s.query(Etablissement)
     .filter(Etablissement.departement == 31)
-    .filter(Etablissement.position.is_(None))
+    .filter(Etablissement.latitude.is_(None))
 )
 print("%i enregistrements sans geoloc dans le 31" % result.count())
 
@@ -35,6 +35,7 @@ for row in result:
 result = s.query(Etablissement).filter(Etablissement.departement == 31)
 print("%i enregistrements dans le 31" % result.count())
 
-r = result[0]
-a = to_shape(r.position)
-print(r.UAI, r.nom, a.x, a.y)
+# r = result[0]
+# a = to_shape(r.position)
+# print(r.UAI, r.nom, a.x, a.y)
+
