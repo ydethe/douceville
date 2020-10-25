@@ -2,9 +2,9 @@ from sqlalchemy import not_, distinct
 
 from flask import render_template, jsonify
 
-from maillage.config import Config
-from maillage import app
-from maillage.models import db, Etablissement, Resultat
+from douceville.config import Config
+from douceville import app
+from douceville.models import db, Etablissement, Resultat
 
 
 @app.route("/")

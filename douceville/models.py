@@ -1,6 +1,6 @@
 from sqlalchemy import inspect
 
-from maillage import db
+from douceville import db
 
 
 # Diplomes :

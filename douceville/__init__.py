@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 
-from maillage.config import Config
+from douceville.config import Config
 
 
 try:
@@ -61,4 +61,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
-from maillage import routes, models
+from douceville import routes, models
+

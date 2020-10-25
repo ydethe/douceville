@@ -1,6 +1,8 @@
 from math import isnan
 from collections import defaultdict
 
+from slugify import slugify
+
 
 def to_cap(x):
     if x is None:
@@ -12,6 +14,22 @@ def to_cap(x):
             return str(x)
     elif type(x) == type(""):
         return x.title()
+
+
+def to_nature(x):
+    s = slugify(x)
+    if 'elementaire' in s:
+        return 'elementaire'
+    elif 'college' in s:
+        return 'college'
+    elif 'lycee' in s:
+        return 'lycee'
+    elif 'prof' in s:
+        return 'lycee'
+    elif 'maternelle' in s:
+        return 'maternelle'
+    else:
+        return s
 
 
 def to_maj(x):
@@ -47,10 +65,6 @@ def to_int(x):
     except Exception as e:
         val = None
     return val
-
-
-def to_nature(x):
-    return to_min(x)
 
 
 def secteur_to_bool(x):

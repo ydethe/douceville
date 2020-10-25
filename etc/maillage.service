@@ -7,9 +7,9 @@ After=network.target
 [Service]
 User=ydethe
 Group=ydethe
-WorkingDirectory=/home/ydethe/repos/collegeslycees
+WorkingDirectory=/home/ydethe/repos/maillage
 # Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
-ExecStart=/home/ydethe/.local/bin/uwsgi etc/uwsgi.ini
+ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
 
 [Install]
 WantedBy=multi-user.target

@@ -17,4 +17,6 @@ PyYaml
 gevent
 pyopenssl
 gunicorn
+uwsgi
+python-slugify
 

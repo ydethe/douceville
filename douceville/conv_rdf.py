@@ -6,7 +6,7 @@ import argparse
 import tqdm
 from rdflib import Graph
 
-from maillage.read_config import loadConfig
+from douceville.read_config import loadConfig
 
 
 def create_cache(cfg, src):

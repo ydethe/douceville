@@ -10,12 +10,12 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import tqdm
 
-import maillage
-from maillage.models import Etablissement, Resultat
-from maillage.conv_utils import *
-from maillage.config import Config
-from maillage.read_config import loadConfig
-from maillage.conv_rdf import import_geoloc_db
+import douceville
+from douceville.models import Etablissement, Resultat
+from douceville.conv_utils import *
+from douceville.config import Config
+from douceville.read_config import loadConfig
+from douceville.conv_rdf import import_geoloc_db
 
 
 def insert_or_update(session, etabl, res, check_nullable=True):
@@ -275,7 +275,7 @@ def import_geoloc(session, file, row_limit=None):
 
 
 def import_main():
-    print("Maillage, version", maillage.__version__)
+    print("Maillage, version", douceville.__version__)
 
     parser = argparse.ArgumentParser(description="Maillage France")
     parser.add_argument("cfg", help="fichier config", type=str)

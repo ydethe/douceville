@@ -2,8 +2,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
 from geoalchemy2.shape import to_shape
 
-from maillage.models import Etablissement
-from maillage.config import Config
+from douceville.models import Etablissement
+from douceville.config import Config
 
 
 def object_as_dict(obj):

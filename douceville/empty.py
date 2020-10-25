@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine, inspect, or_
 from sqlalchemy.orm import sessionmaker
 
-from maillage.models import Etablissement, Resultat
-from maillage.config import Config
+from douceville.models import Etablissement, Resultat
+from douceville.config import Config
 
 
 engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
