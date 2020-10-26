@@ -3,6 +3,7 @@ GeoAlchemy2
 sqlalchemy
 psycopg2-binary
 shapely
+openrouteservice
 flask
 flask-shell-ipython
 flask-sqlalchemy
