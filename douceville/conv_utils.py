@@ -18,16 +18,16 @@ def to_cap(x):
 
 def to_nature(x):
     s = slugify(x)
-    if 'elementaire' in s:
-        return 'elementaire'
-    elif 'college' in s:
-        return 'college'
-    elif 'lycee' in s:
-        return 'lycee'
-    elif 'prof' in s:
-        return 'lycee'
-    elif 'maternelle' in s:
-        return 'maternelle'
+    if "elementaire" in s:
+        return "elementaire"
+    elif "college" in s:
+        return "college"
+    elif "lycee" in s:
+        return "lycee"
+    elif "prof" in s:
+        return "lycee"
+    elif "maternelle" in s:
+        return "maternelle"
     else:
         return s
 

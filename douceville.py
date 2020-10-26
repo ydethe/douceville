@@ -10,4 +10,3 @@ def make_shell_context():
         "Acces": Acces,
         "Resultat": Resultat,
     }
-

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
+
 # from geoalchemy2.shape import to_shape
 
 from douceville.models import Etablissement
@@ -38,4 +39,3 @@ print("%i enregistrements dans le 31" % result.count())
 # r = result[0]
 # a = to_shape(r.position)
 # print(r.UAI, r.nom, a.x, a.y)
-

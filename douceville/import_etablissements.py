@@ -27,12 +27,17 @@ def insert_or_update(session, etabl, res, check_nullable=True):
                     break
 
     if not etabl is None:
-        if 'latitude' in etabl.keys() and 'longitude' in etabl.keys() and not etabl['latitude'] is None and not etabl['longitude'] is None:
-            lat = etabl.pop('latitude')
-            lon = etabl.pop('longitude')
-            etabl['position'] = 'POINT(%f %f)' % (lon,lat)
-        etabl.pop('latitude',None)
-        etabl.pop('longitude',None)
+        if (
+            "latitude" in etabl.keys()
+            and "longitude" in etabl.keys()
+            and not etabl["latitude"] is None
+            and not etabl["longitude"] is None
+        ):
+            lat = etabl.pop("latitude")
+            lon = etabl.pop("longitude")
+            etabl["position"] = "POINT(%f %f)" % (lon, lat)
+        etabl.pop("latitude", None)
+        etabl.pop("longitude", None)
 
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
@@ -121,7 +126,7 @@ def import_sheet(
             print(index, row, etab)
 
         uai = etab["UAI"]
-        if uai[:2] == '97':
+        if uai[:2] == "97":
             continue
 
         if not geoloc2 is None:
@@ -255,9 +260,9 @@ def import_geoloc(session, file, row_limit=None):
             val = fct(row.values[i])
             etab[k] = val
 
-        if etab['UAI'][:2] == '97':
+        if etab["UAI"][:2] == "97":
             continue
-            
+
         insert_or_update(session, etab, None, check_nullable=True)
 
         if not row_limit is None and index >= row_limit:

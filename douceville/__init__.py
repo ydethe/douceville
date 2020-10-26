@@ -43,18 +43,14 @@ logger.addHandler(stream_handler)
 # now = datetime.now()
 # sd = now.strftime("%Y_%m_%d_%H_%M_%S")
 file_handler = logging.FileHandler(
-"douceville.log", mode="w", encoding="utf-8", delay=False
+    "douceville.log", mode="w", encoding="utf-8", delay=False
 )
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 
 # create and configure the app
-# app = Flask(__name__, instance_relative_config=True, static_url_path='static')
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_mapping(
-    SECRET_KEY="dev",
-)
 app.config.from_object(Config)
 app.logger.addHandler(file_handler)
 
@@ -63,4 +59,3 @@ migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
 from douceville import routes, models
-

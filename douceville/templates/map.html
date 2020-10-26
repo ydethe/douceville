@@ -37,6 +37,8 @@
           L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);
       })
 
+      L.geoJSON({{ isochrone|tojson }}).addTo(mymap);
+
     </script>
   </body>
 </html>

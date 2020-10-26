@@ -1,10 +1,12 @@
 from sqlalchemy import not_, distinct
+from geoalchemy2.shape import to_shape
 
-from flask import render_template, jsonify
+from flask import render_template, jsonify, make_response
 
 from douceville.config import Config
 from douceville import app
 from douceville.models import db, Etablissement, Resultat
+from douceville.isochrone import calcIsochrone
 
 
 @app.route("/")
@@ -32,6 +34,8 @@ def get_all_points(year, nature, departement, stat_min):
 
     features = []
     for e in a.all():
+        print(to_shape(e.position))
+
         info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
 
         results = (
@@ -61,8 +65,13 @@ def get_all_points(year, nature, departement, stat_min):
 @app.route("/map/<int:year>/<nature>/<int:departement>", methods=["GET"])
 @app.route("/map/<int:year>/<nature>/<int:departement>/<int:stat_min>")
 def map(year, nature, departement=0, stat_min=0):
+    dist = 20 * 60
+    center = [1.387276, 43.545640]
+    iso = calcIsochrone(center, dist)
+
     return render_template(
         "map.html",
+        isochrone=iso["features"],
         points_request="%s:%i/points/%i/%s/%i/%i"
         % (Config.HOST, Config.PORT, year, nature, departement, stat_min),
     )
