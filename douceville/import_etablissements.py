@@ -27,6 +27,13 @@ def insert_or_update(session, etabl, res, check_nullable=True):
                     break
 
     if not etabl is None:
+        if 'latitude' in etabl.keys() and 'longitude' in etabl.keys() and not etabl['latitude'] is None and not etabl['longitude'] is None:
+            lat = etabl.pop('latitude')
+            lon = etabl.pop('longitude')
+            etabl['position'] = 'POINT(%f %f)' % (lon,lat)
+        etabl.pop('latitude',None)
+        etabl.pop('longitude',None)
+
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
             old_rec = q.first().asDict()

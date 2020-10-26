@@ -56,6 +56,7 @@ app.config.from_mapping(
     SECRET_KEY="dev",
 )
 app.config.from_object(Config)
+app.logger.addHandler(file_handler)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

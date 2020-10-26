@@ -1,4 +1,5 @@
 from sqlalchemy import inspect
+from geoalchemy2 import Geometry
 
 from douceville import db
 
@@ -92,8 +93,9 @@ class Etablissement(db.Model):
     commune = db.Column(db.String(191), nullable=False)
     ouverture = db.Column(db.DateTime())
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-    latitude = db.Column(db.Float, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
+    # latitude = db.Column(db.Float, nullable=False)
+    # longitude = db.Column(db.Float, nullable=False)
+    position = db.Column(Geometry('POINT'))
 
     def __repr__(self):
         return "<Etablissement {}, lat={}>".format(self.nom, self.latitude)
