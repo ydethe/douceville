@@ -24,7 +24,19 @@ def index():
     "/points/<int:year>/<nature>/<int:departement>/<int:stat_min>", methods=["GET"]
 )
 def get_all_points(year, nature, departement, stat_min):
-    a = Etablissement.query.filter(not_(Etablissement.latitude.is_(None)))
+    dist = 500
+    center = [1.39396,43.547864]
+    iso = calcIsochrone(center, dist)
+
+    pts = iso['features'][0]['geometry']['coordinates'][0]
+
+    pg = 'POLYGON(('
+    for lon,lat in pts:
+        pg += '%f %f,' % (lon,lat)
+    pg = pg[:-1] + '))'
+
+    a = Etablissement.query.filter(not_(Etablissement.latitude.is_(None))).filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
+
 
     if departement > 0:
         a = a.filter(Etablissement.departement == departement)

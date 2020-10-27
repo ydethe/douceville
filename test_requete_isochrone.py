@@ -13,7 +13,8 @@ iso = calcIsochrone([1.39396,43.547864],500)
 
 pts = iso['features'][0]['geometry']['coordinates'][0]
 
-pg = 'SRID=4326;POLYGON(('
+pg = 'POLYGON(('
+# pg = 'SRID=4326;POLYGON(('
 for lon,lat in pts:
     pg += '%f %f,' % (lon,lat)
 pg = pg[:-1] + '))'
