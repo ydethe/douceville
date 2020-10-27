@@ -1,5 +1,6 @@
 from sqlalchemy import not_, distinct
 from geoalchemy2.shape import to_shape
+from geoalchemy2 import func
 
 from flask import render_template, jsonify, make_response
 
@@ -35,7 +36,7 @@ def get_all_points(year, nature, departement, stat_min):
         pg += '%f %f,' % (lon,lat)
     pg = pg[:-1] + '))'
 
-    a = Etablissement.query.filter(not_(Etablissement.latitude.is_(None))).filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
+    a = Etablissement.query.filter(not_(Etablissement.position.is_(None))).filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
 
 
     if departement > 0:
@@ -63,8 +64,10 @@ def get_all_points(year, nature, departement, stat_min):
                 info += "<br>Réussite %s : %i%%" % (res.diplome, stat)
 
         if stat >= stat_min:
+            p = to_shape(e.position)
+            lon,lat = p.coords.xy
             f = {
-                "geometry": {"coordinates": [e.longitude, e.latitude], "type": "Point"},
+                "geometry": {"coordinates": [lon[0], lat[0]], "type": "Point"},
                 "properties": {"info": info},
                 "type": "Feature",
             }
