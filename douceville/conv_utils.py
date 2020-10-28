@@ -109,8 +109,14 @@ def corr_diplome(nom, groupe):
         corr["etabl"]["Patronyme"] = (("nom", to_cap),)
         corr["etabl"]["Libellé académie"] = (("academie", to_cap),)
         corr["etabl"]["Commune"] = (("code_postal", to_maj),)
-        corr["etabl"]["Commune_et_arrondissement"] = (("code_postal", to_maj),("departement", cp_to_dep))
-        corr["etabl"]["Commune et arrondissement"] = (("code_postal", to_maj),("departement", cp_to_dep))
+        corr["etabl"]["Commune_et_arrondissement"] = (
+            ("code_postal", to_maj),
+            ("departement", cp_to_dep),
+        )
+        corr["etabl"]["Commune et arrondissement"] = (
+            ("code_postal", to_maj),
+            ("departement", cp_to_dep),
+        )
         corr["etabl"]["Code département"] = (("departement", to_int),)
         corr["etabl"]["Secteur d'enseignement"] = (("secteur", secteur_to_bool),)
         corr["etabl"]["Secteur_d_enseignement"] = (("secteur", secteur_to_bool),)

@@ -18,10 +18,10 @@ class Resultat(db.Model):
     etablissement_id = db.Column(
         db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False
     )
-    
+
     def __repr__(self):
         r = self.asDict()
-        r.pop('position', None)
+        r.pop("position", None)
         ks = list(r.keys())
         for k in ks:
             if r[k] is None:
@@ -48,13 +48,13 @@ class Etablissement(db.Model):
     commune = db.Column(db.String(191), nullable=False)
     ouverture = db.Column(db.DateTime())
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-    position = db.Column(Geometry('POINT'))
-    
-    resultats = db.relationship('Resultat', backref='etablissement', lazy='dynamic')
-    
+    position = db.Column(Geometry("POINT"))
+
+    resultats = db.relationship("Resultat", backref="etablissement", lazy="dynamic")
+
     def __repr__(self):
         r = self.asDict()
-        r.pop('position', None)
+        r.pop("position", None)
         ks = list(r.keys())
         for k in ks:
             if r[k] is None:
@@ -63,4 +63,3 @@ class Etablissement(db.Model):
 
     def asDict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
-

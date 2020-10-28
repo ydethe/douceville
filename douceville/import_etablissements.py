@@ -23,24 +23,24 @@ from douceville.conv_rdf import import_geoloc_db
 @logged
 def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
     etabl_valid = True
-    log_valid = ''
+    log_valid = ""
     if check_nullable and not etabl is None:
         for c in inspect(Etablissement).mapper.column_attrs:
             if not getattr(Etablissement, c.key).nullable:
-                log_valid += '* %s' % c.key
+                log_valid += "* %s" % c.key
                 if c.key in etabl.keys():
-                    log_valid += ' -> %s\n' % etabl[c.key]
+                    log_valid += " -> %s\n" % etabl[c.key]
                 else:
-                    log_valid += '\n'
+                    log_valid += "\n"
                 if not c.key in etabl.keys() or etabl[c.key] is None:
                     etabl_valid = False
             else:
-                log_valid += '  %s' % c.key
+                log_valid += "  %s" % c.key
                 if c.key in etabl.keys():
-                    log_valid += ' -> %s\n' % etabl[c.key]
+                    log_valid += " -> %s\n" % etabl[c.key]
                 else:
-                    log_valid += '\n'
-                
+                    log_valid += "\n"
+
     if not etabl_valid:
         logger.error("etabl invalide")
         logger.error(log_valid)
@@ -130,7 +130,7 @@ def import_sheet(
             etab = {"nature": "college"}
         elif "bac" in corr_dict["nom_diplome"]:
             etab = {"nature": "lycee"}
-        
+
         for xl_k in corr_dict["etabl"].keys():
             for db_k, fct in corr_dict["etabl"][xl_k]:
 
@@ -143,8 +143,10 @@ def import_sheet(
                     etab[db_k] = val
 
         if not "UAI" in etab.keys():
-            logger.error("'UAI' attribute not found @row %i : %s, %s" % (index, row, etab))
-            
+            logger.error(
+                "'UAI' attribute not found @row %i : %s, %s" % (index, row, etab)
+            )
+
         uai = etab["UAI"]
         if uai[:2] == "97":
             continue
@@ -155,7 +157,7 @@ def import_sheet(
                 etab["longitude"] = geoloc2[uai]["longitude"]
             else:
                 etab = None
-        
+
         # =====================
         # Analyse des résultats
         # =====================
@@ -331,7 +333,7 @@ def import_main(logger=None):
         gl2 = import_geoloc_db(cfg.geoloc2)
     else:
         gl2 = None
-        
+
     for src in cfg.sources:
         corr = corr_diplome(src.diplome, src.groupes)
 
