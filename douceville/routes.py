@@ -88,11 +88,11 @@ def map():
     lon = float(request.args.get("lon", "1.39396"))
     lat = float(request.args.get("lat", "43.547864"))
     
-    iso = calcIsochrone(center, dist)
+    iso = calcIsochrone([lon,lat], dist)
 
     return render_template(
         "map.html",
         isochrone=iso["features"],
-        points_request="%s:%i/points?nature=%s&departement=%i&dist=%f&lon=%f&lat=£f"
+        points_request="%s:%i/points?nature=%s&departement=%i&dist=%f&lon=%f&lat=%f"
         % (Config.HOST, Config.PORT, nature, departement, dist, lon, lat),
     )
