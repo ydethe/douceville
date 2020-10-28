@@ -21,12 +21,15 @@ def index():
     )
 
 
-@app.route(
-    "/points/<int:year>/<nature>/<int:departement>/<int:stat_min>", methods=["GET"]
-)
-def get_all_points(year, nature, departement, stat_min):
-    dist = 300
-    center = [1.39396,43.547864]
+@app.route("/points", methods=["GET"])
+def get_all_points():
+    nature = request.args.get("nature", "0")
+    departement = int(request.args.get("departement", "0"))
+    dist = float(request.args.get("dist", "300"))
+    lon = float(request.args.get("lon", "1.39396"))
+    lat = float(request.args.get("lat", "43.547864"))
+        
+    center = [lon,lat]
     iso = calcIsochrone(center, dist)
 
     pts = iso['features'][0]['geometry']['coordinates'][0]
@@ -37,7 +40,6 @@ def get_all_points(year, nature, departement, stat_min):
     pg = pg[:-1] + '))'
 
     a = Etablissement.query.filter(not_(Etablissement.position.is_(None))).filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
-
 
     if departement > 0:
         a = a.filter(Etablissement.departement == departement)
@@ -76,17 +78,21 @@ def get_all_points(year, nature, departement, stat_min):
     return jsonify(features)
 
 
-@app.route("/map/<int:year>/<nature>", methods=["GET"])
-@app.route("/map/<int:year>/<nature>/<int:departement>", methods=["GET"])
-@app.route("/map/<int:year>/<nature>/<int:departement>/<int:stat_min>")
-def map(year, nature, departement=0, stat_min=0):
-    dist = 300
-    center = [1.387276, 43.545640]
+@app.route("/map", methods=["GET"])
+def map():
+    year = int(request.args.get("year", "2018"))
+    nature = request.args.get("nature", "0")
+    departement = int(request.args.get("departement", "0"))
+    stat_min = int(request.args.get("stat_min", "0"))
+    dist = float(request.args.get("dist", "300"))
+    lon = float(request.args.get("lon", "1.39396"))
+    lat = float(request.args.get("lat", "43.547864"))
+    
     iso = calcIsochrone(center, dist)
 
     return render_template(
         "map.html",
         isochrone=iso["features"],
-        points_request="%s:%i/points/%i/%s/%i/%i"
-        % (Config.HOST, Config.PORT, year, nature, departement, stat_min),
+        points_request="%s:%i/points?nature=%s&departement=%i&dist=%f&lon=%f&lat=£f"
+        % (Config.HOST, Config.PORT, nature, departement, dist, lon, lat),
     )
