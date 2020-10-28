@@ -11,6 +11,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 
+from sqlalchemy import event
+
 from douceville.config import Config
 
 

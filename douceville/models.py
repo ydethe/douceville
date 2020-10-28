@@ -1,4 +1,4 @@
-from sqlalchemy import inspect
+from sqlalchemy import inspect, event
 from geoalchemy2 import Geometry
 
 from douceville import db

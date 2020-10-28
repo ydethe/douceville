@@ -21,4 +21,4 @@ pyopenssl
 gunicorn
 uwsgi
 python-slugify
-
+cryptography
