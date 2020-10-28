@@ -2,7 +2,7 @@ from sqlalchemy import not_, distinct
 from geoalchemy2.shape import to_shape
 from geoalchemy2 import func
 
-from flask import render_template, jsonify, make_response
+from flask import render_template, jsonify, make_response, request
 
 from douceville.config import Config
 from douceville import app
@@ -25,7 +25,7 @@ def index():
     "/points/<int:year>/<nature>/<int:departement>/<int:stat_min>", methods=["GET"]
 )
 def get_all_points(year, nature, departement, stat_min):
-    dist = 500
+    dist = 300
     center = [1.39396,43.547864]
     iso = calcIsochrone(center, dist)
 
@@ -80,7 +80,7 @@ def get_all_points(year, nature, departement, stat_min):
 @app.route("/map/<int:year>/<nature>/<int:departement>", methods=["GET"])
 @app.route("/map/<int:year>/<nature>/<int:departement>/<int:stat_min>")
 def map(year, nature, departement=0, stat_min=0):
-    dist = 20 * 60
+    dist = 300
     center = [1.387276, 43.545640]
     iso = calcIsochrone(center, dist)
 
