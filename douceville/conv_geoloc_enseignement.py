@@ -7,24 +7,26 @@ import pandas as pd
 import tqdm
 from rdflib import Graph
 
+from douceville.utils import logged
 from douceville.read_config import loadConfig
 
 
-def create_cache(cfg, src):
-    print(time.ctime(), "Creating geoloc cache '%s'..." % src)
+@logged
+def create_cache(cfg, src, logger=None):
+    logger.info(time.ctime(), "Creating geoloc cache '%s'..." % src)
 
     c = loadConfig(cfg)
     dst = c.geoloc
 
     if dst is None:
-        print("[ERROR]No geoloc file specified in %s" % cfg)
+        logger.error("No geoloc file specified in %s" % cfg)
     elif dst == src:
-        print("[ERROR]Same source and destination %s" % src)
+        logger.error("Same source and destination %s" % src)
     else:
         df = pd.read_excel(src)
         df.to_pickle(dst)
 
-    print(time.ctime(), "Done.")
+    logger.info(time.ctime(), "Done.")
 
 
 def import_geoloc_db(fic):

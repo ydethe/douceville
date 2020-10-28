@@ -1,6 +1,7 @@
 import pickle
 import argparse
 import os
+import logging
 
 import numpy as np
 
@@ -11,6 +12,7 @@ import pandas as pd
 import tqdm
 
 import douceville
+from douceville.utils import logged
 from douceville.models import Etablissement, Resultat
 from douceville.conv_utils import *
 from douceville.config import Config
@@ -18,15 +20,32 @@ from douceville.read_config import loadConfig
 from douceville.conv_rdf import import_geoloc_db
 
 
-def insert_or_update(session, etabl, res, check_nullable=True):
+@logged
+def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
+    etabl_valid = True
+    log_valid = ''
     if check_nullable and not etabl is None:
         for c in inspect(Etablissement).mapper.column_attrs:
             if not getattr(Etablissement, c.key).nullable:
+                log_valid += '* %s' % c.key
+                if c.key in etabl.keys():
+                    log_valid += ' -> %s\n' % etabl[c.key]
+                else:
+                    log_valid += '\n'
                 if not c.key in etabl.keys() or etabl[c.key] is None:
-                    etabl = None
-                    break
-
-    if not etabl is None:
+                    etabl_valid = False
+            else:
+                log_valid += '  %s' % c.key
+                if c.key in etabl.keys():
+                    log_valid += ' -> %s\n' % etabl[c.key]
+                else:
+                    log_valid += '\n'
+                
+    if not etabl_valid:
+        logger.error("etabl invalide")
+        logger.error(log_valid)
+        exit(0)
+    else:
         if (
             "latitude" in etabl.keys()
             and "longitude" in etabl.keys()
@@ -65,8 +84,8 @@ def insert_or_update(session, etabl, res, check_nullable=True):
             Etablissement.UAI == res["etablissement_id"]
         )
         if q.count() == 0:
-            print("[WARNING]Le resultat suivant ne correspond a aucun etablissement")
-            print("[WARNING]", res)
+            logger.warnin("Le resultat suivant ne correspond a aucun etablissement")
+            logger.warnin("%s" % res)
             return
 
         q = (
@@ -94,6 +113,7 @@ def import_sheet(
     inv_mention=False,
     geoloc2=None,
     row_limit=None,
+    logger=None,
 ):
     df = pd.read_excel(xls, sheet_name, skiprows=range(skp))
 
@@ -110,21 +130,21 @@ def import_sheet(
             etab = {"nature": "college"}
         elif "bac" in corr_dict["nom_diplome"]:
             etab = {"nature": "lycee"}
-
+        
         for xl_k in corr_dict["etabl"].keys():
-            db_k, fct = corr_dict["etabl"][xl_k]
+            for db_k, fct in corr_dict["etabl"][xl_k]:
 
-            if xl_k in row.keys():
-                val = fct(row[xl_k])
-            else:
-                val = None
+                if xl_k in row.keys():
+                    val = fct(row[xl_k])
+                else:
+                    val = None
 
-            if not val is None:
-                etab[db_k] = val
+                if not val is None:
+                    etab[db_k] = val
 
         if not "UAI" in etab.keys():
-            print(index, row, etab)
-
+            logger.error("'UAI' attribute not found @row %i : %s, %s" % (index, row, etab))
+            
         uai = etab["UAI"]
         if uai[:2] == "97":
             continue
@@ -135,7 +155,7 @@ def import_sheet(
                 etab["longitude"] = geoloc2[uai]["longitude"]
             else:
                 etab = None
-
+        
         # =====================
         # Analyse des résultats
         # =====================
@@ -182,7 +202,7 @@ def import_sheet(
         # Filtrage
         # =====================
         if not "presents" in res.keys():
-            # print('skip103', res)
+            logger.warning("'present' attribute not found : %s" % res)
             continue
 
         if inv_mention and "mentions" in res.keys() and "admis" in res.keys():
@@ -200,7 +220,7 @@ def import_sheet(
 
 
 def import_geoloc(session, file, row_limit=None):
-    print("Importation données géoloc '%s'..." % file)
+    logger.info("Importation données géoloc '%s'..." % file)
 
     df = pd.read_pickle(file)
 
@@ -286,8 +306,9 @@ def import_geoloc(session, file, row_limit=None):
 # https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 
 
-def import_main():
-    print("Maillage, version", douceville.__version__)
+@logged
+def import_main(logger=None):
+    logger.info("Maillage, version %s" % douceville.__version__)
 
     parser = argparse.ArgumentParser(description="Maillage France")
     parser.add_argument("cfg", help="fichier config", type=str)
@@ -296,7 +317,7 @@ def import_main():
 
     cfg = loadConfig(args.cfg)
 
-    print("Base de données :", Config.SQLALCHEMY_DATABASE_URI)
+    logger.info("Base de données : %s" % Config.SQLALCHEMY_DATABASE_URI)
     engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
     session = sessionmaker()
@@ -308,7 +329,9 @@ def import_main():
 
     if not cfg.geoloc2 is None:
         gl2 = import_geoloc_db(cfg.geoloc2)
-
+    else:
+        gl2 = None
+        
     for src in cfg.sources:
         corr = corr_diplome(src.diplome, src.groupes)
 
@@ -316,7 +339,7 @@ def import_main():
             xls = pd.ExcelFile(src.fichier % annee)
             for ong in src.onglets:
                 rt = os.path.split(src.fichier % annee)[-1]
-                print(
+                logger.info(
                     "Importation %s@%s, %s %i..."
                     % (ong, rt, corr["nom_diplome"], annee)
                 )

@@ -81,9 +81,10 @@ def secteur_to_bool(x):
 
 
 def cp_to_dep(x):
+    x = str(x)
     if x == "-":
         return None
-    if len(x) > 4:
+    if len(x) >= 4:
         return to_int(x[:-3])
     elif len(x) == 2:
         return to_int(x)
@@ -100,42 +101,25 @@ def to_lieu_dit(x):
     return res
 
 
-liste_bac_techno = ["STMG", "STL", "ST2S", "STI2D", "STD2A", "TMD", "STHR"]
-
-liste_bac_pro = [
-    "Production",
-    "Services",
-    "Spe_pluritech",
-    "Transformations",
-    "Genie_civil",
-    "Materiaux_souples",
-    "Meca_elec",
-    "Spe_plurivalentes",
-    "Echanges_gestion",
-    "Communication_info",
-    "Services_personnes",
-    "Services_collectivite",
-]
-
-
 def corr_diplome(nom, groupe):
     corr = defaultdict(dict)
 
     if nom == "brevet":
         corr["nom_diplome"] = "brevet"
-        corr["etabl"]["Patronyme"] = "nom", to_cap
-        corr["etabl"]["Libellé académie"] = "academie", to_cap
-        corr["etabl"]["Code département"] = "departement", to_int
-        corr["etabl"]["Commune_et_arrondissement"] = "departement", cp_to_dep
-        corr["etabl"]["Commune et arrondissement"] = "departement", cp_to_dep
-        corr["etabl"]["Secteur d'enseignement"] = "secteur", secteur_to_bool
-        corr["etabl"]["Secteur_d_enseignement"] = "secteur", secteur_to_bool
-        corr["etabl"]["Libellé commune"] = "commune", to_cap
-        corr["etabl"]["Commune et arrondissement Lib L"] = "commune", to_cap
-        corr["etabl"]["Commune_et_arrondissement_Lib_L"] = "commune", to_cap
-        corr["etabl"]["Numéro d'établissement"] = "UAI", to_maj
-        corr["etabl"]["Numero d'etablissement"] = "UAI", to_maj
-        corr["etabl"]["Numero_d_etablissement"] = "UAI", to_maj
+        corr["etabl"]["Patronyme"] = (("nom", to_cap),)
+        corr["etabl"]["Libellé académie"] = (("academie", to_cap),)
+        corr["etabl"]["Commune"] = (("code_postal", to_maj),)
+        corr["etabl"]["Commune_et_arrondissement"] = (("code_postal", to_maj),("departement", cp_to_dep))
+        corr["etabl"]["Commune et arrondissement"] = (("code_postal", to_maj),("departement", cp_to_dep))
+        corr["etabl"]["Code département"] = (("departement", to_int),)
+        corr["etabl"]["Secteur d'enseignement"] = (("secteur", secteur_to_bool),)
+        corr["etabl"]["Secteur_d_enseignement"] = (("secteur", secteur_to_bool),)
+        corr["etabl"]["Libellé commune"] = (("commune", to_cap),)
+        corr["etabl"]["Commune et arrondissement Lib L"] = (("commune", to_cap),)
+        corr["etabl"]["Commune_et_arrondissement_Lib_L"] = (("commune", to_cap),)
+        corr["etabl"]["Numéro d'établissement"] = (("UAI", to_maj),)
+        corr["etabl"]["Numero d'etablissement"] = (("UAI", to_maj),)
+        corr["etabl"]["Numero_d_etablissement"] = (("UAI", to_maj),)
         corr["res"]["Presents"] = "presents", to_int
         corr["res"]["Nombre_de_presents"] = "presents", to_int
         corr["res"]["Nombre de présents"] = "presents", to_int
@@ -147,12 +131,12 @@ def corr_diplome(nom, groupe):
         corr["res"]["Nombre d'admis sans Mention"] = "mentions", to_int
     else:
         corr["nom_diplome"] = "bac_%s" % (nom.lower())
-        corr["etabl"]["UAI"] = "UAI", to_maj
-        corr["etabl"]["NOM_UAI"] = "nom", to_cap
-        corr["etabl"]["ACAD"] = "academie", to_cap
-        corr["etabl"]["DEP"] = "departement", to_int
-        corr["etabl"]["SECTEUR"] = "secteur", secteur_to_bool
-        corr["etabl"]["COMMUNE_UAI"] = "commune", to_cap
+        corr["etabl"]["UAI"] = (("UAI", to_maj),)
+        corr["etabl"]["NOM_UAI"] = (("nom", to_cap),)
+        corr["etabl"]["ACAD"] = (("academie", to_cap),)
+        corr["etabl"]["DEP"] = (("departement", to_int),)
+        corr["etabl"]["SECTEUR"] = (("secteur", secteur_to_bool),)
+        corr["etabl"]["COMMUNE_UAI"] = (("commune", to_cap),)
 
         for c in groupe:
             corr["res"]["Presents_%s" % c] = "presents", to_int

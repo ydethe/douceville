@@ -8,6 +8,7 @@ from douceville.config import Config
 from douceville import app
 from douceville.models import db, Etablissement, Resultat
 from douceville.isochrone import calcIsochrone
+from douceville.utils import logged
 
 
 @app.route("/")
@@ -49,8 +50,6 @@ def get_all_points():
 
     features = []
     for e in a.all():
-        print(to_shape(e.position))
-
         info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
 
         results = (

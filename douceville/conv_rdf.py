@@ -6,19 +6,21 @@ import argparse
 import tqdm
 from rdflib import Graph
 
+from douceville.utils import logged
 from douceville.read_config import loadConfig
 
 
-def create_cache(cfg, src):
-    print(time.ctime(), "Creating geoloc cache 'data_dict.raw'...")
+@logged
+def create_cache(cfg, src, logger=None):
+    logger.info(time.ctime(), "Creating geoloc cache 'data_dict.raw'...")
 
     c = loadConfig(cfg)
     dst = c.geoloc2
 
     if dst is None:
-        print("[ERROR]No geoloc file specified in %s" % cfg)
+        logger.error("No geoloc file specified in %s" % cfg)
     elif dst == src:
-        print("[ERROR]Same source and destination %s" % src)
+        logger.error("Same source and destination %s" % src)
     else:
         g = Graph()
         g.parse(src, format="n3")
@@ -29,7 +31,7 @@ def create_cache(cfg, src):
 
         pickle.dump(info, open(dst, "wb"))
 
-    print(time.ctime(), "Done.")
+    logger.info(time.ctime(), "Done.")
 
 
 def import_geoloc_db(fic):

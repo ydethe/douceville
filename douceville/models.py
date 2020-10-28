@@ -18,6 +18,15 @@ class Resultat(db.Model):
     etablissement_id = db.Column(
         db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False
     )
+    
+    def __repr__(self):
+        r = self.asDict()
+        r.pop('position', None)
+        ks = list(r.keys())
+        for k in ks:
+            if r[k] is None:
+                r.pop(k)
+        return str(r)
 
     def asDict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
@@ -32,19 +41,26 @@ class Etablissement(db.Model):
     adresse = db.Column(db.String(191))
     lieu_dit = db.Column(db.String(191))
     code_postal = db.Column(db.String(6))
-    academie = db.Column(db.String(191), nullable=False)
+    academie = db.Column(db.String(191))
     nature = db.Column(db.String(191), nullable=False)
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String(191), nullable=False)
     commune = db.Column(db.String(191), nullable=False)
     ouverture = db.Column(db.DateTime())
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-    # latitude = db.Column(db.Float, nullable=False)
-    # longitude = db.Column(db.Float, nullable=False)
-    position = db.Column(Geometry("POINT"))
-
+    position = db.Column(Geometry('POINT'))
+    
+    resultats = db.relationship('Resultat', backref='etablissement', lazy='dynamic')
+    
     def __repr__(self):
-        return "<Etablissement {}, lat={}>".format(self.nom, self.latitude)
+        r = self.asDict()
+        r.pop('position', None)
+        ks = list(r.keys())
+        for k in ks:
+            if r[k] is None:
+                r.pop(k)
+        return str(r)
 
     def asDict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+

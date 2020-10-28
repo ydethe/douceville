@@ -24,7 +24,7 @@ __email__ = "yann@johncloud.fr"
 
 
 # création de l'objet logger qui va nous servir à écrire dans les logs
-logger = logging.getLogger("collegeslycees_logger")
+logger = logging.getLogger("douceville_logger")
 # on met le niveau du logger à DEBUG, comme ça il écrit tout
 logger.setLevel(logging.DEBUG)
 # logger.setLevel(logging.INFO)

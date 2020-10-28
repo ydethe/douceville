@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, inspect
 
 # from geoalchemy2.shape import to_shape
 
+from douceville.utils import logged
 from douceville.models import Etablissement
 from douceville.config import Config
 
