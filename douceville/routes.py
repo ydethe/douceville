@@ -7,7 +7,7 @@ from flask import render_template, jsonify, make_response, request
 from douceville.config import Config
 from douceville import app
 from douceville.models import db, Etablissement, Resultat
-from douceville.isochrone import calcIsochrone
+from douceville.isochrone import calcIsochrone, findCoordFromAddress
 from douceville.utils import logged, Serializer
 
 
@@ -102,7 +102,7 @@ def isochrone():
     
     center = [lon, lat]
     iso = calcIsochrone(center, dist)
-
+    
     return jsonify(iso)
 
 @app.route("/map", methods=["GET"])
@@ -114,6 +114,10 @@ def map():
     dist = float(request.args.get("dist", "300"))
     lon = float(request.args.get("lon", "1.39396"))
     lat = float(request.args.get("lat", "43.547864"))
+    address = request.args.get("address", "")
+
+    if address != '':
+        lon,lat = findCoordFromAddress(address)
 
     s = Serializer()
     dat = {'year':year, 'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat, 'stat_min':stat_min}

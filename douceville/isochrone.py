@@ -1,6 +1,6 @@
 import os
 
-from openrouteservice import client
+from openrouteservice import client, geocode
 
 
 def calcIsochrone(center, dist):
@@ -20,3 +20,12 @@ def calcIsochrone(center, dist):
     iso = clnt.isochrones(**params_iso)  # Perform isochrone request
 
     return iso
+
+def findCoordFromAddress(address):
+    api_key = os.environ["OPENROUTESERVICE_KEY"]
+    clnt = client.Client(key=api_key)
+
+    j = geocode.pelias_search(clnt, address)
+    lon, lat = j['features'][0]['geometry']['coordinates']
+
+    return lon, lat
