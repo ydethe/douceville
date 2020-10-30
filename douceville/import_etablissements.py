@@ -221,7 +221,8 @@ def import_sheet(
     session.commit()
 
 
-def import_geoloc(session, file, row_limit=None):
+@logged
+def import_geoloc(session, file, row_limit=None, logger=None):
     logger.info("Importation données géoloc '%s'..." % file)
 
     df = pd.read_pickle(file)

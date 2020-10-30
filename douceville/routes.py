@@ -8,7 +8,7 @@ from douceville.config import Config
 from douceville import app
 from douceville.models import db, Etablissement, Resultat
 from douceville.isochrone import calcIsochrone
-from douceville.utils import logged
+from douceville.utils import logged, Serializer
 
 
 @app.route("/")
@@ -24,12 +24,19 @@ def index():
 
 @app.route("/points", methods=["GET"])
 def get_all_points():
-    nature = request.args.get("nature", "0")
-    departement = int(request.args.get("departement", "0"))
-    dist = float(request.args.get("dist", "300"))
-    lon = float(request.args.get("lon", "1.39396"))
-    lat = float(request.args.get("lat", "43.547864"))
-
+    token = request.args.get("token", "")
+    
+    s = Serializer()
+    dat = s.deserialize(token)
+    # dat = {'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat}
+    year = dat.pop('year', 2018)
+    nature = dat.pop('nature', '0')
+    departement = dat.pop('departement', 0)
+    stat_min = dat.pop('stat_min', 0)
+    dist = dat.pop('dist', 600)
+    lat = dat.pop('lat', 1.39396)
+    lon = dat.pop('lon', 43.547864)
+    
     center = [lon, lat]
     iso = calcIsochrone(center, dist)
 
@@ -78,6 +85,25 @@ def get_all_points():
 
     return jsonify(features)
 
+@app.route("/isochrone", methods=["GET"])
+def isochrone():
+    token = request.args.get("token", "")
+
+    s = Serializer()
+    dat = s.deserialize(token)
+    # dat = {'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat}
+    year = dat.pop('year', 2018)
+    nature = dat.pop('nature', '0')
+    departement = dat.pop('departement', 0)
+    stat_min = dat.pop('stat_min', 0)
+    dist = dat.pop('dist', 600)
+    lat = dat.pop('lat', 1.39396)
+    lon = dat.pop('lon', 43.547864)
+    
+    center = [lon, lat]
+    iso = calcIsochrone(center, dist)
+
+    return jsonify(iso)
 
 @app.route("/map", methods=["GET"])
 def map():
@@ -89,11 +115,12 @@ def map():
     lon = float(request.args.get("lon", "1.39396"))
     lat = float(request.args.get("lat", "43.547864"))
 
-    iso = calcIsochrone([lon, lat], dist)
+    s = Serializer()
+    dat = {'year':year, 'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat, 'stat_min':stat_min}
+    token = s.serialize(dat)
 
     return render_template(
         "map.html",
-        isochrone=iso["features"],
-        points_request="%s:%i/points?nature=%s&departement=%i&dist=%f&lon=%f&lat=%f"
-        % (Config.HOST, Config.PORT, nature, departement, dist, lon, lat),
+        points_request="%s:%i/points?token=%s" % (Config.HOST, Config.PORT, token),
+        isochrone_request="%s:%i/isochrone?token=%s" % (Config.HOST, Config.PORT, token),
     )

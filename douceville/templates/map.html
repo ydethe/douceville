@@ -31,14 +31,19 @@
           }
       }
 
-      axios.get('{{ points_request}}')
+      axios.get('{{ points_request }}')
       .then(response => {
-          console.log(response.data)
+          console.log(response.data);
           L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);
       })
 
-      L.geoJSON({{ isochrone|tojson }}).addTo(mymap);
+      axios.get('{{ isochrone_request }}')
+      .then(response => {
+          console.log(response.data);
+          L.geoJSON(response.data).addTo(mymap);
+      })
 
+      
     </script>
   </body>
 </html>
