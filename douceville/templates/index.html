@@ -1,13 +1,10 @@
 {% extends "base.html" %}
-{% import 'bootstrap/wtf.html' as wtf %}
 
 
 {% block content %}
-    <div class="container">Hello, {{ user.username }}!</h1>
-    <br><br>
-    /carte?year=xxxx&nature=xxx&departement=xxx&stat_min=xxx
-    <br>
-    {% for n in natures: %}
-        <br>{{ n }}
-    {% endfor %}
+<div class="container">
+    {% block app_content %}
+    <div class="container">Hello, {{ user.username }}!</div>
+    {% endblock %}
+</div>
 {% endblock %}
