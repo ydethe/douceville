@@ -1,0 +1,37 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block content %}
+    <h1>Recherche</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.address.label }}<br>
+            {{ form.address }}
+        </p>
+        <p>
+            {{ form.dist.label }}<br>
+            {{ form.dist }}
+        </p>
+        <p>
+            {{ form.stat_min.label }}<br>
+            {{ form.stat_min }}
+        </p>
+        <p>
+            {{ form.academie.label }}<br>
+            {{ form.academie }}
+        </p>
+        <p>
+            {{ form.nature.label }}<br>
+            {{ form.nature }}
+        </p>
+        <p>
+            {{ form.departement.label }}<br>
+            {{ form.departement }}
+        </p>
+        <p>
+            {{ form.secteur.label }}<br>
+            {{ form.secteur }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
