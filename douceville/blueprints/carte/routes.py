@@ -30,43 +30,39 @@ def recherche():
         req_param["address"] = form.address.data
         req_param["dist"] = form.dist.data
         req_param["stat_min"] = form.stat_min.data
-        req_param["academie"] = form.academie.data
+        # req_param["academie"] = form.academie.data
         req_param["nature"] = form.nature.data
-        req_param["departement"] = form.departement.data
+        # req_param["departement"] = form.departement.data
         req_param["secteur"] = form.secteur.data
         req_param["year"] = '2018'
         
-        return redirect(url_for(".carte", **req_param))
+        s = Serializer()
+        token = s.serialize(req_param)
+
+        return redirect(url_for(".carte", token=token))
 
     return render_template("carte/carte_query.html", form=form)
 
 
 @carte_bp.route("/", methods=["GET"])
 def carte():
-    year = request.args.get("year", "2018")
-    address = request.args.get("address", "")
-    dist = request.args.get("dist", "300")
-    academie = request.args.get("academie", "all")
-    nature = request.args.get("nature", "all")
-    departement = request.args.get("departement", "all")
-    secteur = request.args.get("secteur", "all")
-    stat_min = request.args.get("stat_min", "0")
-    
-    if address != "":
-        lon, lat = findCoordFromAddress(address)
+    token = request.args.get("token", "")
 
     s = Serializer()
-    dat = {
-        "year": year,
-        "lon": lon,
-        "lat": lat,
-        "dist": dist,
-        "academie": academie,
-        "nature": nature,
-        "departement": departement,
-        "secteur": secteur,
-        "stat_min": stat_min,
-    }
+    dat = s.deserialize(token)
+    
+    year = dat.get("year", "2018")
+    address = dat.get("address", "")
+    dist = dat.get("dist", "300")
+    academie = dat.get("academie", "all")
+    nature = dat.get("nature", "all")
+    departement = dat.get("departement", "all")
+    secteur = dat.get("secteur", "all")
+    stat_min = dat.get("stat_min", "0")
+    
+    if address != "":
+        dat['lon'], dat['lat'] = findCoordFromAddress(address)
+
     token = s.serialize(dat)
 
     return render_template(

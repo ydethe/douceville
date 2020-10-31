@@ -26,8 +26,8 @@ def enseignement():
     lon = dat.pop("lon", 43.547864)
     dist = dat.pop("dist", 600)
     academie = dat.pop("academie", 'all')
-    nature = dat.pop("nature", "all")
-    secteur = dat.pop("secteur", "all")
+    nature = dat.pop("nature", ["all"])
+    secteur = dat.pop("secteur", ["all"])
     departement = dat.pop("departement", "all")
     stat_min = dat.pop("stat_min", 0)
 
@@ -48,10 +48,10 @@ def enseignement():
     if departement != "all":
         a = a.filter(Etablissement.departement == int(departement))
 
-    if nature != "all":
+    if nature != [] and nature != "all":
         a = a.filter(Etablissement.nature == nature)
 
-    if secteur != "all":
+    if secteur != [] and secteur != "all":
         a = a.filter(Etablissement.secteur == secteur)
 
     features = []
