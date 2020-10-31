@@ -7,6 +7,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class BaseConfig(object):
     SECRET_KEY = b"lVwBk7UXvvhDlURHQ7iBnyFy-PBvBrUhHQ5NsDlcRh0="
     OPENROUTESERVICE_KEY = "5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783"
+    FLASK_ADMIN_SWATCH = 'cerulean'
 
 class ProdConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://web_user@localhost/douceville"

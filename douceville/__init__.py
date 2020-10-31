@@ -10,6 +10,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 from sqlalchemy import event
 
@@ -60,4 +62,10 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
+admin = Admin(app, name='douceville', template_mode='bootstrap3')
+
 from douceville import routes, models
+
+admin.add_view(ModelView(models.Etablissement, db.session))
+admin.add_view(ModelView(models.Resultat, db.session))
+

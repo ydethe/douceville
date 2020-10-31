@@ -8,7 +8,6 @@ After=network.target
 User=ydethe
 Group=ydethe
 WorkingDirectory=/home/ydethe/douceville
-Environment="OPENROUTESERVICE_KEY=5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783"
 ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
 
 [Install]
