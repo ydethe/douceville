@@ -62,6 +62,9 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
+from douceville.blueprints.carte import carte
+app.register_blueprint(carte, url_prefix='/carte')
+
 admin = Admin(app, name='douceville', template_mode='bootstrap3')
 
 from douceville import routes, models
