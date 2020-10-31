@@ -19,14 +19,17 @@ def enseignement():
 
     s = Serializer()
     dat = s.deserialize(token)
-    # dat = {'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat}
+    print(dat)
+
     year = dat.pop("year", 2018)
-    nature = dat.pop("nature", "0")
-    departement = dat.pop("departement", 0)
-    stat_min = dat.pop("stat_min", 0)
-    dist = dat.pop("dist", 600)
     lat = dat.pop("lat", 1.39396)
     lon = dat.pop("lon", 43.547864)
+    dist = dat.pop("dist", 600)
+    academie = dat.pop("academie", 'all')
+    nature = dat.pop("nature", "all")
+    secteur = dat.pop("secteur", "all")
+    departement = dat.pop("departement", "all")
+    stat_min = dat.pop("stat_min", 0)
 
     center = [lon, lat]
     iso = calcIsochrone(center, dist)
@@ -42,11 +45,14 @@ def enseignement():
         func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
     )
 
-    if departement > 0:
-        a = a.filter(Etablissement.departement == departement)
+    if departement != "all":
+        a = a.filter(Etablissement.departement == int(departement))
 
-    if nature != "0":
+    if nature != "all":
         a = a.filter(Etablissement.nature == nature)
+
+    if secteur != "all":
+        a = a.filter(Etablissement.secteur == secteur)
 
     features = []
     for e in a.all():
@@ -54,11 +60,11 @@ def enseignement():
 
         stat = 0
         for res in e.resultats:
-            if not res.admis is None:
+            if not res.admis is None and res.annee == int(year):
                 stat = int(100 * res.admis / res.presents)
-                info += "<br>Réussite %s : %i%%" % (res.diplome, stat)
+                info += "<br>Réussite %s %i : %i%%" % (res.diplome, res.annee, stat)
 
-        if stat >= stat_min:
+        if stat >= float(stat_min):
             p = to_shape(e.position)
             lon, lat = p.coords.xy
             f = {

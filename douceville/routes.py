@@ -14,4 +14,3 @@ def index():
     return render_template(
         "index.html", title="Home", user=user, natures=[x[0] for x in r]
     )
-

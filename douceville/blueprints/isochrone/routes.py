@@ -8,7 +8,10 @@ from douceville.config import Config
 from douceville.models import db, Etablissement, Resultat
 from douceville.utils import logged, Serializer
 from douceville.blueprints.isochrone import isochrone_bp
-from douceville.blueprints.isochrone.geographique import calcIsochrone, findCoordFromAddress
+from douceville.blueprints.isochrone.geographique import (
+    calcIsochrone,
+    findCoordFromAddress,
+)
 
 
 @isochrone_bp.route("/", methods=["GET"])
@@ -17,11 +20,6 @@ def isochrone():
 
     s = Serializer()
     dat = s.deserialize(token)
-    # dat = {'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat}
-    year = dat.pop("year", 2018)
-    nature = dat.pop("nature", "0")
-    departement = dat.pop("departement", 0)
-    stat_min = dat.pop("stat_min", 0)
     dist = dat.pop("dist", 600)
     lat = dat.pop("lat", 1.39396)
     lon = dat.pop("lon", 43.547864)
@@ -30,4 +28,3 @@ def isochrone():
     iso = calcIsochrone(center, dist)
 
     return jsonify(iso)
-    
