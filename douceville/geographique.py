@@ -1,11 +1,11 @@
-import os
-
 from openrouteservice import client, geocode
+
+from douceville.config import Config
 
 
 def calcIsochrone(center, dist):
     # https://openrouteservice.org/dev/#/home?tab=1
-    api_key = os.environ["OPENROUTESERVICE_KEY"]
+    api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
     # Request of isochrones with 15 minute footwalk.
@@ -21,11 +21,12 @@ def calcIsochrone(center, dist):
 
     return iso
 
+
 def findCoordFromAddress(address):
-    api_key = os.environ["OPENROUTESERVICE_KEY"]
+    api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
     j = geocode.pelias_search(clnt, address)
-    lon, lat = j['features'][0]['geometry']['coordinates']
+    lon, lat = j["features"][0]["geometry"]["coordinates"]
 
     return lon, lat

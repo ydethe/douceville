@@ -63,3 +63,4 @@ class Etablissement(db.Model):
 
     def asDict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+

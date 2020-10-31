@@ -6,8 +6,8 @@ import json
 from douceville.config import Config
 
 
-class Serializer (object):
-    '''
+class Serializer(object):
+    """
 
     Examples:
     >>> s = Serializer()
@@ -17,7 +17,8 @@ class Serializer (object):
     >>> d2 = s.deserialize(token)
     >>> d2
 
-    '''
+    """
+
     def __init__(self):
         self.fernet = Fernet(Config.SECRET_KEY)
 
@@ -30,7 +31,7 @@ class Serializer (object):
         j = self.fernet.decrypt(s.encode(), ttl=60)
         d = json.loads(j)
         return d
-        
+
 
 def logged(fct):
     log = logging.getLogger("douceville_logger")
@@ -43,6 +44,7 @@ def logged(fct):
     return wrapper
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

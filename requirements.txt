@@ -8,6 +8,7 @@ flask
 flask-shell-ipython
 flask-sqlalchemy
 Flask-Migrate
+flask-admin
 flask-bootstrap
 pandas
 bottleneck
@@ -22,3 +23,6 @@ gunicorn
 uwsgi
 python-slugify
 cryptography
+flask-login
+flask-wtf
+wtforms

@@ -7,7 +7,7 @@ from flask import render_template, jsonify, make_response, request
 from douceville.config import Config
 from douceville import app
 from douceville.models import db, Etablissement, Resultat
-from douceville.isochrone import calcIsochrone, findCoordFromAddress
+from douceville.geographique import calcIsochrone, findCoordFromAddress
 from douceville.utils import logged, Serializer
 
 
@@ -25,18 +25,18 @@ def index():
 @app.route("/points", methods=["GET"])
 def get_all_points():
     token = request.args.get("token", "")
-    
+
     s = Serializer()
     dat = s.deserialize(token)
     # dat = {'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat}
-    year = dat.pop('year', 2018)
-    nature = dat.pop('nature', '0')
-    departement = dat.pop('departement', 0)
-    stat_min = dat.pop('stat_min', 0)
-    dist = dat.pop('dist', 600)
-    lat = dat.pop('lat', 1.39396)
-    lon = dat.pop('lon', 43.547864)
-    
+    year = dat.pop("year", 2018)
+    nature = dat.pop("nature", "0")
+    departement = dat.pop("departement", 0)
+    stat_min = dat.pop("stat_min", 0)
+    dist = dat.pop("dist", 600)
+    lat = dat.pop("lat", 1.39396)
+    lon = dat.pop("lon", 43.547864)
+
     center = [lon, lat]
     iso = calcIsochrone(center, dist)
 
@@ -85,6 +85,7 @@ def get_all_points():
 
     return jsonify(features)
 
+
 @app.route("/isochrone", methods=["GET"])
 def isochrone():
     token = request.args.get("token", "")
@@ -92,18 +93,19 @@ def isochrone():
     s = Serializer()
     dat = s.deserialize(token)
     # dat = {'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat}
-    year = dat.pop('year', 2018)
-    nature = dat.pop('nature', '0')
-    departement = dat.pop('departement', 0)
-    stat_min = dat.pop('stat_min', 0)
-    dist = dat.pop('dist', 600)
-    lat = dat.pop('lat', 1.39396)
-    lon = dat.pop('lon', 43.547864)
-    
+    year = dat.pop("year", 2018)
+    nature = dat.pop("nature", "0")
+    departement = dat.pop("departement", 0)
+    stat_min = dat.pop("stat_min", 0)
+    dist = dat.pop("dist", 600)
+    lat = dat.pop("lat", 1.39396)
+    lon = dat.pop("lon", 43.547864)
+
     center = [lon, lat]
     iso = calcIsochrone(center, dist)
-    
+
     return jsonify(iso)
+
 
 @app.route("/map", methods=["GET"])
 def map():
@@ -116,15 +118,24 @@ def map():
     lat = float(request.args.get("lat", "43.547864"))
     address = request.args.get("address", "")
 
-    if address != '':
-        lon,lat = findCoordFromAddress(address)
+    if address != "":
+        lon, lat = findCoordFromAddress(address)
 
     s = Serializer()
-    dat = {'year':year, 'nature':nature, 'departement':departement, 'dist':dist, 'lon':lon, 'lat':lat, 'stat_min':stat_min}
+    dat = {
+        "year": year,
+        "nature": nature,
+        "departement": departement,
+        "dist": dist,
+        "lon": lon,
+        "lat": lat,
+        "stat_min": stat_min,
+    }
     token = s.serialize(dat)
 
     return render_template(
         "map.html",
         points_request="%s:%i/points?token=%s" % (Config.HOST, Config.PORT, token),
-        isochrone_request="%s:%i/isochrone?token=%s" % (Config.HOST, Config.PORT, token),
+        isochrone_request="%s:%i/isochrone?token=%s"
+        % (Config.HOST, Config.PORT, token),
     )
