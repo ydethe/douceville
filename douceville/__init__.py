@@ -62,8 +62,14 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
-from douceville.blueprints.carte import carte
-app.register_blueprint(carte, url_prefix='/carte')
+from douceville.blueprints.carte import carte_bp
+app.register_blueprint(carte_bp, url_prefix='/carte')
+
+from douceville.blueprints.isochrone import isochrone_bp
+app.register_blueprint(isochrone_bp, url_prefix='/isochrone')
+
+from douceville.blueprints.enseignement import enseignement_bp
+app.register_blueprint(enseignement_bp, url_prefix='/enseignement')
 
 admin = Admin(app, name='douceville', template_mode='bootstrap3')
 
