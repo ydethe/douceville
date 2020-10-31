@@ -49,10 +49,10 @@ def enseignement():
         a = a.filter(Etablissement.departement == int(departement))
 
     if nature != [] and nature != "all":
-        a = a.filter(Etablissement.nature == nature)
+        a = a.filter(Etablissement.nature == nature[0])
 
     if secteur != [] and secteur != "all":
-        a = a.filter(Etablissement.secteur == secteur)
+        a = a.filter(Etablissement.secteur == secteur[0])
 
     features = []
     for e in a.all():
