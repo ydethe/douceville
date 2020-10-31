@@ -30,4 +30,4 @@ def isochrone():
     iso = calcIsochrone(center, dist)
 
     return jsonify(iso)
-
+    

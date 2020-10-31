@@ -6,7 +6,6 @@ from geoalchemy2 import func
 
 from douceville.config import Config
 from douceville.models import db, Etablissement, Resultat
-from douceville.geographique import calcIsochrone, findCoordFromAddress
 from douceville.utils import logged, Serializer
 from douceville.blueprints.carte import carte_bp
 

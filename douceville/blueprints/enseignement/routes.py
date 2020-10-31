@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, render_template, jsonify, make_response, request, abort
 from jinja2 import TemplateNotFound
 from sqlalchemy import not_, distinct
@@ -6,9 +8,9 @@ from geoalchemy2 import func
 
 from douceville.config import Config
 from douceville.models import db, Etablissement, Resultat
-from douceville.geographique import calcIsochrone, findCoordFromAddress
 from douceville.utils import logged, Serializer
 from douceville.blueprints.enseignement import enseignement_bp
+from douceville.blueprints.isochrone.geographique import calcIsochrone
 
 
 @enseignement_bp.route("/", methods=["GET"])
