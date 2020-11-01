@@ -30,9 +30,7 @@ def recherche():
         req_param["address"] = form.address.data
         req_param["dist"] = form.dist.data
         req_param["stat_min"] = form.stat_min.data
-        # req_param["academie"] = form.academie.data
         req_param["nature"] = form.nature.data
-        # req_param["departement"] = form.departement.data
         req_param["secteur"] = form.secteur.data
         req_param["year"] = '2018'
         
@@ -52,12 +50,10 @@ def carte():
     dat = s.deserialize(token)
     
     year = dat.get("year", "2018")
-    address = dat.get("address", "")
+    address = dat.pop("address", "")
     dist = dat.get("dist", "300")
-    academie = dat.get("academie", "all")
-    nature = dat.get("nature", "all")
-    departement = dat.get("departement", "all")
-    secteur = dat.get("secteur", "all")
+    nature = dat.get("nature", [])
+    secteur = dat.get("secteur", [])
     stat_min = dat.get("stat_min", "0")
     
     if address != "":

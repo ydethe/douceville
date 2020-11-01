@@ -32,5 +32,5 @@ class Dev2Config(BaseConfig):
     PORT = 5000
 
 
-# Config = Dev2Config
-Config = ProdConfig
+Config = Dev2Config
+# Config = ProdConfig

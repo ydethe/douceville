@@ -19,16 +19,13 @@ def enseignement():
 
     s = Serializer()
     dat = s.deserialize(token)
-    print(dat)
 
     year = dat.pop("year", 2018)
     lat = dat.pop("lat", 1.39396)
     lon = dat.pop("lon", 43.547864)
     dist = dat.pop("dist", 600)
-    academie = dat.pop("academie", 'all')
-    nature = dat.pop("nature", ["all"])
-    secteur = dat.pop("secteur", ["all"])
-    departement = dat.pop("departement", "all")
+    nature = dat.pop("nature", [])
+    secteur = dat.pop("secteur", [])
     stat_min = dat.pop("stat_min", 0)
 
     center = [lon, lat]
@@ -45,14 +42,8 @@ def enseignement():
         func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
     )
 
-    if departement != "all":
-        a = a.filter(Etablissement.departement == int(departement))
-
-    if nature != [] and nature != "all":
-        a = a.filter(Etablissement.nature == nature[0])
-
-    if secteur != [] and secteur != "all":
-        a = a.filter(Etablissement.secteur == secteur[0])
+    a = a.filter(Etablissement.nature.in_(nature))
+    a = a.filter(Etablissement.secteur.in_(secteur))
 
     features = []
     for e in a.all():
