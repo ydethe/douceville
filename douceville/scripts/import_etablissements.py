@@ -69,12 +69,6 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
         q.delete()
         session.commit()
 
-        for rn in found_natures:
-            for n in coor_nature[rn]:
-                if rn != n:
-                    rec = Nature(nature=n, etablissement_id=etabl["UAI"])
-                    session.add(rec)
-                        
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
             old_rec = q.first().asDict()
@@ -96,6 +90,12 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
 
         session.commit()
 
+        for rn in found_natures:
+            for n in coor_nature[rn]:
+                if rn != n:
+                    rec = Nature(nature=n, etablissement_id=etabl["UAI"])
+                    session.add(rec)
+        
     if not res is None:
         q = session.query(Etablissement).filter(
             Etablissement.UAI == res["etablissement_id"]
