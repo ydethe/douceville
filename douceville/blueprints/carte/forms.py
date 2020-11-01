@@ -12,7 +12,7 @@ def buildList(attr):
     elem = [str(x[0]) for x in db.session.query(distinct(a)).all()]
     elem.sort()
 
-    l = [("all", "all")] + [(str(x), str(x)) for x in elem]
+    l = [(str(x), str(x)) for x in elem]
 
     return l
 

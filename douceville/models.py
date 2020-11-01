@@ -4,6 +4,31 @@ from geoalchemy2 import Geometry
 from douceville import db
 
 
+class Nature(db.Model):
+    __tablename__ = "nature"
+    __table_args__ = (db.UniqueConstraint("nature", "etablissement_id"),)
+
+    idx = db.Column(db.Integer, primary_key=True, nullable=False)
+    nature = db.Column(db.String(191))
+
+    etablissement_id = db.Column(
+        db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False
+    )
+
+    def __repr__(self):
+        r = self.asDict()
+        r.pop("position", None)
+        r.pop("idx", None)
+        ks = list(r.keys())
+        for k in ks:
+            if r[k] is None:
+                r.pop(k)
+        return str(r)
+
+    def asDict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+
+
 class Resultat(db.Model):
     __tablename__ = "resultat"
     __table_args__ = (db.UniqueConstraint("diplome", "annee", "etablissement_id"),)
@@ -22,6 +47,7 @@ class Resultat(db.Model):
     def __repr__(self):
         r = self.asDict()
         r.pop("position", None)
+        r.pop("idx", None)
         ks = list(r.keys())
         for k in ks:
             if r[k] is None:
@@ -42,7 +68,7 @@ class Etablissement(db.Model):
     lieu_dit = db.Column(db.String(191))
     code_postal = db.Column(db.String(6))
     academie = db.Column(db.String(191))
-    nature = db.Column(db.String(191), nullable=False)
+    # nature = db.Column(db.String(191), nullable=False)
     departement = db.Column(db.Integer, nullable=False)
     secteur = db.Column(db.String(191), nullable=False)
     commune = db.Column(db.String(191), nullable=False)
@@ -50,7 +76,9 @@ class Etablissement(db.Model):
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
     position = db.Column(Geometry("POINT"))
 
+    nature = None
     resultats = db.relationship("Resultat", backref="etablissement", lazy="dynamic")
+    natures = db.relationship("Nature", backref="etablissement", lazy="dynamic")
 
     def __repr__(self):
         r = self.asDict()

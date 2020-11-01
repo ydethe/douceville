@@ -8,7 +8,7 @@ import tqdm
 from rdflib import Graph
 
 from douceville.utils import logged
-from douceville.read_config import loadConfig
+from douceville.scripts.read_config import loadConfig
 
 
 @logged

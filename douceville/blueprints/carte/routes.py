@@ -32,8 +32,8 @@ def recherche():
         req_param["stat_min"] = form.stat_min.data
         req_param["nature"] = form.nature.data
         req_param["secteur"] = form.secteur.data
-        req_param["year"] = '2018'
-        
+        req_param["year"] = "2018"
+
         s = Serializer()
         token = s.serialize(req_param)
 
@@ -48,16 +48,16 @@ def carte():
 
     s = Serializer()
     dat = s.deserialize(token)
-    
+
     year = dat.get("year", "2018")
     address = dat.pop("address", "")
     dist = dat.get("dist", "300")
     nature = dat.get("nature", [])
     secteur = dat.get("secteur", [])
     stat_min = dat.get("stat_min", "0")
-    
+
     if address != "":
-        dat['lon'], dat['lat'] = findCoordFromAddress(address)
+        dat["lon"], dat["lat"] = findCoordFromAddress(address)
 
     token = s.serialize(dat)
 

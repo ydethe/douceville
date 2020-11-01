@@ -9,6 +9,4 @@ from douceville import app
 def index():
     user = {"username": "Yann"}
 
-    return render_template(
-        "index.html", title="Home", user=user
-    )
+    return render_template("index.html", title="Home", user=user)

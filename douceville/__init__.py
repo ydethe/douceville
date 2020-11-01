@@ -35,7 +35,9 @@ logger.setLevel(logging.DEBUG)
 
 # création d'un formateur qui va ajouter le temps, le niveau
 # de chaque message quand on écrira un message dans le log
-formatter = logging.Formatter("[%(levelname)s]%(message)s")
+formatter = logging.Formatter(
+    "[%(levelname)s] - %(asctime)s - %(lineno)d@%(filename)s - %(message)s"
+)
 # création d'un handler qui va rediriger chaque écriture de log
 # sur la console
 stream_handler = logging.StreamHandler()

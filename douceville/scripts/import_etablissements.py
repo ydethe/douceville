@@ -13,16 +13,16 @@ import tqdm
 
 import douceville
 from douceville.utils import logged
-from douceville.models import Etablissement, Resultat
-from douceville.conv_utils import *
+from douceville.models import Etablissement, Resultat, Nature
+from douceville.scripts.conv_utils import *
 from douceville.config import Config
-from douceville.read_config import loadConfig
-from douceville.conv_rdf import import_geoloc_db
+from douceville.scripts.read_config import loadConfig
+from douceville.scripts.conv_rdf import import_geoloc_db
 
 
 @logged
 def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
-    etabl_valid = True
+    etabl_valid = not etabl is None
     log_valid = ""
     if check_nullable and not etabl is None:
         for c in inspect(Etablissement).mapper.column_attrs:
@@ -43,8 +43,9 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
 
     if not etabl_valid:
         logger.error("etabl invalide")
+        logger.error("%s" % str(etabl))
         logger.error(log_valid)
-        exit(0)
+        # exit(0)
     else:
         if (
             "latitude" in etabl.keys()
@@ -58,6 +59,22 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
         etabl.pop("latitude", None)
         etabl.pop("longitude", None)
 
+        nature = etabl.pop("nature", None)
+        
+        q = (
+            session.query(Nature)
+            .filter(Nature.etablissement_id == etabl["UAI"])
+        )
+        found_natures = [r.nature for r in q.all() if not r.nature is None] + [nature]
+        q.delete()
+        session.commit()
+
+        for rn in found_natures:
+            for n in coor_nature[rn]:
+                if rn != n:
+                    rec = Nature(nature=n, etablissement_id=etabl["UAI"])
+                    session.add(rec)
+                        
         q = session.query(Etablissement).filter(Etablissement.UAI == etabl["UAI"])
         if q.count() != 0:
             old_rec = q.first().asDict()
@@ -84,8 +101,8 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
             Etablissement.UAI == res["etablissement_id"]
         )
         if q.count() == 0:
-            logger.warnin("Le resultat suivant ne correspond a aucun etablissement")
-            logger.warnin("%s" % res)
+            logger.warning("Le resultat suivant ne correspond a aucun etablissement")
+            logger.warning("%s" % res)
             return
 
         q = (
@@ -283,7 +300,7 @@ def import_geoloc(session, file, row_limit=None, logger=None):
             val = fct(row.values[i])
             etab[k] = val
 
-        if etab["UAI"][:2] == "97":
+        if etab["UAI"][:2] == "97" or etab["UAI"][:2] == "98":
             continue
 
         insert_or_update(session, etab, None, check_nullable=True)

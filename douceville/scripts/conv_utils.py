@@ -151,3 +151,19 @@ def corr_diplome(nom, groupe):
             corr["res"]["Taux_%s" % c] = "taux", to_int
 
     return corr
+
+
+coor_nature = {}
+coor_nature["maternelle"] = ["maternelle"]
+coor_nature["elementaire"] = ["elementaire"]
+coor_nature["college"] = ["college"]
+coor_nature["lycee"] = ["lycee"]
+coor_nature["ecole-de-plein-air"] = []
+coor_nature["ecole-sans-effectifs-permanents"] = []
+coor_nature["ecole-regionale-du-premier-degre"] = ("maternelle", "elementaire")
+coor_nature["ecole-secondaire-specialisee-2-d-cycle"] = ("college", "lycee")
+coor_nature["etablissement-de-reinsertion-scolaire"] = []
+coor_nature["etablissement-experimental"] = []
+coor_nature["etablissement-regional-d-enseignt-adapte"] = []
+coor_nature["maison-familiale-rurale-education-orient"] = []
+coor_nature["section-enseigt-general-et-technologique"] = []
