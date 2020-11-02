@@ -4,6 +4,7 @@
 """
 from pkg_resources import get_distribution
 import logging
+from logging.handlers import RotatingFileHandler
 import os
 
 from flask import Flask
@@ -16,6 +17,7 @@ from flask_admin.contrib.sqla import ModelView
 from sqlalchemy import event
 
 from douceville.config import Config
+from douceville.DVLogFormatter import DVLogFormatter
 
 
 try:
@@ -35,22 +37,14 @@ logger.setLevel(logging.DEBUG)
 
 # création d'un formateur qui va ajouter le temps, le niveau
 # de chaque message quand on écrira un message dans le log
-formatter = logging.Formatter(
-    "[%(levelname)s] - %(asctime)s - %(lineno)d@%(filename)s - %(message)s"
-)
+formatter = DVLogFormatter()
 # création d'un handler qui va rediriger chaque écriture de log
 # sur la console
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
-# os.makedirs("logs", exist_ok=True)
-
-# now = datetime.now()
-# sd = now.strftime("%Y_%m_%d_%H_%M_%S")
-file_handler = logging.FileHandler(
-    "douceville.log", mode="w", encoding="utf-8", delay=False
-)
+file_handler = RotatingFileHandler("douceville.log", maxBytes=10e6, backupCount=5)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
