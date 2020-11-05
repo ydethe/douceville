@@ -1,16 +1,13 @@
 from sqlalchemy import create_engine, inspect, or_
 from sqlalchemy.orm import sessionmaker
 
-from douceville.models import Etablissement, Resultat
+from douceville.models import *
 from douceville.config import Config
 
 
-engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+s = db.session
 
-session = sessionmaker()
-session.configure(bind=engine)
-s = session()
-
+s.query(Nature).delete()
 s.query(Resultat).delete()
 s.query(Etablissement).delete()
 

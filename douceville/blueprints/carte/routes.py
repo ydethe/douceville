@@ -1,21 +1,11 @@
 from flask import (
-    Blueprint,
     render_template,
-    jsonify,
-    make_response,
     request,
-    abort,
-    flash,
     redirect,
     url_for,
 )
-from jinja2 import TemplateNotFound
-from sqlalchemy import not_, distinct
-from geoalchemy2.shape import to_shape
-from geoalchemy2 import func
 
 from douceville.config import Config
-from douceville.models import db, Etablissement, Resultat
 from douceville.utils import logged, Serializer
 from douceville.blueprints.carte import carte_bp
 from douceville.blueprints.carte.forms import QueryForm

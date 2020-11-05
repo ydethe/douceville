@@ -13,7 +13,7 @@ from douceville.scripts.read_config import loadConfig
 
 @logged
 def create_cache(cfg, src, logger=None):
-    logger.info(time.ctime(), "Creating geoloc cache '%s'..." % src)
+    logger.info("Creating geoloc cache '%s'..." % src)
 
     c = loadConfig(cfg)
     dst = c.geoloc
@@ -26,7 +26,7 @@ def create_cache(cfg, src, logger=None):
         df = pd.read_excel(src)
         df.to_pickle(dst)
 
-    logger.info(time.ctime(), "Done.")
+    logger.info("Done.")
 
 
 def import_geoloc_db(fic):

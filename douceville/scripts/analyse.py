@@ -1,42 +1,44 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
 
-# from geoalchemy2.shape import to_shape
-
 from douceville.utils import logged
-from douceville.models import Etablissement
+from douceville.models import *
 from douceville.config import Config
+# from douceville.blueprints.isochrone.geographique import findCoordFromAddress
 
 
-def object_as_dict(obj):
-    return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
+s = db.session
 
+result = s.query(Etablissement).filter(Etablissement.import_status == ImportStatus.ETAB_FROM_RESULT)
+# print("%i enregistrements" % result.count())
 
-engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
-session = sessionmaker()
-session.configure(bind=engine)
-s = session()
+l_keys = [
+    'UAI',
+    'nom',
+    'adresse',
+    'lieu_dit',
+    'code_postal',
+    'commune',
+    'position',
+    'departement',
+    'academie',
+    'secteur',
+    'ouverture',
+    'import_status',
+]
+for e in result.all():
+    ed = e.asDict()
+    for k in l_keys:
+        if k == 'UAI':
+            print(ed[k])
+        if not k in ed.keys() or ed[k] is None:
+            print('   %s' % k)
 
+# result = s.query(Nature).filter(Nature.etablissement_id=='0010005A')
+# print(result.all())
 
-result = s.query(Etablissement)
-print("%i enregistrements" % result.count())
+# result = s.query(Nature).filter(Nature.nature == '')
+# print(result.count())
+# print(result.all())
 
-result = s.query(Etablissement).filter(Etablissement.latitude.is_(None))
-print("%i enregistrements sans geoloc" % result.count())
-
-result = (
-    s.query(Etablissement)
-    .filter(Etablissement.departement == 31)
-    .filter(Etablissement.latitude.is_(None))
-)
-print("%i enregistrements sans geoloc dans le 31" % result.count())
-
-for row in result:
-    print("%s, %s, %s" % (row.UAI, row.commune, row.nom))
-
-result = s.query(Etablissement).filter(Etablissement.departement == 31)
-print("%i enregistrements dans le 31" % result.count())
-
-# r = result[0]
-# a = to_shape(r.position)
-# print(r.UAI, r.nom, a.x, a.y)
+# print(bulidList(Nature.nature))

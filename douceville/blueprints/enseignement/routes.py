@@ -1,8 +1,7 @@
 import json
 
-from flask import Blueprint, render_template, jsonify, make_response, request, abort
-from jinja2 import TemplateNotFound
-from sqlalchemy import not_, distinct
+from flask import jsonify, request
+from sqlalchemy import not_
 from geoalchemy2.shape import to_shape
 from geoalchemy2 import func
 
