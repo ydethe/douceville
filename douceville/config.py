@@ -27,7 +27,7 @@ class DevConfig(BaseConfig):
 
 
 class Dev2Config(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://cl_user@localhost/douceville"
+    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://web_user@localhost/douceville"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     HOST = "https://localhost"
     PORT = 5000

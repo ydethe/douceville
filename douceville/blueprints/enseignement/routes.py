@@ -52,7 +52,7 @@ def enseignement():
         a = a.filter(Etablissement.secteur.in_(secteur))
 
     features = []
-    for e in a.all():
+    for e,n in a.all():
         info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
 
         stat = 0
