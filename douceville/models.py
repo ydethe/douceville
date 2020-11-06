@@ -77,7 +77,7 @@ class Etablissement(db.Model):
     position = db.Column(Geometry("POINT"), nullable=False)
     # position = db.Column(db.String(191), nullable=False)
     departement = db.Column(db.Integer, nullable=False)
-    academie = db.Column(db.String(191), nullable=False)
+    academie = db.Column(db.String(191))
     secteur = db.Column(db.String(191), nullable=False)
     ouverture = db.Column(db.DateTime())
     import_status = db.Column(db.Integer, nullable=False)
