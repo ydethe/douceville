@@ -2,12 +2,13 @@
 
 
 class DVLogFormatter(logging.Formatter):
-
     def __init__(self, notime=False):
         if notime:
             fmt = "[%(levelname)s] - %(message)s"
         else:
-            fmt = "[%(levelname)s] - %(asctime)s - L%(lineno)d@%(filename)s - %(message)s"
+            fmt = (
+                "[%(levelname)s] - %(asctime)s - L%(lineno)d@%(filename)s - %(message)s"
+            )
 
         super().__init__(fmt=fmt, datefmt=None, style="%")
 

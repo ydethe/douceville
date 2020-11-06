@@ -24,12 +24,13 @@ def calcIsochrone(center, dist):
 
     return iso
 
+
 @logged
 def geocodeUserAddress(query, logger=None):
     api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
-    lon=lat=None
+    lon = lat = None
     j = geocode.pelias_search(
         clnt,
         query,
@@ -39,11 +40,13 @@ def geocodeUserAddress(query, logger=None):
     for f in j["features"]:
         lon, lat = f["geometry"]["coordinates"]
 
-        return lon,lat
+        return lon, lat
 
 
 @logged
-def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None, logger=None):
+def findCoordFromAddress(
+    nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None, logger=None
+):
     """
 
     Examples:
@@ -60,7 +63,9 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
     api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
-    def geocode_query(clnt, nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None):
+    def geocode_query(
+        clnt, nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None
+    ):
         query = ""
         if not nom is None:
             query += nom + ","
@@ -75,7 +80,7 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
             query += commune + ","
         else:
             logger.error("In findCoordFromAddress, argument 'commune' must not be None")
-            return None,None
+            return None, None
 
         lon = lat = None
         j = geocode.pelias_search(
@@ -113,19 +118,19 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
         return None
 
     if nom is None or adresse is None or cp is None:
-        j = geocode.pelias_reverse(clnt, [lon,lat], country='FR')
-        for f in j['features']:
-            p = f['properties']
-            if 'postalcode' in p.keys() and 'name' in p.keys():
-                adresse = p['name']
-                cp = p['postalcode'].zfill(5)
-    
+        j = geocode.pelias_reverse(clnt, [lon, lat], country="FR")
+        for f in j["features"]:
+            p = f["properties"]
+            if "postalcode" in p.keys() and "name" in p.keys():
+                adresse = p["name"]
+                cp = p["postalcode"].zfill(5)
+
     etab_maj["position"] = "POINT(%f %f)" % (lon, lat)
-    etab_maj['commune'] = commune
-    etab_maj['code_postal'] = cp
-    etab_maj['adresse'] = adresse
-    etab_maj['departement'] = cp[:2]
-    
+    etab_maj["commune"] = commune
+    etab_maj["code_postal"] = cp
+    etab_maj["adresse"] = adresse
+    etab_maj["departement"] = cp[:2]
+
     return etab_maj
 
 

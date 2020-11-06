@@ -26,8 +26,8 @@ from douceville.blueprints.isochrone.geographique import findCoordFromAddress
 
 
 def findEtabPosition(etab):
-    lat = etab.pop('latitude', None)
-    lon = etab.pop('longitude', None)
+    lat = etab.pop("latitude", None)
+    lon = etab.pop("longitude", None)
 
     adresse = {}
     if not etab["nom"] is None:
@@ -61,7 +61,9 @@ def insert_or_update_resulat(session, etab_res, nature, resultat, logger=None):
     if q.count() == 0:
         etab = findEtabPosition(etab_res)
         if etab is None:
-            logger.error("Impossible de geolocaliser l'etablissement '%s'" % str(etab_res))
+            logger.error(
+                "Impossible de geolocaliser l'etablissement '%s'" % str(etab_res)
+            )
             return
 
         logger.warning(
@@ -297,7 +299,7 @@ def import_sheet(
 
             if val is None:
                 continue
-            
+
             if db_k in ["admis", "presents", "mentions", "taux"]:
                 res[db_k].append(val)
             else:
@@ -310,7 +312,7 @@ def import_sheet(
             res["admis"] = [int(np.round(adm / 100, 0))]
 
         for k in ["admis", "presents", "mentions"]:
-            k_bck = k+'_bck'
+            k_bck = k + "_bck"
             if res[k] == []:
                 if k_bck in res.keys():
                     res[k] = res[k_bck]

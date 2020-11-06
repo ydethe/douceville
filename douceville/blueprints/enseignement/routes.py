@@ -6,7 +6,7 @@ from geoalchemy2.shape import to_shape
 from geoalchemy2 import func
 
 from douceville.config import Config
-from douceville.models import db, Etablissement, Resultat
+from douceville.models import *
 from douceville.utils import logged, Serializer
 from douceville.blueprints.enseignement import enseignement_bp
 from douceville.blueprints.isochrone.geographique import calcIsochrone
@@ -37,12 +37,15 @@ def enseignement():
         pg += "%f %f," % (lon, lat)
     pg = pg[:-1] + "))"
 
-    a = Etablissement.query.filter(not_(Etablissement.position.is_(None))).filter(
-        func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
+    a = (
+        db.session.query(Etablissement, Nature)
+        .filter(Etablissement.UAI == Nature.etablissement_id)
+        .filter(Etablissement.UAI == Nature.etablissement_id)
+        .filter(not_(Etablissement.position.is_(None)))
+        .filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
+        .filter(Nature.nature.in_(nature))
+        .filter(Etablissement.secteur.in_(secteur))
     )
-
-    a = a.filter(Etablissement.nature.in_(nature))
-    a = a.filter(Etablissement.secteur.in_(secteur))
 
     features = []
     for e in a.all():
