@@ -24,6 +24,23 @@ def calcIsochrone(center, dist):
 
     return iso
 
+@logged
+def geocodeUserAddress(query, logger=None):
+    api_key = Config.OPENROUTESERVICE_KEY
+    clnt = client.Client(key=api_key)
+
+    lon=lat=None
+    j = geocode.pelias_search(
+        clnt,
+        query,
+        country="FR",
+        layers=["postalcode", "address", "locality", "venue"],
+    )
+    for f in j["features"]:
+        lon, lat = f["geometry"]["coordinates"]
+
+        return lon,lat
+
 
 @logged
 def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None, logger=None):
@@ -58,7 +75,7 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
             query += commune + ","
         else:
             logger.error("In findCoordFromAddress, argument 'commune' must not be None")
-            return None
+            return None,None
 
         lon = lat = None
         j = geocode.pelias_search(

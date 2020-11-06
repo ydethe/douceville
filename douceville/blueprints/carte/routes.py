@@ -9,7 +9,7 @@ from douceville.config import Config
 from douceville.utils import logged, Serializer
 from douceville.blueprints.carte import carte_bp
 from douceville.blueprints.carte.forms import QueryForm
-from douceville.blueprints.isochrone.geographique import findCoordFromAddress
+from douceville.blueprints.isochrone.geographique import geocodeUserAddress
 
 
 @carte_bp.route("/query", methods=["GET", "POST"])
@@ -47,7 +47,7 @@ def carte():
     stat_min = dat.get("stat_min", "0")
 
     if address != "":
-        dat["lon"], dat["lat"] = findCoordFromAddress(address)
+        dat["lon"], dat["lat"] = geocodeUserAddress(address)
 
     token = s.serialize(dat)
 
