@@ -39,15 +39,17 @@ def enseignement():
         pg += "%f %f," % (lon, lat)
     pg = pg[:-1] + "))"
 
-    logger.debug('polygon : %s' % pg)
-        
     a = (
         db.session.query(Etablissement, Nature)
         .filter(Etablissement.UAI == Nature.etablissement_id)
         .filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
-        .filter(Nature.nature.in_(nature))
-        .filter(Etablissement.secteur.in_(secteur))
     )
+
+    if nature != []:
+        a = a.filter(Nature.nature.in_(nature))
+
+    if secteur != []:
+        a = a.filter(Etablissement.secteur.in_(secteur))
 
     features = []
     for e in a.all():
