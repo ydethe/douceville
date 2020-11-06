@@ -6,14 +6,16 @@ from douceville.config import Config
 from douceville.utils import logged
 
 
-def calcIsochrone(center, dist):
+def calcIsochrone(center, dist, transp):
     # https://openrouteservice.org/dev/#/home?tab=1
     api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
+    print(transp)
+    
     # Request of isochrones with 15 minute footwalk.
     params_iso = {
-        "profile": "driving-car",
+        "profile": transp,
         "intervals": [dist],  # time in seconds
         "segments": dist,
         "attributes": ["total_pop"],  # Get population count for isochrones
