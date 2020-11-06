@@ -30,13 +30,13 @@ def loadConfigV1(info):
     if not hasattr(info, "sources"):
         info.sources = []
 
-    n = len(info.sources)
-
     if not hasattr(info, "geoloc"):
         info.geoloc = None
 
     if not hasattr(info, "geoloc2"):
         info.geoloc2 = None
+
+    n = len(info.sources)
 
     for i in range(n):
         src = info.sources[i]
@@ -48,6 +48,9 @@ def loadConfigV1(info):
 
         if not hasattr(src, "skiprows"):
             info.sources[i].skiprows = 0
+
+        if not hasattr(src, "backup_group"):
+            info.sources[i].backup_group = None
 
     return info
 
@@ -73,6 +76,8 @@ def loadConfig(fic):
     info.cfgfile = fic
 
     if info.ident.ver == 1:
-        return loadConfigV1(info)
+        info = loadConfigV1(info)
     elif info.ident.ver == 2:
-        return loadConfigV2(info)
+        info = loadConfigV2(info)
+
+    return info

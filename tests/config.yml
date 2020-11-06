@@ -6,13 +6,13 @@ options:
 # geoloc: douceville/raw/simplifie.pkl
 # geoloc: douceville/raw/complet.pkl
 sources:
- - fichier: douceville/raw/brevet_%i.xls
-   onglets:
-   - Sheet
-   diplome: brevet
-   inv_mention: true
-   annees:
-   - 2018
+#  - fichier: douceville/raw/brevet_%i.xls
+#    onglets:
+#    - Sheet
+#    diplome: brevet
+#    inv_mention: true
+#    annees:
+#    - 2018
  # - fichier: douceville/raw/brevet_%i.xls
    # onglets:
    # - Rapport 1
@@ -29,17 +29,19 @@ sources:
    # skiprows: 3
    # annees:
    # - 2015
-#  - fichier: douceville/raw/bac_%i.xls
-#    onglets:
-#    - MENTIONS_GT
-#    - REUSSITE_GT
-#    diplome: general
-#    groupes:
-#    - S
-#    - L
-#    - ES
-#    annees:
-#    - 2018
+ - fichier: douceville/raw/bac_%i.xls
+   onglets:
+  #  - MENTIONS_GT
+   - REUSSITE_GT
+   diplome: general
+   groupes:
+   - S
+   - L
+   - ES
+   backup_group: GT
+   annees:
+   - 2018
+  #  231 etablissements ignores
    # - 2017
 #  - fichier: douceville/raw/bac_%i.xls
 #    onglets:
@@ -75,6 +77,7 @@ sources:
    # - S
    # - L
    # - ES
+  #  backup_group: GT
    # annees:
    # - 2016
    # - 2015

@@ -162,10 +162,10 @@ def to_lieu_dit(x):
     return res
 
 
-def corr_diplome(nom, groupe):
+def corr_diplome(src):
     corr = defaultdict(dict)
     # nature
-    if nom == "brevet":
+    if src.diplome == "brevet":
         corr["nom_diplome"] = "brevet"
         corr["etabl"]["Patronyme"] = (("nom", to_cap),)
         corr["etabl"]["Libellé académie"] = (("academie", to_cap),)
@@ -197,7 +197,7 @@ def corr_diplome(nom, groupe):
         corr["res"]["Nombre_d_admis_sans_Mention"] = "mentions", to_int
         corr["res"]["Nombre d'admis sans Mention"] = "mentions", to_int
     else:
-        corr["nom_diplome"] = "bac_%s" % (nom.lower())
+        corr["nom_diplome"] = "bac_%s" % (src.diplome.lower())
         corr["etabl"]["UAI"] = (("UAI", to_maj),)
         corr["etabl"]["NOM_UAI"] = (("nom", to_cap),)
         corr["etabl"]["ACAD"] = (("academie", to_cap),)
@@ -205,7 +205,13 @@ def corr_diplome(nom, groupe):
         corr["etabl"]["SECTEUR"] = (("secteur", secteur_to_bool),)
         corr["etabl"]["COMMUNE_UAI"] = (("commune", to_cap),)
 
-        for c in groupe:
+        if not src.backup_group is None:
+            corr["res"]["Presents_%s" % src.backup_group] = "presents_bck", to_int
+            corr["res"]["Admis_%s" % src.backup_group] = "admis_bck", to_int
+            corr["res"]["Mentions_%s" % src.backup_group] = "mentions_bck", to_int
+            corr["res"]["Taux_%s" % src.backup_group] = "taux_bck", to_int
+
+        for c in src.groupes:
             corr["res"]["Presents_%s" % c] = "presents", to_int
             corr["res"]["Admis_%s" % c] = "admis", to_int
             corr["res"]["Mentions_%s" % c] = "mentions", to_int

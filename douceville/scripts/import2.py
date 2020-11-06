@@ -227,6 +227,7 @@ def import_sheet(
     sheet_name,
     skp,
     corr_dict,
+    backup_group,
     year,
     inv_mention,
     row_limit,
@@ -296,7 +297,7 @@ def import_sheet(
 
             if val is None:
                 continue
-
+            
             if db_k in ["admis", "presents", "mentions", "taux"]:
                 res[db_k].append(val)
             else:
@@ -308,13 +309,20 @@ def import_sheet(
                 adm += p * t
             res["admis"] = [int(np.round(adm / 100, 0))]
 
-        res.pop("taux")
-
         for k in ["admis", "presents", "mentions"]:
+            k_bck = k+'_bck'
             if res[k] == []:
-                res.pop(k)
+                if k_bck in res.keys():
+                    res[k] = res[k_bck]
+                else:
+                    res.pop(k)
             else:
                 res[k] = sum(res[k])
+
+            res.pop(k_bck, None)
+
+        res.pop("taux")
+        res.pop("taux_bck", None)
 
         # =====================
         # Filtrage
@@ -374,7 +382,7 @@ def import_main(logger=None):
         import_geoloc(s, cfg.geoloc, row_limit=cfg.options["row_limit"])
 
     for src in cfg.sources:
-        corr = corr_diplome(src.diplome, src.groupes)
+        corr = corr_diplome(src)
 
         for annee in src.annees:
             xls = pd.ExcelFile(src.fichier % annee)
@@ -390,6 +398,7 @@ def import_main(logger=None):
                     ong,
                     src.skiprows,
                     corr,
+                    src.backup_group,
                     annee,
                     src.inv_mention,
                     row_limit=cfg.options["row_limit"],
