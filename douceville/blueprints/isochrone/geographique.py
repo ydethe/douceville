@@ -58,7 +58,7 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
             query += commune + ","
         else:
             logger.error("In findCoordFromAddress, argument 'commune' must not be None")
-            return None
+            return None,None
 
         lon = lat = None
         j = geocode.pelias_search(
