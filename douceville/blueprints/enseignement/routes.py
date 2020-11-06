@@ -1,4 +1,5 @@
 import json
+import logging
 
 from flask import jsonify, request
 from sqlalchemy import not_
@@ -14,6 +15,7 @@ from douceville.blueprints.isochrone.geographique import calcIsochrone
 
 @enseignement_bp.route("/", methods=["GET"])
 def enseignement():
+    logger = logging.getLogger('douceville_logger')
     token = request.args.get("token", "")
 
     s = Serializer()
