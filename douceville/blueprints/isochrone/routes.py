@@ -11,11 +11,13 @@ def isochrone():
 
     s = Serializer()
     dat = s.deserialize(token)
-    dist = dat.pop("dist", 600)
-    lat = dat.pop("lat", 1.39396)
-    lon = dat.pop("lon", 43.547864)
+
+    dist = dat.get("dist", 600)
+    transp = dat.get("transp", "")
+    lat = dat.get("lat", 1.39396)
+    lon = dat.get("lon", 43.547864)
 
     center = [lon, lat]
-    iso = calcIsochrone(center, dist)
+    iso = calcIsochrone(center, dist, transp)
 
     return jsonify(iso)

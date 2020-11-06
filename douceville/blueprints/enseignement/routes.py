@@ -21,16 +21,17 @@ def enseignement():
     s = Serializer()
     dat = s.deserialize(token)
 
-    year = dat.pop("year", 2018)
-    lat = dat.pop("lat", 1.39396)
-    lon = dat.pop("lon", 43.547864)
-    dist = dat.pop("dist", 600)
-    nature = dat.pop("nature", [])
-    secteur = dat.pop("secteur", [])
-    stat_min = dat.pop("stat_min", 0)
-
+    year = dat.get("year", 2018)
+    lat = dat.get("lat", 1.39396)
+    lon = dat.get("lon", 43.547864)
+    dist = dat.get("dist", 600)
+    transp = dat.get("transp", '')
+    nature = dat.get("nature", [])
+    secteur = dat.get("secteur", [])
+    stat_min = dat.get("stat_min", 0)
+    
     center = [lon, lat]
-    iso = calcIsochrone(center, dist)
+    iso = calcIsochrone(center, dist, transp)
 
     pts = iso["features"][0]["geometry"]["coordinates"][0]
 

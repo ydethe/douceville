@@ -18,11 +18,13 @@ def recherche():
     if form.validate_on_submit():
         req_param = {}
         req_param["address"] = form.address.data
-        req_param["dist"] = form.dist.data
+        req_param["transp"] = form.transp.data
+        req_param["dist"] = form.dist.data*60
         req_param["stat_min"] = form.stat_min.data
         req_param["nature"] = form.nature.data
         req_param["secteur"] = form.secteur.data
         req_param["year"] = "2018"
+        print('req_param',req_param)
 
         s = Serializer()
         token = s.serialize(req_param)
@@ -41,6 +43,7 @@ def carte():
 
     year = dat.get("year", "2018")
     address = dat.pop("address", "")
+    transp = dat.get("transp", "")
     dist = dat.get("dist", "300")
     nature = dat.get("nature", [])
     secteur = dat.get("secteur", [])

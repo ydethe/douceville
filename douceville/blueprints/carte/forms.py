@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import SelectMultipleField as DVSelField
+from wtforms.fields import SelectField
 from wtforms.fields import StringField, SubmitField, FloatField
 from wtforms.validators import DataRequired
 
@@ -17,10 +18,11 @@ def buildList(attr):
 
 
 class QueryForm(FlaskForm):
-    address = StringField("address")
-    dist = FloatField("dist")
+    address = StringField("Adresse")
+    transp = SelectField("Transport", choices=[('driving-car','Voiture'), ('cycling-road', 'Vélo')])
+    dist = FloatField("Temps (min)")
     stat_min = FloatField("stat_min")
-    nature = DVSelField("nature", choices=buildList(Nature.nature))
-    secteur = DVSelField("secteur", choices=buildList(Etablissement.secteur))
+    nature = DVSelField("Nature", choices=buildList(Nature.nature))
+    secteur = DVSelField("Secteur", choices=buildList(Etablissement.secteur))
 
     submit = SubmitField("Chercher")
