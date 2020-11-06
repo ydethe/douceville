@@ -17,8 +17,8 @@ def to_cap(x):
 
 
 def to_nature(x):
-    '''
-    
+    """
+
     Examples:
     >>> f = open('douceville/scripts/liste_nature.txt', 'r')
     >>> natures = f.readlines()
@@ -26,70 +26,70 @@ def to_nature(x):
     >>> for n in natures:
     ...    if to_nature(n) is None:
     ...       print(n.strip(), slugify(n.strip()), to_nature(n))
-    
-    '''
+
+    """
     s = slugify(x.strip())
-    if  "elementaire" in s:
+    if "elementaire" in s:
         nature = ["elementaire"]
-    elif  "elemenetaire" in s:
+    elif "elemenetaire" in s:
         nature = ["elementaire"]
-    elif  "elem-" in s:
+    elif "elem-" in s:
         nature = ["elementaire"]
-    elif  "ele-" in s:
+    elif "ele-" in s:
         nature = ["elementaire"]
-    elif  "elemenaire" in s:
+    elif "elemenaire" in s:
         nature = ["elementaire"]
-    elif  "college" in s:
+    elif "college" in s:
         nature = ["college"]
-    elif  "lycee" in s:
+    elif "lycee" in s:
         nature = ["lycee"]
-    elif  "general-et-technologique" in s:
+    elif "general-et-technologique" in s:
         nature = ["lycee"]
-    elif  "lp-" in s:
+    elif "lp-" in s:
         nature = ["lycee"]
-    elif  "lyc-" in s:
+    elif "lyc-" in s:
         nature = ["lycee"]
-    elif  "etablissement-regional-denseignt-adapte" in s:
+    elif "etablissement-regional-denseignt-adapte" in s:
         nature = ["college EREA"]
-    elif  "maison-familiale-rurale" in s:
+    elif "maison-familiale-rurale" in s:
         nature = ["maison familiale rurale"]
-    elif  "prof" in s:
+    elif "prof" in s:
         nature = ["lycee"]
-    elif  "maternelle" in s:
+    elif "maternelle" in s:
         nature = ["maternelle"]
-    elif  "maternellle" in s:
+    elif "maternellle" in s:
         nature = ["maternelle"]
-    elif  "primaire" in s:
+    elif "primaire" in s:
         nature = ["maternelle", "elementaire"]
-    elif  "pimaire" in s:
+    elif "pimaire" in s:
         nature = ["maternelle", "elementaire"]
-    elif  "priimaire" in s:
+    elif "priimaire" in s:
         nature = ["maternelle", "elementaire"]
-    elif  "premier-degre" in s:
+    elif "premier-degre" in s:
         nature = ["maternelle", "elementaire"]
-    elif  "prmaire" in s:
+    elif "prmaire" in s:
         nature = ["maternelle", "elementaire"]
-    elif  "plein-air" in s:
+    elif "plein-air" in s:
         nature = ["maternelle", "elementaire"]
-    elif  "second-" in s:
+    elif "second-" in s:
         nature = ["college", "lycee"]
-    elif  "secondaire" in s:
+    elif "secondaire" in s:
         nature = ["college", "lycee"]
-    elif  "2nd-degr" in s:
+    elif "2nd-degr" in s:
         nature = ["college", "lycee"]
-    elif  "2d-degr" in s:
+    elif "2d-degr" in s:
         nature = ["college", "lycee"]
-    elif  "2-degr" in s:
+    elif "2-degr" in s:
         nature = ["college", "lycee"]
-    elif  "segpa" in s:
+    elif "segpa" in s:
         nature = ["college SEGPA"]
-    elif  "etablissement-de-reinsertion-scolaire" in s:
+    elif "etablissement-de-reinsertion-scolaire" in s:
         nature = ["college ERS"]
-    elif  "ecole-sans-effectifs-permanents" in s:
+    elif "ecole-sans-effectifs-permanents" in s:
         nature = None
     else:
         nature = None
-        
+
     return nature
 
 
@@ -214,9 +214,7 @@ def corr_diplome(nom, groupe):
     return corr
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
-    
-    

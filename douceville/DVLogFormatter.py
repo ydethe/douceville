@@ -3,7 +3,7 @@
 
 class DVLogFormatter(logging.Formatter):
 
-    dbg_fmt  = "[%(levelname)s] - %(asctime)s - L%(lineno)d@%(filename)s - %(message)s"
+    dbg_fmt = "[%(levelname)s] - %(asctime)s - L%(lineno)d@%(filename)s - %(message)s"
 
     def __init__(self, notime=False):
         if notime:
@@ -11,8 +11,8 @@ class DVLogFormatter(logging.Formatter):
         else:
             fmt = "[%(levelname)s] - %(asctime)s - %(message)s"
 
-        super().__init__(fmt=fmt, datefmt=None, style='%')  
-        
+        super().__init__(fmt=fmt, datefmt=None, style="%")
+
     def format(self, record):
 
         # Save the original format configured by the user
@@ -30,5 +30,3 @@ class DVLogFormatter(logging.Formatter):
         self._style._fmt = format_orig
 
         return result
-        
-        

@@ -20,7 +20,7 @@ class QueryForm(FlaskForm):
     address = StringField("address")
     dist = FloatField("dist")
     stat_min = FloatField("stat_min")
-    nature  = DVSelField("nature",  choices=buildList(Nature.nature))
+    nature = DVSelField("nature", choices=buildList(Nature.nature))
     secteur = DVSelField("secteur", choices=buildList(Etablissement.secteur))
 
     submit = SubmitField("Chercher")

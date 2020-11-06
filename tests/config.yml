@@ -4,15 +4,15 @@ options:
  # - row_limit: 10
 # geoloc: douceville/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
 # geoloc: douceville/raw/simplifie.pkl
-geoloc: douceville/raw/complet.pkl
-# sources:
-#  - fichier: douceville/raw/brevet_%i.xls
-#    onglets:
-#    - Sheet
-#    diplome: brevet
-#    inv_mention: true
-#    annees:
-#    - 2018
+# geoloc: douceville/raw/complet.pkl
+sources:
+ - fichier: douceville/raw/brevet_%i.xls
+   onglets:
+   - Sheet
+   diplome: brevet
+   inv_mention: true
+   annees:
+   - 2018
  # - fichier: douceville/raw/brevet_%i.xls
    # onglets:
    # - Rapport 1
@@ -40,7 +40,7 @@ geoloc: douceville/raw/complet.pkl
 #    - ES
 #    annees:
 #    - 2018
-#    # - 2017
+   # - 2017
 #  - fichier: douceville/raw/bac_%i.xls
 #    onglets:
 #    - MENTIONS_PRO

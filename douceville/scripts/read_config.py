@@ -67,7 +67,7 @@ def loadConfigV2(info):
 
 def loadConfig(fic):
     f = open(fic, "r")
-    info = Config(yaml.load(f))
+    info = Config(yaml.load(f, Loader=yaml.FullLoader))
     f.close()
 
     info.cfgfile = fic

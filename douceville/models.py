@@ -9,6 +9,7 @@ class ImportStatus(object):
     COORD_FROM_ADDRESS = 1
     ETAB_FROM_RESULT = 2
 
+
 class Nature(db.Model):
     __tablename__ = "nature"
     __table_args__ = (db.UniqueConstraint("nature", "etablissement_id"),)
@@ -81,7 +82,7 @@ class Etablissement(db.Model):
     ouverture = db.Column(db.DateTime())
     import_status = db.Column(db.Integer, nullable=False)
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-    
+
     resultats = db.relationship("Resultat", backref="etablissement", lazy="dynamic")
     natures = db.relationship("Nature", backref="etablissement", lazy="dynamic")
 

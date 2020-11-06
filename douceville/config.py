@@ -6,7 +6,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class BaseConfig(object):
     SECRET_KEY = b"lVwBk7UXvvhDlURHQ7iBnyFy-PBvBrUhHQ5NsDlcRh0="
-    OPENROUTESERVICE_KEY = "5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783"
+    # OPENROUTESERVICE_KEY = "5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783"
+    OPENROUTESERVICE_KEY = "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638"
     FLASK_ADMIN_SWATCH = "cerulean"
 
 
@@ -32,6 +33,5 @@ class Dev2Config(BaseConfig):
     PORT = 5000
 
 
-# Config = Dev2Config
-Config = ProdConfig
-
+Config = Dev2Config
+# Config = ProdConfig

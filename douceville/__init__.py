@@ -56,10 +56,10 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
-if os.environ.get('FLASK_INIT_DB','0') == '0':
+if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from flask_admin import Admin
     from flask_admin.contrib.sqla import ModelView
-    
+
     from douceville.blueprints.carte import carte_bp
 
     app.register_blueprint(carte_bp, url_prefix="/carte")

@@ -60,11 +60,8 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
         etabl.pop("longitude", None)
 
         nature = etabl.pop("nature", None)
-        
-        q = (
-            session.query(Nature)
-            .filter(Nature.etablissement_id == etabl["UAI"])
-        )
+
+        q = session.query(Nature).filter(Nature.etablissement_id == etabl["UAI"])
         found_natures = [r.nature for r in q.all() if not r.nature is None] + [nature]
         q.delete()
         session.commit()
@@ -95,7 +92,7 @@ def insert_or_update(session, etabl, res, check_nullable=True, logger=None):
                 if rn != n:
                     rec = Nature(nature=n, etablissement_id=etabl["UAI"])
                     session.add(rec)
-        
+
     if not res is None:
         q = session.query(Etablissement).filter(
             Etablissement.UAI == res["etablissement_id"]
