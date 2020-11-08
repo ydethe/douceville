@@ -7,7 +7,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class BaseConfig(object):
     FLASK_ADMIN_SWATCH = "cerulean"
     BCRYPT_ROUNDS = 10
-
+    SECRET_KEY = os.environ.get('SECRET_KEY', "mon_secret")
+    OPENROUTESERVICE_KEY = os.environ.get('OPENROUTESERVICE_KEY', "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638")
+    
     MAIL_SERVER = "box.johncloud.fr"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
@@ -25,8 +27,6 @@ class ProdConfig(BaseConfig):
 
 
 class DevConfig(BaseConfig):
-    SECRET_KEY = b"mon_secret"
-    OPENROUTESERVICE_KEY = "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638"
     SQLALCHEMY_DATABASE_URI = "sqlite:///%s/mydb.db" % basedir
     SQLITE_SPATIALITE_PATH = "/usr/local/lib/mod_spatialite.so"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -35,8 +35,6 @@ class DevConfig(BaseConfig):
 
 
 class Dev2Config(BaseConfig):
-    SECRET_KEY = b"mon_secret"
-    OPENROUTESERVICE_KEY = "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638"
     SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://web_user@localhost/douceville"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     HOST = "https://localhost"
