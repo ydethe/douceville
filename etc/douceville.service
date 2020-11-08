@@ -8,6 +8,8 @@ After=network.target
 User=ydethe
 Group=ydethe
 Environment=DOUCEVILLE_CONFIG=prod
+Environment=SECRET_KEY=lVwBk7UXvvhDlURHQ7iBnyFy-PBvBrUhHQ5NsDlcRh0=
+Environment=OPENROUTESERVICE_KEY=5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783
 WorkingDirectory=/home/ydethe/douceville
 ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
 
