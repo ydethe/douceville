@@ -66,6 +66,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
 class UserModelView(ModelView):
     def is_accessible(self):
         return current_user.is_active and current_user.is_authenticated and current_user.admin
@@ -76,9 +79,6 @@ class UserModelView(ModelView):
 
 
 if os.environ.get("FLASK_INIT_DB", "0") == "0":
-    from flask_admin import Admin
-    from flask_admin.contrib.sqla import ModelView
-
     from douceville.blueprints.carte import carte_bp
 
     app.register_blueprint(carte_bp, url_prefix="/carte")
