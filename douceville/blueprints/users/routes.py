@@ -24,16 +24,18 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if not user or not user.isCorrectPassword(form.password.data):
-            flash('Please check your login details and try again.')
-            return redirect(url_for('.login')) # if the user doesn't exist or password is wrong, reload the page
+            flash("Please check your login details and try again.")
+            return redirect(
+                url_for(".login")
+            )  # if the user doesn't exist or password is wrong, reload the page
         elif not user.is_active:
-            flash('Your account has not been confirmed yet.')
-            return redirect(url_for('.login'))
+            flash("Your account has not been confirmed yet.")
+            return redirect(url_for(".login"))
         else:
             login_user(user)
-            next_page = request.args.get('next')
-            if not next_page or url_parse(next_page).netloc != '':
-                next_page = url_for('index')
+            next_page = request.args.get("next")
+            if not next_page or url_parse(next_page).netloc != "":
+                next_page = url_for("index")
             return redirect(next_page)
 
     return render_template("users/login.html", form=form)
@@ -48,20 +50,21 @@ def signup():
         if lstat:
             return redirect(url_for("index"))
         else:
-            flash('Email address already exists')
+            flash("Email address already exists")
             return redirect(url_for(".signup"))
 
     return render_template("users/signup.html", form=form)
 
+
 @users_bp.route("/confirm", methods=["GET"])
 def confirm():
     token = request.args.get("token", "")
-    
+
     s = Serializer()
     param = s.deserialize(token, ttl=86400)
 
-    verif_email = param['email']
-    maj_user = {'is_active':True}
+    verif_email = param["email"]
+    maj_user = {"is_active": True}
     maj_user.update(param)
 
     q = db.session.query(User).filter(User.email == verif_email)
@@ -69,10 +72,11 @@ def confirm():
         logging.error("Aucun utilisateur avec le mail %s" % verif_email)
     else:
         q.update(maj_user)
-    
+
     db.session.commit()
 
     return redirect(url_for(".login"))
+
 
 @users_bp.route("/logout", methods=["GET"])
 def logout():

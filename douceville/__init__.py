@@ -14,6 +14,7 @@ from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_login import current_user
 
 from sqlalchemy import event
 
@@ -65,6 +66,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
+class UserModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_active and current_user.is_authenticated and current_user.admin
+
+    def _handle_view(self, name):
+        if not self.is_accessible():
+            return redirect(url_for("users.login"))
+
+
 if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from flask_admin import Admin
     from flask_admin.contrib.sqla import ModelView
@@ -89,9 +99,9 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
 
     from douceville import routes, models
 
-    admin.add_view(ModelView(models.Etablissement, db.session))
-    admin.add_view(ModelView(models.Nature, db.session))
-    admin.add_view(ModelView(models.Resultat, db.session))
-    admin.add_view(ModelView(models.User, db.session))
+    admin.add_view(UserModelView(models.Etablissement, db.session))
+    admin.add_view(UserModelView(models.Nature, db.session))
+    admin.add_view(UserModelView(models.Resultat, db.session))
+    admin.add_view(UserModelView(models.User, db.session))
 
     # logger.debug("%s" % app.url_map)

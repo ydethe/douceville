@@ -12,20 +12,25 @@ from douceville.utils import logged, Serializer
 
 def add_user(email=None, pwd=None, admin=False, active=False):
     if email is None:
-        email = input('email: ')
+        email = input("email: ")
     if pwd is None:
-        pwd = getpass('password: ')
-    
+        pwd = getpass("password: ")
+
     q = User.query.filter_by(email=email)
     if q.count() == 0:
         hpwd = bcrypt.generate_password_hash(pwd, Config.BCRYPT_ROUNDS)
-        user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, is_active=active)
+        user = User(
+            email=email, hashed_pwd=hpwd.decode(), admin=admin, is_active=active
+        )
 
         s = Serializer()
-        token = s.serialize({'email':email})
+        token = s.serialize({"email": email})
         with app.app_context():
             msg = Message("Hello", recipients=[email])
-            msg.html = '<a href="%s/confirm?token=%s">Click here to confirm</a>' % (Config.HOST,token)
+            msg.html = '<a href="%s/confirm?token=%s">Click here to confirm</a>' % (
+                Config.HOST,
+                token,
+            )
             mail.send(msg)
 
         db.session.add(user)
@@ -34,19 +39,21 @@ def add_user(email=None, pwd=None, admin=False, active=False):
     else:
         return False
 
+
 @logged
 def main(logger=None):
     logger.info("Maillage, version %s" % douceville.__version__)
 
-    parser = argparse.ArgumentParser(description="Maillage France - Gestion utilisateurs")
+    parser = argparse.ArgumentParser(
+        description="Maillage France - Gestion utilisateurs"
+    )
     parser.add_argument("action", help="action", type=str)
     parser.add_argument("email", help="email", type=str, default=None)
     parser.add_argument("password", help="password", type=str, default=None)
-    parser.add_argument("--admin", help="admin", action='store_true')
-    parser.add_argument("--active", help="active", action='store_true')
-    
+    parser.add_argument("--admin", help="admin", action="store_true")
+    parser.add_argument("--active", help="active", action="store_true")
+
     args = parser.parse_args()
 
-    if args.action == 'add':
+    if args.action == "add":
         add_user(args.email, args.password, args.admin, args.active)
-

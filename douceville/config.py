@@ -11,13 +11,13 @@ class BaseConfig(object):
     # OPENROUTESERVICE_KEY = "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638"
     FLASK_ADMIN_SWATCH = "cerulean"
 
-    MAIL_SERVER = 'box.johncloud.fr'
+    MAIL_SERVER = "box.johncloud.fr"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
-    MAIL_USERNAME = 'yann@johncloud.fr'
-    MAIL_PASSWORD = 'c86WHgSpo6hdPj'
-    MAIL_DEFAULT_SENDER = ('Yann', 'yann@johncloud.fr')
+    MAIL_USERNAME = "yann@johncloud.fr"
+    MAIL_PASSWORD = "c86WHgSpo6hdPj"
+    MAIL_DEFAULT_SENDER = ("Yann", "yann@johncloud.fr")
 
 
 class ProdConfig(BaseConfig):
