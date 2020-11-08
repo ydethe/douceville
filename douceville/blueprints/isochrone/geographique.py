@@ -12,7 +12,7 @@ def calcIsochrone(center, dist, transp):
     clnt = client.Client(key=api_key)
 
     print(transp)
-    
+
     # Request of isochrones with 15 minute footwalk.
     params_iso = {
         "profile": transp,

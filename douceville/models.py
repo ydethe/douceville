@@ -1,7 +1,14 @@
-from sqlalchemy import inspect, event
+from sqlalchemy import inspect, event, DDL
 from geoalchemy2 import Geometry
+from flask_login import UserMixin
 
-from douceville import db
+from douceville import db, bcrypt, login_manager, logger
+
+
+@login_manager.user_loader
+def load_user(userid):
+    user = User.query.filter(User.id == userid).first()
+    return user
 
 
 class ImportStatus(object):
@@ -9,6 +16,26 @@ class ImportStatus(object):
     COORD_FROM_ADDRESS = 1
     ETAB_FROM_RESULT = 2
 
+
+class User(UserMixin, db.Model):
+    __tablename__ = "user"
+
+    id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
+    # id = db.Column(db.BigInteger, primary_key=True)
+    email = db.Column(db.String(1024), nullable=False, unique=True)
+    hashed_pwd = db.Column(db.String(128), nullable=False)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=False)
+
+    def isCorrectPassword(self, plaintext):
+        return bcrypt.check_password_hash(self.hashed_pwd, plaintext)
+
+    def __repr__(self):
+        r = self.asDict()
+        return str(r)
+
+    def asDict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 class Nature(db.Model):
     __tablename__ = "nature"

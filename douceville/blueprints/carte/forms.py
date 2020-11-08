@@ -19,7 +19,9 @@ def buildList(attr):
 
 class QueryForm(FlaskForm):
     address = StringField("Adresse")
-    transp = SelectField("Transport", choices=[('driving-car','Voiture'), ('cycling-road', 'Vélo')])
+    transp = SelectField(
+        "Transport", choices=[("driving-car", "Voiture"), ("cycling-road", "Vélo")]
+    )
     dist = FloatField("Temps (min)")
     stat_min = FloatField("stat_min")
     nature = DVSelField("Nature", choices=buildList(Nature.nature))

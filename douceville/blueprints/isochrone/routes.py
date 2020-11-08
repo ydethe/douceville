@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_login import login_required, current_user
 
 from douceville.utils import logged, Serializer
 from douceville.blueprints.isochrone import isochrone_bp
@@ -6,6 +7,7 @@ from douceville.blueprints.isochrone.geographique import calcIsochrone
 
 
 @isochrone_bp.route("/", methods=["GET"])
+@login_required
 def isochrone():
     token = request.args.get("token", "")
 

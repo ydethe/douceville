@@ -26,3 +26,5 @@ cryptography
 flask-login
 flask-wtf
 wtforms
+email-validator
+flask-mail

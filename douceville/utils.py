@@ -27,8 +27,8 @@ class Serializer(object):
         token = self.fernet.encrypt(j)
         return token.decode()
 
-    def deserialize(self, s):
-        j = self.fernet.decrypt(s.encode(), ttl=60)
+    def deserialize(self, s, ttl=60):
+        j = self.fernet.decrypt(s.encode(), ttl=ttl)
         d = json.loads(j)
         return d
 

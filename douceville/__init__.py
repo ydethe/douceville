@@ -11,6 +11,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+from flask_mail import Mail
 
 from sqlalchemy import event
 
@@ -56,6 +59,11 @@ app.logger.addHandler(file_handler)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
+bcrypt = Bcrypt(app)
+mail = Mail(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "users.login"
 
 if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from flask_admin import Admin
@@ -64,6 +72,10 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from douceville.blueprints.carte import carte_bp
 
     app.register_blueprint(carte_bp, url_prefix="/carte")
+
+    from douceville.blueprints.users import users_bp
+
+    app.register_blueprint(users_bp, url_prefix="/")
 
     from douceville.blueprints.isochrone import isochrone_bp
 
@@ -78,4 +90,8 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from douceville import routes, models
 
     admin.add_view(ModelView(models.Etablissement, db.session))
+    admin.add_view(ModelView(models.Nature, db.session))
     admin.add_view(ModelView(models.Resultat, db.session))
+    admin.add_view(ModelView(models.User, db.session))
+
+    # logger.debug("%s" % app.url_map)

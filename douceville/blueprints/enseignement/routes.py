@@ -2,6 +2,7 @@ import json
 import logging
 
 from flask import jsonify, request
+from flask_login import login_required, current_user
 from sqlalchemy import not_
 from geoalchemy2.shape import to_shape
 from geoalchemy2 import func
@@ -14,8 +15,9 @@ from douceville.blueprints.isochrone.geographique import calcIsochrone
 
 
 @enseignement_bp.route("/", methods=["GET"])
+@login_required
 def enseignement():
-    logger = logging.getLogger('douceville_logger')
+    logger = logging.getLogger("douceville_logger")
     token = request.args.get("token", "")
 
     s = Serializer()
@@ -25,11 +27,11 @@ def enseignement():
     lat = dat.get("lat", 1.39396)
     lon = dat.get("lon", 43.547864)
     dist = dat.get("dist", 600)
-    transp = dat.get("transp", '')
+    transp = dat.get("transp", "")
     nature = dat.get("nature", [])
     secteur = dat.get("secteur", [])
     stat_min = dat.get("stat_min", 0)
-    
+
     center = [lon, lat]
     iso = calcIsochrone(center, dist, transp)
 
@@ -53,7 +55,7 @@ def enseignement():
         a = a.filter(Etablissement.secteur.in_(secteur))
 
     features = []
-    for e,n in a.all():
+    for e, n in a.all():
         info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
 
         stat = 0

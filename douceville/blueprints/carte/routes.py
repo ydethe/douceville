@@ -4,6 +4,7 @@ from flask import (
     redirect,
     url_for,
 )
+from flask_login import login_required, current_user
 
 from douceville.config import Config
 from douceville.utils import logged, Serializer
@@ -13,18 +14,19 @@ from douceville.blueprints.isochrone.geographique import geocodeUserAddress
 
 
 @carte_bp.route("/query", methods=["GET", "POST"])
+@login_required
 def recherche():
     form = QueryForm()
     if form.validate_on_submit():
         req_param = {}
         req_param["address"] = form.address.data
         req_param["transp"] = form.transp.data
-        req_param["dist"] = form.dist.data*60
+        req_param["dist"] = form.dist.data * 60
         req_param["stat_min"] = form.stat_min.data
         req_param["nature"] = form.nature.data
         req_param["secteur"] = form.secteur.data
         req_param["year"] = "2018"
-        print('req_param',req_param)
+        print("req_param", req_param)
 
         s = Serializer()
         token = s.serialize(req_param)
@@ -35,6 +37,7 @@ def recherche():
 
 
 @carte_bp.route("/", methods=["GET"])
+@login_required
 def carte():
     token = request.args.get("token", "")
 
