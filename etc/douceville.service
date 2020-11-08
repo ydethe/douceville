@@ -7,6 +7,7 @@ After=network.target
 [Service]
 User=ydethe
 Group=ydethe
+Environment=DOUCEVILLE_CONFIG=prod
 WorkingDirectory=/home/ydethe/douceville
 ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
 

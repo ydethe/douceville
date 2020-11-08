@@ -42,5 +42,8 @@ class Dev2Config(BaseConfig):
     PORT = 5000
 
 
-#BConfig = Dev2Config
-Config = ProdConfig
+tgt_conf = os.environ.get('DOUCEVILLE_CONFIG','dev')
+if tgt_conf == 'prod':
+    Config = ProdConfig
+else:
+    Config = Dev2Config

@@ -28,3 +28,4 @@ flask-wtf
 wtforms
 email-validator
 flask-mail
+flask-bcrypt
