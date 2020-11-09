@@ -5,19 +5,18 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class BaseConfig(object):
-    SECRET_KEY = b"lVwBk7UXvvhDlURHQ7iBnyFy-PBvBrUhHQ5NsDlcRh0="
-    BCRYPT_ROUNDS = 10
-    OPENROUTESERVICE_KEY = "5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783"
-    # OPENROUTESERVICE_KEY = "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638"
     FLASK_ADMIN_SWATCH = "cerulean"
-
-    MAIL_SERVER = 'box.johncloud.fr'
+    BCRYPT_ROUNDS = 10
+    SECRET_KEY = os.environ.get('SECRET_KEY', "mon_secret")
+    OPENROUTESERVICE_KEY = os.environ.get('OPENROUTESERVICE_KEY', "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638")
+    
+    MAIL_SERVER = "box.johncloud.fr"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
-    MAIL_USERNAME = 'yann@johncloud.fr'
-    MAIL_PASSWORD = 'c86WHgSpo6hdPj'
-    MAIL_DEFAULT_SENDER = ('Yann', 'yann@johncloud.fr')
+    MAIL_USERNAME = "yann@johncloud.fr"
+    MAIL_PASSWORD = "c86WHgSpo6hdPj"
+    MAIL_DEFAULT_SENDER = ("Yann", "yann@johncloud.fr")
 
 
 class ProdConfig(BaseConfig):
@@ -42,5 +41,8 @@ class Dev2Config(BaseConfig):
     PORT = 5000
 
 
-Config = Dev2Config
-# Config = ProdConfig
+tgt_conf = os.environ.get('DOUCEVILLE_CONFIG','dev')
+if tgt_conf == 'prod':
+    Config = ProdConfig
+else:
+    Config = Dev2Config

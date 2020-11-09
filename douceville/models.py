@@ -37,6 +37,7 @@ class User(UserMixin, db.Model):
     def asDict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
+
 class Nature(db.Model):
     __tablename__ = "nature"
     __table_args__ = (db.UniqueConstraint("nature", "etablissement_id"),)

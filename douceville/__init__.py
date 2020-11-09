@@ -7,6 +7,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
+import stripe
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -14,6 +15,7 @@ from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_login import current_user
 
 from sqlalchemy import event
 
@@ -65,10 +67,26 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
-if os.environ.get("FLASK_INIT_DB", "0") == "0":
-    from flask_admin import Admin
-    from flask_admin.contrib.sqla import ModelView
+stripe_keys = {
+  'secret_key': os.environ.get('STRIPE_SECRET_KEY','sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL'),
+  'publishable_key': os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk')
+}
 
+stripe.api_key = stripe_keys['secret_key']
+
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
+class UserModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_active and current_user.is_authenticated and current_user.admin
+
+    def _handle_view(self, name):
+        if not self.is_accessible():
+            return redirect(url_for("users.login"))
+
+
+if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from douceville.blueprints.carte import carte_bp
 
     app.register_blueprint(carte_bp, url_prefix="/carte")
@@ -81,6 +99,10 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
 
     app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
 
+    from douceville.blueprints.payment import payment_bp
+
+    app.register_blueprint(payment_bp, url_prefix="/")
+
     from douceville.blueprints.enseignement import enseignement_bp
 
     app.register_blueprint(enseignement_bp, url_prefix="/enseignement")
@@ -89,9 +111,9 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
 
     from douceville import routes, models
 
-    admin.add_view(ModelView(models.Etablissement, db.session))
-    admin.add_view(ModelView(models.Nature, db.session))
-    admin.add_view(ModelView(models.Resultat, db.session))
-    admin.add_view(ModelView(models.User, db.session))
+    admin.add_view(UserModelView(models.Etablissement, db.session))
+    admin.add_view(UserModelView(models.Nature, db.session))
+    admin.add_view(UserModelView(models.Resultat, db.session))
+    admin.add_view(UserModelView(models.User, db.session))
 
     # logger.debug("%s" % app.url_map)
