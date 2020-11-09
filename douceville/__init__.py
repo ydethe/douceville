@@ -68,8 +68,8 @@ login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
 stripe_keys = {
-  'secret_key': os.environ.get('STRIPE_SECRET_KEY','sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL'),
-  'publishable_key': os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk')
+  'secret_key': os.environ.get('STRIPE_SECRET_KEY',''),
+  'publishable_key': os.environ.get('STRIPE_PUBLISHABLE_KEY', '')
 }
 
 stripe.api_key = stripe_keys['secret_key']
