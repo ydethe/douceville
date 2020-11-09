@@ -12,7 +12,7 @@ from douceville.blueprints.payment import payment_bp
 def pay():
     return render_template('payment/test.html',user_email=current_user.email,key=Config.STRIPE_PUBLISHABLE_KEY)
 
-@payment_bp.route('/checkout', methods=['POST'])
+@payment_bp.route('/checkout', methods=['GET'])
 @login_required
 def checkout():
     return render_template('payment/checkout.html')
