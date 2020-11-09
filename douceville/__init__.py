@@ -67,12 +67,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
-stripe_keys = {
-  'secret_key': os.environ.get('STRIPE_SECRET_KEY',''),
-  'publishable_key': os.environ.get('STRIPE_PUBLISHABLE_KEY', '')
-}
-
-stripe.api_key = stripe_keys['secret_key']
+stripe.api_key = Config.STRIPE_SECRET_KEY
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
