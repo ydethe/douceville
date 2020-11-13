@@ -1,3 +1,7 @@
+import time
+
+import stripe
+
 from flask import (
     render_template,
     request,
@@ -57,10 +61,10 @@ def login():
             login_user(user)
             next_page = request.args.get("next")
             if not next_page or url_parse(next_page).netloc != "":
-                next_page = url_for("index")
+                next_page = url_for("carte.recherche")
             return redirect(next_page)
 
-    return render_template("users/login.html", form=form)
+    return render_template("login.html", form=form)
 
 
 @users_bp.route("/signup", methods=["GET", "POST"])
@@ -75,7 +79,7 @@ def signup():
             flash("Email address already exists")
             return redirect(url_for(".signup"))
 
-    return render_template("users/signup.html", form=form)
+    return render_template("signup.html", form=form)
 
 
 @users_bp.route("/confirm", methods=["GET"])
@@ -104,4 +108,4 @@ def confirm():
 def logout():
     logout_user()
 
-    return redirect(url_for("index"))
+    return redirect(url_for(".login'"))

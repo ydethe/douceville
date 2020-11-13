@@ -23,15 +23,16 @@ def add_user(email=None, pwd=None, admin=False, active=False):
             email=email, hashed_pwd=hpwd.decode(), admin=admin, is_active=active
         )
 
-        s = Serializer()
-        token = s.serialize({"email": email})
-        with app.app_context():
-            msg = Message("Hello", recipients=[email])
-            msg.html = '<a href="%s/confirm?token=%s">Click here to confirm</a>' % (
-                Config.HOST,
-                token,
-            )
-            mail.send(msg)
+        if not active:
+            s = Serializer()
+            token = s.serialize({"email": email})
+            with app.app_context():
+                msg = Message("Hello", recipients=[email])
+                msg.html = '<a href="%s/confirm?token=%s">Click here to confirm</a>' % (
+                    Config.HOST,
+                    token,
+                )
+                mail.send(msg)
 
         db.session.add(user)
         db.session.commit()
@@ -56,4 +57,7 @@ def main(logger=None):
     args = parser.parse_args()
 
     if args.action == "add":
-        add_user(args.email, args.password, args.admin, args.active)
+        print(add_user(args.email, args.password, args.admin, args.active))
+
+if __name__ == '__main__':
+    main()

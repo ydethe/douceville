@@ -1,5 +1,6 @@
 from sqlalchemy import inspect
 from geoalchemy2 import Geometry
+import stripe
 from flask_login import UserMixin
 
 from douceville import db, bcrypt, login_manager, logger

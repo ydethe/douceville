@@ -33,7 +33,7 @@ def recherche():
 
         return redirect(url_for(".carte", token=token))
 
-    return render_template("carte/carte_query.html", form=form)
+    return render_template("carte_query.html", form=form)
 
 
 @carte_bp.route("/", methods=["GET"])
@@ -58,7 +58,7 @@ def carte():
     token = s.serialize(dat)
 
     return render_template(
-        "carte/carte.html",
+        "carte.html",
         points_request="%s:%i/enseignement?token=%s"
         % (Config.HOST, Config.PORT, token),
         isochrone_request="%s:%i/isochrone?token=%s"
