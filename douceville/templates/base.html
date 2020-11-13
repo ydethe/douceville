@@ -1,5 +1,9 @@
-{% extends 'bootstrap/base.html' %}
+{% extends "bootstrap/base.html" %}
 
 {% block title %}
-    {% if title %}Collèges Lycées - {{ title }}{% endif %}
+    {% if title %}Douceville{% endif %}
+{% endblock %}
+
+{% block navbar %}
+{{nav.top.render()}}
 {% endblock %}

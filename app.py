@@ -8,4 +8,5 @@ def make_shell_context():
         "db": db,
         "Etablissement": Etablissement,
         "Resultat": Resultat,
+        "User": User,
     }

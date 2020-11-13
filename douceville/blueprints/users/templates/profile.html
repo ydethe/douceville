@@ -1,0 +1,19 @@
+{%- extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+<div class="container">
+    {% block app_content %}
+      <div class="sr-payment-summary completed-view">
+            <h1>Votre profil {{user_email }}</h1>
+      </div>
+      {{ subscription_lib }}
+      <div class="completed-view-section">
+            <a href="{{ url_for('payment.pay') }}" class="btn btn-primary btn-block">Acheter un abonnement</a><br>
+            <a href="{{ portal_url }}" class="btn btn-primary btn-block">Billing portal</a>
+      </div>
+
+    {% endblock %}
+</div>
+
+{% endblock %}

@@ -30,3 +30,4 @@ email-validator
 flask-mail
 flask-bcrypt
 stripe
+flask_nav

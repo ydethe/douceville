@@ -16,6 +16,8 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_login import current_user
+from flask_nav import Nav
+from flask_nav.elements import *
 
 from sqlalchemy import event
 
@@ -87,16 +89,18 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     app.register_blueprint(carte_bp, url_prefix="/carte")
 
     from douceville.blueprints.users import users_bp
+    from douceville.blueprints.users.routes import profile
 
-    app.register_blueprint(users_bp, url_prefix="/")
+    app.register_blueprint(users_bp, url_prefix="/users/")
 
     from douceville.blueprints.isochrone import isochrone_bp
 
     app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
 
     from douceville.blueprints.payment import payment_bp
+    from douceville.blueprints.payment.routes import pay
 
-    app.register_blueprint(payment_bp, url_prefix="/")
+    app.register_blueprint(payment_bp, url_prefix="/pay")
 
     from douceville.blueprints.enseignement import enseignement_bp
 
@@ -104,11 +108,23 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
 
     admin = Admin(app, name="douceville", template_mode="bootstrap3")
 
-    from douceville import routes, models
+    from douceville import models
 
     admin.add_view(UserModelView(models.Etablissement, db.session))
     admin.add_view(UserModelView(models.Nature, db.session))
     admin.add_view(UserModelView(models.Resultat, db.session))
     admin.add_view(UserModelView(models.User, db.session))
 
+    topbar = Navbar('douceville.fr',
+                    View('Recherche', 'carte.recherche'),
+                    View('Profile', 'users.profile'),
+                    )
+
+    # registers the "top" menubar
+    nav = Nav()
+    nav.register_element('top', topbar)
+
+    nav.init_app(app)
+
     # logger.debug("%s" % app.url_map)
+    

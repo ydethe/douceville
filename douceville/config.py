@@ -11,6 +11,7 @@ class BaseConfig(object):
     OPENROUTESERVICE_KEY = os.environ.get('OPENROUTESERVICE_KEY', "5b3ce3597851110001cf624873393d15b50746faa0f160ba2a7e8638")
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY','sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL')
     STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY','pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk')
+    PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
 
     MAIL_SERVER = "box.johncloud.fr"
     MAIL_PORT = 587

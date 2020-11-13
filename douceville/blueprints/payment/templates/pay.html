@@ -1,0 +1,46 @@
+{%- extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+<div class="container">
+    {% block app_content %}
+    <h1>Test {{ user_email }}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="price-table-container">
+              <div class="name">Starter</div>
+              <div class="price">$12</div>
+              <input class="btn btn-default" id="subscribe-btn" name="submit" type="submit" value="Acheter">
+              <!--<button id="subscribe-btn">Select</button>-->
+            </div>
+            <div id="error-message"></div>
+        </div>
+    </div>
+
+    <script src="https://js.stripe.com/v3"></script>
+    <script src="{{ url_for('payment.static', filename='stripe.js') }}"></script>
+    <script>
+    var stripe = Stripe('{{ publishableKey }}');
+
+    // Setup event handler to create a Checkout Session when button is clicked
+    document
+      .getElementById("subscribe-btn")
+      .addEventListener("click", function(evt) {
+        createCheckoutSession('{{ price_id }}').then(function(data) {
+          // Call Stripe.js method to redirect to the new Checkout page
+          stripe
+            .redirectToCheckout({
+              sessionId: data.sessionId
+            })
+            .then(handleResult);
+        });
+      });
+
+    </script>
+    {% endblock %}
+</div>
+
+{% endblock %}
+
+
+

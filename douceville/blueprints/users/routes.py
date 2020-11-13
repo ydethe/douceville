@@ -17,6 +17,28 @@ from douceville.blueprints.users.forms import LoginForm, SignupForm
 from douceville.models import db, User
 
 
+@users_bp.route("/profile", methods=["GET"])
+@login_required
+def profile():
+    # This is the URL to which the customer will be redirected after they are
+    # done managing their billing with the portal.
+    return_url = "%s:%s%s" % (Config.HOST, Config.PORT, url_for('.profile'))
+
+    session = stripe.billing_portal.Session.create(
+        customer=current_user.getStripeID(), return_url=return_url
+    )
+
+    subscriptions = stripe.Subscription.list(customer=current_user.getStripeID(), status='active', current_period_end={'gt':int(time.time())})
+    if len(subscriptions['data']) == 0:
+        dt = 'Inactif'
+    else:
+        s = subscriptions['data'][0]
+        t = s['current_period_end']
+        ts = time.gmtime(t)
+        dt = time.strftime("%A %d %B à %Hh%M", ts)
+
+    return render_template("profile.html", user_email=current_user.email, subscription_end=dt, portal_url=session.url)
+
 @users_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()

@@ -1,4 +1,4 @@
-from sqlalchemy import inspect, event, DDL
+from sqlalchemy import inspect
 from geoalchemy2 import Geometry
 from flask_login import UserMixin
 
@@ -21,11 +21,32 @@ class User(UserMixin, db.Model):
     __tablename__ = "user"
 
     id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
-    # id = db.Column(db.BigInteger, primary_key=True)
     email = db.Column(db.String(1024), nullable=False, unique=True)
     hashed_pwd = db.Column(db.String(128), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
     is_active = db.Column(db.Boolean, nullable=False, default=False)
+    stripe_id = db.Column(db.String(191), unique=True)
+
+    def getStripeID(self):
+        if not self.stripe_id is None:
+            return self.stripe_id
+
+        ret = stripe.Customer.list(email=self.email)
+        if len(ret) == 0:
+            client = stripe.Customer.create(
+                email=self.email,
+                metadata={"dv_id": self.id},
+            )
+        elif len(ret) == 1:
+            client = ret["data"][0]
+        else:
+            logger.error("Too much clients in stripe API")
+            return None
+
+        self.stripe_id = client["id"]
+        db.session.commit()
+
+        return client["id"]
 
     def isCorrectPassword(self, plaintext):
         return bcrypt.check_password_hash(self.hashed_pwd, plaintext)
