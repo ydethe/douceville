@@ -15,6 +15,7 @@
             {% endif %}
             {% endwith %}
             {{ wtf.quick_form(form) }}
+            <a href="{{ url_for('users.signup') }}">Créer un compte</a>
         </div>
     </div>
     {% endblock %}
