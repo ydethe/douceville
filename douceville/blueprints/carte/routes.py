@@ -41,21 +41,22 @@ def recherche():
 def carte():
     token = request.args.get("token", "")
 
-    s = Serializer()
-    dat = s.deserialize(token)
+    if token != '':
+        s = Serializer()
+        dat = s.deserialize(token)
 
-    year = dat.get("year", "2018")
-    address = dat.pop("address", "")
-    transp = dat.get("transp", "")
-    dist = dat.get("dist", "300")
-    nature = dat.get("nature", [])
-    secteur = dat.get("secteur", [])
-    stat_min = dat.get("stat_min", "0")
+        year = dat.get("year", "2018")
+        address = dat.pop("address", "")
+        transp = dat.get("transp", "")
+        dist = dat.get("dist", "300")
+        nature = dat.get("nature", [])
+        secteur = dat.get("secteur", [])
+        stat_min = dat.get("stat_min", "0")
 
-    if address != "":
-        dat["lon"], dat["lat"] = geocodeUserAddress(address)
+        if address != "":
+            dat["lon"], dat["lat"] = geocodeUserAddress(address)
 
-    token = s.serialize(dat)
+        token = s.serialize(dat)
 
     return render_template(
         "carte.html",

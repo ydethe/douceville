@@ -114,6 +114,7 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     admin.add_view(UserModelView(models.User, db.session))
 
     topbar = Navbar('douceville.fr',
+                    View('Carte', 'carte.carte'),
                     View('Recherche', 'carte.recherche'),
                     View('Profile', 'users.profile'),
                     )

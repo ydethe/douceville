@@ -10,6 +10,8 @@ from douceville.blueprints.isochrone.geographique import calcIsochrone
 @login_required
 def isochrone():
     token = request.args.get("token", "")
+    if token == '':
+        return jsonify({})
 
     s = Serializer()
     dat = s.deserialize(token)

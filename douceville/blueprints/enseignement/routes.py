@@ -19,6 +19,8 @@ from douceville.blueprints.isochrone.geographique import calcIsochrone
 def enseignement():
     logger = logging.getLogger("douceville_logger")
     token = request.args.get("token", "")
+    if token == '':
+        return jsonify({})
 
     s = Serializer()
     dat = s.deserialize(token)
