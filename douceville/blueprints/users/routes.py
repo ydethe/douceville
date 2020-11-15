@@ -34,12 +34,12 @@ def profile():
 
     subscriptions = stripe.Subscription.list(customer=current_user.getStripeID(), status='active', current_period_end={'gt':int(time.time())})
     if len(subscriptions['data']) == 0:
-        dt = 'Inactif'
+        dt = 'Inactive'
     else:
         s = subscriptions['data'][0]
         t = s['current_period_end']
         ts = time.gmtime(t)
-        dt = time.strftime("%A %d %B à %Hh%M", ts)
+        dt = "Jusqu'au " + time.strftime("%A %d %B à %Hh%M", ts)
 
     return render_template("profile.html", user_email=current_user.email, subscription_end=dt, portal_url=session.url,
         publishableKey=Config.STRIPE_PUBLISHABLE_KEY,

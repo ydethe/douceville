@@ -24,6 +24,7 @@ def enseignement():
 
     s = Serializer()
     dat = s.deserialize(token)
+    logger.debug("enseignement param : %s" % str(dat))
 
     year = dat.get("year", 2018)
     lat = dat.get("lat", 1.39396)
@@ -76,4 +77,6 @@ def enseignement():
             }
             features.append(f)
 
+    print(len(features))
+    
     return jsonify(features)

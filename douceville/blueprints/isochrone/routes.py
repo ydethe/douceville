@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from flask_login import login_required, current_user
 
+from douceville import logger
 from douceville.utils import logged, Serializer
 from douceville.blueprints.isochrone import isochrone_bp
 from douceville.blueprints.isochrone.geographique import calcIsochrone
@@ -15,6 +16,7 @@ def isochrone():
 
     s = Serializer()
     dat = s.deserialize(token)
+    logger.debug("isochrone param : %s" % str(dat))
 
     dist = dat.get("dist", 600)
     transp = dat.get("transp", "")

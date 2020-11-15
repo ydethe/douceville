@@ -23,8 +23,6 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(mymap);
       
-      $(window).on("resize", function () { $("#mapid").height($(window).height()-220); mymap.invalidateSize(); }).trigger("resize");
-
       function onEachFeature(feature, layer) {
           // does this feature have a property named info?
           if (feature.properties && feature.properties.info) {

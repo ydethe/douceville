@@ -6,6 +6,7 @@ from flask import (
 )
 from flask_login import login_required, current_user
 
+from douceville import logger
 from douceville.config import Config
 from douceville.utils import logged, Serializer
 from douceville.blueprints.carte import carte_bp
@@ -26,7 +27,7 @@ def recherche():
         req_param["nature"] = form.nature.data
         req_param["secteur"] = form.secteur.data
         req_param["year"] = "2018"
-        print("req_param", req_param)
+        logger.debug("carte param : %s" % str(req_param))
 
         s = Serializer()
         token = s.serialize(req_param)
