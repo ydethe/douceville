@@ -131,14 +131,18 @@ def to_int(x):
 def secteur_to_bool(x):
     if type(x) != type(""):
         return None
-    elif x == "SANS OBJET":
+
+    x = x.lower().strip()
+    if x == "sans objet":
         return "public"
-    elif x == "PR" or x == "SECTEUR PRIVE":
+    elif x == "pr" or x == "secteur prive":
         return "prive"
-    elif x == "PU" or x == "SECTEUR PUBLIC":
+    elif x == "pu" or x == "secteur public":
         return "public"
+    elif 'contrat ' in x:
+        return 'prive'
     else:
-        return x.lower()
+        return x
 
 
 def cp_to_dep(x):
