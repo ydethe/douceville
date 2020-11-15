@@ -12,7 +12,7 @@ var handleFetchResult = function(result) {
 
 // Create a Checkout Session with the selected plan ID
 var createCheckoutSession = function(priceId) {
-  return fetch("/create-checkout-session", {
+  return fetch("/pay/create-checkout-session", {
     method: "POST",
     credentials: 'include',
     headers: {

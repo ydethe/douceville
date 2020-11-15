@@ -41,7 +41,9 @@ def profile():
         ts = time.gmtime(t)
         dt = time.strftime("%A %d %B à %Hh%M", ts)
 
-    return render_template("profile.html", user_email=current_user.email, subscription_end=dt, portal_url=session.url)
+    return render_template("profile.html", user_email=current_user.email, subscription_end=dt, portal_url=session.url,
+        publishableKey=Config.STRIPE_PUBLISHABLE_KEY,
+        price_id=Config.PRICE_ID)
 
 @users_bp.route("/login", methods=["GET", "POST"])
 def login():

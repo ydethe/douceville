@@ -89,7 +89,6 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     app.register_blueprint(carte_bp, url_prefix="/carte")
 
     from douceville.blueprints.users import users_bp
-    from douceville.blueprints.users.routes import profile
 
     app.register_blueprint(users_bp, url_prefix="/users/")
 
@@ -98,7 +97,6 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
 
     from douceville.blueprints.payment import payment_bp
-    from douceville.blueprints.payment.routes import pay
 
     app.register_blueprint(payment_bp, url_prefix="/pay")
 

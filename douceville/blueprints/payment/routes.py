@@ -9,18 +9,6 @@ from douceville.config import Config
 from douceville.blueprints.payment import payment_bp
 
 
-@payment_bp.route("/", methods=["GET"])
-@payment_bp.route("/pay", methods=["GET"])
-@login_required
-def pay():
-    return render_template(
-        "pay.html",
-        user_email=current_user.email,
-        publishableKey=Config.STRIPE_PUBLISHABLE_KEY,
-        price_id=Config.PRICE_ID,
-    )
-
-
 @payment_bp.route("/create-checkout-session", methods=["POST"])
 @login_required
 def create_checkout_session():

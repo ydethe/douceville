@@ -7,11 +7,31 @@
       <div class="sr-payment-summary completed-view">
             <h1>Votre profil {{user_email }}</h1>
       </div>
-      {{ subscription_lib }}
+      {{ subscription_lib }}<br>
       <div class="completed-view-section">
-            <a href="{{ url_for('payment.pay') }}" class="btn btn-primary btn-block">Acheter un abonnement</a><br>
-            <a href="{{ portal_url }}" class="btn btn-primary btn-block">Billing portal</a>
+            <input class="btn btn-default" id="subscribe-btn" name="submit" type="submit" value="Acheter un abonnement"><br>
+            <a href="{{ portal_url }}" class="btn btn-default">Billing portal</a>
       </div>
+
+      <script src="https://js.stripe.com/v3"></script>
+      <script src="{{ url_for('payment.static', filename='stripe.js') }}"></script>
+      <script>
+      var stripe = Stripe('{{ publishableKey }}');
+  
+      // Setup event handler to create a Checkout Session when button is clicked
+      document
+        .getElementById("subscribe-btn")
+        .addEventListener("click", function(evt) {
+          createCheckoutSession('{{ price_id }}').then(function(data) {
+            // Call Stripe.js method to redirect to the new Checkout page
+            stripe
+              .redirectToCheckout({
+                sessionId: data.sessionId
+              })
+              .then(handleResult);
+          });
+        });
+      </script>
 
     {% endblock %}
 </div>
