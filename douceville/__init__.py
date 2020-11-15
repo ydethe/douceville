@@ -8,7 +8,7 @@ from logging.handlers import RotatingFileHandler
 import os
 
 import stripe
-from flask import Flask
+from flask import Flask, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
@@ -82,6 +82,9 @@ class UserModelView(ModelView):
         if not self.is_accessible():
             return redirect(url_for("users.login"))
 
+@app.route('/')
+def accueil():
+    return redirect(url_for('carte.carte'))
 
 if os.environ.get("FLASK_INIT_DB", "0") == "0":
     from douceville.blueprints.carte import carte_bp
