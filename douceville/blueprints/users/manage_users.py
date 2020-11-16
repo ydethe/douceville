@@ -28,8 +28,9 @@ def add_user(email=None, pwd=None, admin=False, active=False):
             token = s.serialize({"email": email})
             with app.app_context():
                 msg = Message("Hello", recipients=[email])
-                msg.html = '<a href="%s/confirm?token=%s">Click here to confirm</a>' % (
+                msg.html = '<a href="%s:%s/users/confirm?token=%s">Click here to confirm</a>' % (
                     Config.HOST,
+                    Config.PORT,
                     token,
                 )
                 mail.send(msg)

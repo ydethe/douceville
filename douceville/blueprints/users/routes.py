@@ -75,7 +75,7 @@ def signup():
     if form.validate_on_submit():
         lstat = add_user(email=form.email.data, pwd=form.password.data, admin=False)
         if lstat:
-            return redirect(url_for("index"))
+            return redirect(url_for("carte.carte"))
         else:
             flash("Email address already exists")
             return redirect(url_for(".signup"))
@@ -99,8 +99,7 @@ def confirm():
         logging.error("Aucun utilisateur avec le mail %s" % verif_email)
     else:
         q.update(maj_user)
-
-    db.session.commit()
+        db.session.commit()
 
     return redirect(url_for(".login"))
 
