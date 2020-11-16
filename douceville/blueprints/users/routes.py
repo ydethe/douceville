@@ -27,17 +27,16 @@ def profile():
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
     return_url = "%s:%s%s" % (Config.HOST, Config.PORT, url_for('.profile'))
-
+    sid = current_user.getStripeID()
+        
     session = stripe.billing_portal.Session.create(
-        customer=current_user.getStripeID(), return_url=return_url
+        customer=sid, return_url=return_url
     )
-
-    subscriptions = stripe.Subscription.list(customer=current_user.getStripeID(), status='active', current_period_end={'gt':int(time.time())})
-    if len(subscriptions['data']) == 0:
+    
+    t = current_user.getCurrentPeriodEnd()
+    if t < 0:
         dt = 'Inactive'
     else:
-        s = subscriptions['data'][0]
-        t = s['current_period_end']
         ts = time.gmtime(t)
         dt = "Jusqu'au " + time.strftime("%A %d %B à %Hh%M", ts)
 

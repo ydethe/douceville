@@ -119,7 +119,7 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     topbar = Navbar('douceville.fr',
                     View('Carte', 'carte.carte'),
                     View('Recherche', 'carte.recherche'),
-                    View('Profile', 'users.profile'),
+                    View('Profil', 'users.profile'),
                     )
 
     # registers the "top" menubar
@@ -127,6 +127,5 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
     nav.register_element('top', topbar)
 
     nav.init_app(app)
-
-#     logger.debug("%s" % app.url_map)
+    
     

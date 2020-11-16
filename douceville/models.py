@@ -1,3 +1,5 @@
+import time
+
 from sqlalchemy import inspect
 from geoalchemy2 import Geometry
 import stripe
@@ -27,6 +29,18 @@ class User(UserMixin, db.Model):
     admin = db.Column(db.Boolean, nullable=False, default=False)
     is_active = db.Column(db.Boolean, nullable=False, default=False)
     stripe_id = db.Column(db.String(191), unique=True)
+
+    def getCurrentPeriodEnd(self):
+        sid = self.getStripeID()
+
+        subscriptions = stripe.Subscription.list(customer=sid, status='active', current_period_end={'gt':int(time.time())})
+        if len(subscriptions['data']) == 0:
+            t = -1
+        else:
+            s = subscriptions['data'][0]
+            t = s['current_period_end']
+            
+        return t
 
     def getStripeID(self):
         if not self.stripe_id is None:

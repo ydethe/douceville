@@ -12,7 +12,7 @@
 {% block content %}
 <div class="container">
   {% block app_content %}
-    <div id="rescountid"></div>
+    <!--<div id="rescountid"></div>-->
     <div id="mapid" style="width: 100%; height: 600px;"></div>
     <script>
 
@@ -33,7 +33,7 @@
       axios.get('{{ points_request }}')
       .then(response => {
           // console.log(response.data);
-          document.getElementById("rescountid").innerHTML = 'Nombre de résultats : ' + response.data.length;
+          // document.getElementById("rescountid").innerHTML = 'Nombre de résultats : ' + response.data.length;
           L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);
       })
 
@@ -51,5 +51,6 @@
     
     {% endblock %}
 </div>
+{{super()}}
 {% endblock %}
 
