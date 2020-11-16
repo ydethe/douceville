@@ -128,5 +128,5 @@ if os.environ.get("FLASK_INIT_DB", "0") == "0":
 
     nav.init_app(app)
 
-    # logger.debug("%s" % app.url_map)
+#     logger.debug("%s" % app.url_map)
     
