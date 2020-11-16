@@ -15,7 +15,6 @@ class BaseConfig(object):
     OPENROUTESERVICE_KEY="5b3ce3597851110001cf6248b3fbd66e5be24021b1ea77cb39f76783"
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY','sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL')
     STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY','pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk')
-    PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
 
     MAIL_SERVER = "box.johncloud.fr"
     MAIL_PORT = 587
@@ -31,6 +30,7 @@ class ProdConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     HOST = "https://douceville.fr"
     PORT = 443
+    PRICE_ID = "price_1HoCr3GFonhtEiXEAgLKb9WD"
 
 
 class DevConfig(BaseConfig):
@@ -39,6 +39,7 @@ class DevConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     HOST = "https://localhost"
     PORT = 5000
+    PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
 
 
 class Dev2Config(BaseConfig):
@@ -46,6 +47,7 @@ class Dev2Config(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     HOST = "https://localhost"
     PORT = 5000
+    PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
 
 
 tgt_conf = os.environ.get('DOUCEVILLE_CONFIG','dev')
