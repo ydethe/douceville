@@ -11,7 +11,8 @@
       Souscription actuelle : {{ subscription_end }}<br>
       <div class="completed-view-section">
             <input class="btn btn-default" id="subscribe-btn" name="submit" type="submit" value="Acheter un abonnement"><br>
-            <a href="{{ portal_url }}" class="btn btn-default">Billing portal</a>
+            <a href="{{ portal_url }}" class="btn btn-default">Billing portal</a><br>
+            <a href="{{ url_for('users.logout') }}" class="btn btn-default">Déconnexion</a><br>
       </div>
 
       <script src="https://js.stripe.com/v3"></script>
