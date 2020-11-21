@@ -27,7 +27,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(1024), nullable=False, unique=True)
     hashed_pwd = db.Column(db.String(128), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
-    is_active = db.Column(db.Boolean, nullable=False, default=False)
+    active = db.Column(db.Boolean, nullable=False, default=False)
     stripe_id = db.Column(db.String(191), unique=True)
 
     def getCurrentPeriodEnd(self):

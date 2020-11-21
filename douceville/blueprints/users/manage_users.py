@@ -20,7 +20,7 @@ def add_user(email=None, pwd=None, admin=False, active=False):
     if q.count() == 0:
         hpwd = bcrypt.generate_password_hash(pwd, Config.BCRYPT_ROUNDS)
         user = User(
-            email=email, hashed_pwd=hpwd.decode(), admin=admin, is_active=active
+            email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active
         )
 
         if not active:

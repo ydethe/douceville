@@ -55,7 +55,7 @@ def login():
             return redirect(
                 url_for(".login")
             )  # if the user doesn't exist or password is wrong, reload the page
-        elif not user.is_active:
+        elif not user.active:
             flash("Your account has not been confirmed yet.")
             return redirect(url_for(".login"))
         else:
@@ -91,7 +91,7 @@ def confirm():
     param = s.deserialize(token, ttl=86400)
 
     verif_email = param["email"]
-    maj_user = {"is_active": True}
+    maj_user = {"active": True}
     maj_user.update(param)
 
     q = db.session.query(User).filter(User.email == verif_email)
