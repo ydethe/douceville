@@ -23,8 +23,8 @@ A venir
 - lieux de culte
 - meteo
 - voir concurrents :
-   - `<paris-jetequitte.com>`_
-   - `<map.datafrance.info>`_
+   - `<https://paris-jetequitte.com/>`_
+   - `<http://map.datafrance.info/>`_
 - immobilier
 - maternité
 - age moyen
