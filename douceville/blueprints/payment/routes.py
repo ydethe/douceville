@@ -25,8 +25,8 @@ def create_checkout_session():
 
         # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
-            success_url = "%s%s" % (domain_url,url_for('users.profile')),
-            cancel_url = "%s%s" % (domain_url,url_for('users.profile')),
+            success_url="%s%s" % (domain_url, url_for("users.profile")),
+            cancel_url="%s%s" % (domain_url, url_for("users.profile")),
             payment_method_types=["card"],
             mode="subscription",
             customer=current_user.getStripeID(),

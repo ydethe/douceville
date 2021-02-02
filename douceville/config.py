@@ -11,9 +11,18 @@ class BaseConfig(object):
     BCRYPT_ROUNDS = 10
     # SECRET_KEY = Fernet.generate_key()
     SECRET_KEY = "VLt1XfxWyYcHcIZm92vcDAeoOUWqSQgx3_Mq8c7CCKE="
-    OPENROUTESERVICE_KEY = os.environ.get('OPENROUTESERVICE_KEY', "5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7")
-    STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY','sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL')
-    STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY','pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk')
+    OPENROUTESERVICE_KEY = os.environ.get(
+        "OPENROUTESERVICE_KEY",
+        "5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7",
+    )
+    STRIPE_SECRET_KEY = os.environ.get(
+        "STRIPE_SECRET_KEY",
+        "sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL",
+    )
+    STRIPE_PUBLISHABLE_KEY = os.environ.get(
+        "STRIPE_PUBLISHABLE_KEY",
+        "pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk",
+    )
 
     MAIL_SERVER = "box.johncloud.fr"
     MAIL_PORT = 587
@@ -49,8 +58,8 @@ class Dev2Config(BaseConfig):
     PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
 
 
-tgt_conf = os.environ.get('DOUCEVILLE_CONFIG','dev')
-if tgt_conf == 'prod':
+tgt_conf = os.environ.get("DOUCEVILLE_CONFIG", "dev")
+if tgt_conf == "prod":
     Config = ProdConfig
 else:
     Config = Dev2Config

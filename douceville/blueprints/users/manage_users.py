@@ -28,10 +28,13 @@ def add_user(email=None, pwd=None, admin=False, active=False):
             token = s.serialize({"email": email})
             with app.app_context():
                 msg = Message("Hello", recipients=[email])
-                msg.html = '<a href="%s:%s/users/confirm?token=%s">Click here to confirm</a>' % (
-                    Config.HOST,
-                    Config.PORT,
-                    token,
+                msg.html = (
+                    '<a href="%s:%s/users/confirm?token=%s">Click here to confirm</a>'
+                    % (
+                        Config.HOST,
+                        Config.PORT,
+                        token,
+                    )
                 )
                 mail.send(msg)
 
@@ -60,5 +63,6 @@ def main(logger=None):
     if args.action == "add":
         print(add_user(args.email, args.password, args.admin, args.active))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

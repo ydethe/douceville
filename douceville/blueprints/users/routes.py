@@ -26,23 +26,27 @@ from douceville.models import db, User
 def profile():
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
-    return_url = "%s:%s%s" % (Config.HOST, Config.PORT, url_for('.profile'))
+    return_url = "%s:%s%s" % (Config.HOST, Config.PORT, url_for(".profile"))
     sid = current_user.getStripeID()
-        
-    session = stripe.billing_portal.Session.create(
-        customer=sid, return_url=return_url
-    )
-    
+
+    session = stripe.billing_portal.Session.create(customer=sid, return_url=return_url)
+
     t = current_user.getCurrentPeriodEnd()
     if t < 0:
-        dt = 'Inactive'
+        dt = "Inactive"
     else:
         ts = time.gmtime(t)
         dt = "Jusqu'au " + time.strftime("%A %d %B à %Hh%M", ts)
 
-    return render_template("profile.html", user_email=current_user.email, subscription_end=dt, portal_url=session.url,
+    return render_template(
+        "profile.html",
+        user_email=current_user.email,
+        subscription_end=dt,
+        portal_url=session.url,
         publishableKey=Config.STRIPE_PUBLISHABLE_KEY,
-        price_id=Config.PRICE_ID)
+        price_id=Config.PRICE_ID,
+    )
+
 
 @users_bp.route("/login", methods=["GET", "POST"])
 def login():

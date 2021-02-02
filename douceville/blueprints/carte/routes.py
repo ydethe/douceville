@@ -2,7 +2,8 @@ import time
 
 from flask import (
     render_template,
-    request,flash,
+    request,
+    flash,
     redirect,
     url_for,
     Markup,
@@ -21,9 +22,12 @@ from douceville.blueprints.isochrone.geographique import geocodeUserAddress
 @login_required
 def recherche():
     form = QueryForm()
-    
+
     if current_user.getCurrentPeriodEnd() < time.time() and not current_user.admin:
-        msg = Markup('''Merci d'acheter une licence à partir de <a href="%s">votre page de profil</a>.''' % url_for('users.profile'))
+        msg = Markup(
+            """Merci d'acheter une licence à partir de <a href="%s">votre page de profil</a>."""
+            % url_for("users.profile")
+        )
         flash(msg)
         return render_template("carte_query.html", form=form)
 
@@ -51,7 +55,7 @@ def recherche():
 def carte():
     token = request.args.get("token", "")
 
-    if token != '':
+    if token != "":
         s = Serializer()
         dat = s.deserialize(token)
 

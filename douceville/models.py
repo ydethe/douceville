@@ -33,13 +33,15 @@ class User(UserMixin, db.Model):
     def getCurrentPeriodEnd(self):
         sid = self.getStripeID()
 
-        subscriptions = stripe.Subscription.list(customer=sid, status='active', current_period_end={'gt':int(time.time())})
-        if len(subscriptions['data']) == 0:
+        subscriptions = stripe.Subscription.list(
+            customer=sid, status="active", current_period_end={"gt": int(time.time())}
+        )
+        if len(subscriptions["data"]) == 0:
             t = -1
         else:
-            s = subscriptions['data'][0]
-            t = s['current_period_end']
-            
+            s = subscriptions["data"][0]
+            t = s["current_period_end"]
+
         return t
 
     def getStripeID(self):
