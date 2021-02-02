@@ -9,19 +9,21 @@ from flask import (
     redirect,
     url_for,
 )
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 
+from douceville.blueprints.users.manage_users import add_user
 from douceville.config import Config
-from douceville.utils import logged, Serializer, api_call
-from douceville.users import users_bp
-from douceville.users.forms import LoginForm, SignupForm
+from douceville.utils import logged, Serializer
+from douceville.blueprints.users import users_bp
+from douceville.blueprints.users.forms import LoginForm, SignupForm
+from douceville.models import db, User
 
 
 @users_bp.route("/profile", methods=["GET"])
+@login_required
 def profile():
-    api_key = request.args.get("api_key", "")
-       
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
     return_url = "%s:%s%s" % (Config.HOST, Config.PORT, url_for('.profile'))

@@ -3,6 +3,8 @@ from wtforms.fields import SelectField
 from wtforms.fields import StringField, SubmitField, FloatField, PasswordField
 from wtforms.validators import DataRequired, Email
 
+from douceville.models import *
+
 
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
