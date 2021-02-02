@@ -7,18 +7,15 @@ from flask import (
     url_for,
     Markup,
 )
-from flask_login import login_required, current_user
 
 from douceville import logger
 from douceville.config import Config
 from douceville.utils import logged, Serializer
-from douceville.blueprints.carte import carte_bp
-from douceville.blueprints.carte.forms import QueryForm
-from douceville.blueprints.isochrone.geographique import geocodeUserAddress
+from douceville.carte import carte_bp
+from douceville.carte.forms import QueryForm
 
 
-@carte_bp.route("/query", methods=["GET", "POST"])
-@login_required
+@carte_bp.route("/query", methods=["GET"])
 def recherche():
     form = QueryForm()
     
@@ -26,7 +23,7 @@ def recherche():
         msg = Markup('''Merci d'acheter une licence à partir de <a href="%s">votre page de profil</a>.''' % url_for('users.profile'))
         flash(msg)
         return render_template("carte_query.html", form=form)
-
+        
     if form.validate_on_submit():
         req_param = {}
         req_param["address"] = form.address.data
@@ -36,6 +33,8 @@ def recherche():
         req_param["nature"] = form.nature.data
         req_param["secteur"] = form.secteur.data
         req_param["year"] = "2018"
+        req_param["api_key"] = current_user.api_key
+        
         logger.debug("carte param : %s" % str(req_param))
 
         s = Serializer()
@@ -46,8 +45,7 @@ def recherche():
     return render_template("carte_query.html", form=form)
 
 
-@carte_bp.route("/", methods=["GET"])
-@login_required
+@carte_bp.route("/", methods=["GET", "POST"])
 def carte():
     token = request.args.get("token", "")
 
@@ -66,7 +64,8 @@ def carte():
         if address != "":
             dat["lon"], dat["lat"] = geocodeUserAddress(address)
 
-        token = s.serialize(dat)
+    # api_url = 
+    # api_key = 
 
     return render_template(
         "carte.html",

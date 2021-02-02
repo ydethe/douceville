@@ -23,7 +23,6 @@ gunicorn
 uwsgi
 python-slugify
 cryptography
-flask-login
 flask-wtf
 wtforms
 email-validator

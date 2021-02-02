@@ -30,22 +30,20 @@
           }
       }
 
-      axios.get('{{ points_request }}')
+      axios.get('{{ api_url }}', headers: {
+        Authorization: 'Bearer {{ api_key }}'
+      })
       .then(response => {
           // console.log(response.data);
           // document.getElementById("rescountid").innerHTML = 'Nombre de résultats : ' + response.data.length;
-          L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);
-      })
+          L.geoJSON(response.data.etablissements, {onEachFeature: onEachFeature}).addTo(mymap);
 
-      axios.get('{{ isochrone_request }}')
-      .then(response => {
-          var bb1 = [response.data.bbox[1], response.data.bbox[0]];
-          var bb2 = [response.data.bbox[3], response.data.bbox[2]];
-          // console.log([bb1,bb2]);
-          L.geoJSON(response.data).addTo(mymap);
+          var bb1 = [response.isochrone.data.bbox[1], response.isochrone.data.bbox[0]];
+          var bb2 = [response.isochrone.data.bbox[3], response.isochrone.data.bbox[2]];
+          L.geoJSON(response.isochrone.data).addTo(mymap);
           mymap.fitBounds([bb1,bb2]);
-      })
 
+      })
       
     </script>
     

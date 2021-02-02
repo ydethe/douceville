@@ -3,14 +3,12 @@ import time
 
 import stripe
 from flask import render_template, request, jsonify, url_for
-from flask_login import login_required, current_user
 
 from douceville.config import Config
-from douceville.blueprints.payment import payment_bp
+from douceville.payment import payment_bp
 
 
 @payment_bp.route("/create-checkout-session", methods=["POST"])
-@login_required
 def create_checkout_session():
     data = json.loads(request.data)
     domain_url = "%s:%s" % (Config.HOST, Config.PORT)

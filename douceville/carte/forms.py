@@ -5,16 +5,17 @@ from wtforms.fields import StringField, SubmitField, FloatField
 from wtforms.validators import DataRequired
 
 from sqlalchemy import distinct
-from douceville.models import db, Nature, Etablissement
+# from douceville.models import db, Nature, Etablissement
 
 
 def buildList(attr):
-    elem = [str(x[0]) for x in db.session.query(distinct(attr)).all()]
-    elem.sort()
+    pass
+    # elem = [str(x[0]) for x in db.session.query(distinct(attr)).all()]
+    # elem.sort()
 
-    l = [(str(x), str(x)) for x in elem]
+    # l = [(str(x), str(x)) for x in elem]
 
-    return l
+    # return l
 
 
 class QueryForm(FlaskForm):
@@ -24,7 +25,7 @@ class QueryForm(FlaskForm):
     )
     dist = FloatField("Temps (min)")
     stat_min = FloatField("stat_min")
-    nature = DVSelField("Nature", choices=buildList(Nature.nature))
-    secteur = DVSelField("Secteur", choices=buildList(Etablissement.secteur))
+    # nature = DVSelField("Nature", choices=buildList(Nature.nature))
+    # secteur = DVSelField("Secteur", choices=buildList(Etablissement.secteur))
 
     submit = SubmitField("Chercher")

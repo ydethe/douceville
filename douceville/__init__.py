@@ -13,9 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
 from flask_mail import Mail
-from flask_login import current_user
 from flask_nav import Nav
 from flask_nav.elements import *
 
@@ -65,9 +63,6 @@ migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 bcrypt = Bcrypt(app)
 mail = Mail(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "users.login"
 
 stripe.api_key = Config.STRIPE_SECRET_KEY
 
@@ -87,26 +82,26 @@ def accueil():
     return redirect(url_for('carte.carte'))
 
 if os.environ.get("FLASK_INIT_DB", "0") == "0":
-    from douceville.blueprints.carte import carte_bp
+    from douceville.carte import carte_bp
 
     app.register_blueprint(carte_bp, url_prefix="/carte")
 
-    from douceville.blueprints.users import users_bp
+    from douceville.users import users_bp
 
     app.register_blueprint(users_bp, url_prefix="/users/")
 
-    from douceville.blueprints.payment import payment_bp
+    from douceville.payment import payment_bp
 
     app.register_blueprint(payment_bp, url_prefix="/pay")
 
-    admin = Admin(app, name="douceville", template_mode="bootstrap3")
+    # admin = Admin(app, name="douceville", template_mode="bootstrap3")
 
-    from douceville import models
+    # from douceville import models
 
-    admin.add_view(UserModelView(models.Etablissement, db.session))
-    admin.add_view(UserModelView(models.Nature, db.session))
-    admin.add_view(UserModelView(models.Resultat, db.session))
-    admin.add_view(UserModelView(models.User, db.session))
+    # admin.add_view(UserModelView(models.Etablissement, db.session))
+    # admin.add_view(UserModelView(models.Nature, db.session))
+    # admin.add_view(UserModelView(models.Resultat, db.session))
+    # admin.add_view(UserModelView(models.User, db.session))
 
     topbar = Navbar('douceville.fr',
                     View('Carte', 'carte.carte'),
