@@ -10,16 +10,16 @@ flask-sqlalchemy
 Flask-Migrate
 flask-admin
 flask-bootstrap
+flask-login
 pandas
 bottleneck
 xlrd
 rdflib
-rdflib-jsonld
 geojson
 PyYaml
-gevent
+# gevent
 pyopenssl
-gunicorn
+# gunicorn
 uwsgi
 python-slugify
 cryptography

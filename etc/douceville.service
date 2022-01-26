@@ -16,4 +16,3 @@ ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
 
 [Install]
 WantedBy=multi-user.target
-
