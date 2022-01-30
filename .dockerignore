@@ -1,10 +1,7 @@
-migrations
 *.db
 *.bak
 venv
-*.xls*
 *.raw
-*.pkl
 
 instance
 htmlcov

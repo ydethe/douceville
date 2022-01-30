@@ -1,7 +1,8 @@
 version: '3'
 services:
   db:
-    image: postgres:bullseye
+    # image: postgres:bullseye
+    image: gangstead/postgis:13-3.1-arm
     ports:
       - 5432:5432
     restart: always
@@ -32,19 +33,19 @@ services:
     # - NGINX_HOST=foobar.com
     - NGINX_PORT=80
     
-  douceville:
-    image: douceville
-    build: .
-    restart: always
-    depends_on: 
-      - db
-      - adminer
-      - web
-    environment:
-    - STRIPE_SECRET_KEY=sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL
-    - STRIPE_PUBLISHABLE_KEY=pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk
-    - DOUCEVILLE_CONFIG=prod
-    - OPENROUTESERVICE_KEY=5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7
+  # douceville:
+  #   image: douceville
+  #   build: .
+  #   restart: always
+  #   depends_on: 
+  #     - db
+  #     - adminer
+  #     - web
+  #   environment:
+  #   - STRIPE_SECRET_KEY=sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL
+  #   - STRIPE_PUBLISHABLE_KEY=pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk
+  #   - DOUCEVILLE_CONFIG=prod
+  #   - OPENROUTESERVICE_KEY=5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7
 
 volumes:
-  db_data: {}
+  db_data: 

@@ -7,6 +7,8 @@ Intersection des zones  10 min d'une ecole, < 5 min gare, etc
 Sources
 *******
 
+Sources de données de l'éducation nationale `<https://data.education.gouv.fr/explore>`_
+
 Géolocalisation des établissements scolaires `<https://www.data.gouv.fr/fr/datasets/liste-des-etablissements-des-premier-et-second-degres-pour-les-secteurs-publics-et-prives-en-france>`_
 
 Géolocalisation des établissements scolaires `<https://data.education.gouv.fr/explore/dataset/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/export/?disjunctive.nature_uai&disjunctive.nature_uai_libe&disjunctive.code_departement&disjunctive.code_region&disjunctive.code_academie&disjunctive.secteur_prive_code_type_contrat&disjunctive.secteur_prive_libelle_type_contrat&disjunctive.code_ministere&disjunctive.libelle_ministere&refine.numero_uai=0010002X>`_

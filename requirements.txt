@@ -1,7 +1,7 @@
 tqdm
 GeoAlchemy2
 sqlalchemy
-psycopg2-binary
+psycopg2-binary==2.8.6
 shapely
 openrouteservice
 flask
@@ -13,7 +13,8 @@ flask-bootstrap
 flask-login
 pandas
 bottleneck
-xlrd
+# xlrd
+openpyxl
 rdflib
 geojson
 PyYaml
