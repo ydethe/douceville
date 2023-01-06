@@ -74,8 +74,6 @@ def carte():
 
     return render_template(
         "carte.html",
-        points_request="%s:%i/enseignement?token=%s"
-        % (Config.HOST, Config.PORT, token),
-        isochrone_request="%s:%i/isochrone?token=%s"
-        % (Config.HOST, Config.PORT, token),
+        points_request="%s:%i/enseignement?token=%s" % (Config.HOST, Config.PORT, token),
+        isochrone_request="%s:%i/isochrone?token=%s" % (Config.HOST, Config.PORT, token),
     )

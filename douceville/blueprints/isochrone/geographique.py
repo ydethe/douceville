@@ -63,9 +63,7 @@ def findCoordFromAddress(
     api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
-    def geocode_query(
-        clnt, nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None
-    ):
+    def geocode_query(clnt, nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None):
         query = ""
         if not nom is None:
             query += nom + ","
@@ -93,10 +91,7 @@ def findCoordFromAddress(
             if not "locality" in f["properties"].keys():
                 continue
 
-            if (
-                len(j["features"]) == 1
-                or f["properties"]["locality"].lower() == commune.lower()
-            ):
+            if len(j["features"]) == 1 or f["properties"]["locality"].lower() == commune.lower():
                 lon, lat = f["geometry"]["coordinates"]
 
         return lon, lat

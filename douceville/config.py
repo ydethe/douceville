@@ -34,9 +34,7 @@ class BaseConfig(object):
 
 
 class ProdConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = (
-        "postgresql+psycopg2://douceville:douceville@db/douceville"
-    )
+    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://douceville:douceville@db/douceville"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     HOST = "https://douceville.fr"
     PORT = 443
@@ -53,9 +51,7 @@ class DevConfig(BaseConfig):
 
 
 class Dev2Config(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = (
-        "postgresql+psycopg2://douceville:douceville@localhost/douceville"
-    )
+    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://douceville:douceville@localhost/douceville"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     HOST = "https://localhost"
     PORT = 5000

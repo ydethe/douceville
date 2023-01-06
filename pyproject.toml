@@ -1,0 +1,122 @@
+[project]
+name = "douceville"
+dynamic = ["version"]
+description = ""
+authors = [
+    { name = "Yann de Thé", email = "yann@gmail.com" },
+]
+dependencies = [
+    "bottleneck",
+    "cryptography",
+    "email-validator",
+    "flask_nav",
+    "flask-admin",
+    "flask-bcrypt",
+    "flask-bootstrap",
+    "flask-login",
+    "flask-mail",
+    "Flask-Migrate==3.1.0",
+    "flask-shell-ipython",
+    "flask-sqlalchemy==2.5.1",
+    "flask-wtf==1.0.0",
+    "flask==2.0.3",
+    "GeoAlchemy2",
+    "geojson",
+    "openpyxl",
+    "openrouteservice==2.3.3",
+    "pandas",
+    "psycopg2-binary==2.8.6",
+    "pyopenssl",
+    "python-slugify",
+    "PyYaml",
+    "rdflib",
+    "shapely",
+    "sqlalchemy==1.4.31",
+    "stripe",
+    "tqdm",
+    "uwsgi",
+    "wtforms",
+    # "gevent",
+    # "gunicorn",
+    # "xlrd",
+]
+requires-python = ">=3.8,<3.12"
+
+[project.urls]
+"Bug Tracker" = "https://gitlab.com/ydethe/douceville/-/issues"
+Homepage = "https://gitlab.com/ydethe/douceville"
+Source = "https://gitlab.com/ydethe/douceville"
+
+[tool.pylint.main]
+ignore-patterns = ["kt_*.py"]
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+force-exclude = 'kt_.*.py'
+
+[project.scripts]
+maillage = "douceville.scripts.import_etablissements:import_main"
+conv_geoloc_enseignement = "douceville.scripts.conv_geoloc_enseignement:conv_geoloc_enseignement_main"
+conv_rdf = "douceville.scripts.conv_rdf:conv_rdf_main"
+dv_users = "douceville.blueprints.users.manage_users:main"
+
+[project.optional-dependencies]
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool.pdm.version]
+source = "scm"
+
+[tool.pdm.build]
+includes = [
+    "douceville/",
+]
+excludes = [
+    "tests",
+    "build",
+    "dist",
+]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "ipython~=7.23.1",
+    "black==22.3.0",
+]
+doc = [
+    "nbconvert~=7.0.0",
+    "pdoc3~=0.10.0",
+    "pylint~=2.15.3",
+]
+test = [
+    "pytest~=7.1.3",
+    "pytest-cov~=3.0.0",
+    "pytest-xdist~=2.5.0",
+    "pytest-mock~=3.8.2",
+    "pytest-instafail~=0.4.2",
+    "pytest-picked~=0.4.6",
+    "pytest-sugar~=0.9.5",
+    "pytest-html~=3.1.1",
+]
+
+[tool.pdm.scripts]
+site_packages = true
+test.shell = """\
+    mkdir -p build/htmldoc/tests
+    pytest --html=build/htmldoc/tests/report.html --self-contained-html --junitxml=build/junit.xml --cov-config=.coveragerc --cov douceville tests --doctest-modules douceville
+    coverage html -d build/htmldoc/coverage
+"""
+doc.shell = """\
+    mkdir -p build/htmldoc/douceville
+    mkdir -p build/htmldoc/examples
+    python -m ipykernel install --user
+    python examples/__init__.py
+    cp examples/quadcopter.png build/htmldoc/examples
+    pdoc --html --force --config latex_math=True --template-dir dev/template -o build/htmldoc douceville examples
+    pyreverse -s0 douceville -k --colorized -p douceville -m no --ignore=exceptions.py,LogFormatter.py,CSVLogger.py,PickleLogger.py,XlsLogger.py -d build/htmldoc
+    dot -Tpng build/htmldoc/classes_douceville.dot -o build/htmldoc/douceville/classes.png
+"""

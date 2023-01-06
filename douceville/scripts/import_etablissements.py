@@ -55,20 +55,15 @@ def findEtabPosition(etab):
 
 @logged
 def insert_or_update_resulat(session, etab_res, nature, resultat, logger=None):
-    q = session.query(Etablissement).filter(
-        Etablissement.UAI == resultat["etablissement_id"]
-    )
+    q = session.query(Etablissement).filter(Etablissement.UAI == resultat["etablissement_id"])
     if q.count() == 0:
         etab = findEtabPosition(etab_res)
         if etab is None:
-            logger.error(
-                "Impossible de geolocaliser l'etablissement '%s'" % str(etab_res)
-            )
+            logger.error("Impossible de geolocaliser l'etablissement '%s'" % str(etab_res))
             return
 
         logger.warning(
-            "Pas d'etab pour le resultat : %s => Insertion de %s"
-            % (str(resultat), str(etab))
+            "Pas d'etab pour le resultat : %s => Insertion de %s" % (str(resultat), str(etab))
         )
 
         session.add(Etablissement(**etab))
@@ -250,13 +245,10 @@ def import_geoloc2(session, file, logger=None):
             nom = rec["http://purl.org/dc/terms/title"][0]["@value"]
             dat["nom"] = nom
 
-        if (
-            "http://data.eurecom.fr/ontologies/ecole#denominationPrincipale"
-            in rec.keys()
-        ):
-            denom = rec[
-                "http://data.eurecom.fr/ontologies/ecole#denominationPrincipale"
-            ][0]["@value"]
+        if "http://data.eurecom.fr/ontologies/ecole#denominationPrincipale" in rec.keys():
+            denom = rec["http://data.eurecom.fr/ontologies/ecole#denominationPrincipale"][0][
+                "@value"
+            ]
             dat["secteur"] = secteur_to_bool(denom)
             if not dat["secteur"] in ["public", "prive"]:
                 gouv_dat = search_data_gouv(uai)
@@ -336,9 +328,7 @@ def import_sheet(
                     etab[db_k] = val
 
         if not "UAI" in etab.keys():
-            logger.error(
-                "'UAI' attribute not found @row %i : %s, %s" % (index, row, etab)
-            )
+            logger.error("'UAI' attribute not found @row %i : %s, %s" % (index, row, etab))
 
         uai = etab["UAI"]
         if uai[0] != "0":
@@ -464,10 +454,7 @@ def import_main(logger=None):
             xls = pd.ExcelFile(src.fichier % annee)
             for ong in src.onglets:
                 rt = os.path.split(src.fichier % annee)[-1]
-                logger.info(
-                    "Importation %s@%s, %s %i..."
-                    % (ong, rt, corr["nom_diplome"], annee)
-                )
+                logger.info("Importation %s@%s, %s %i..." % (ong, rt, corr["nom_diplome"], annee))
                 import_sheet(
                     s,
                     xls,

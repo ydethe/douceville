@@ -10,9 +10,7 @@ from douceville.config import Config
 
 s = db.session
 
-result = s.query(Etablissement).filter(
-    Etablissement.import_status == ImportStatus.ETAB_FROM_RESULT
-)
+result = s.query(Etablissement).filter(Etablissement.import_status == ImportStatus.ETAB_FROM_RESULT)
 # print("%i enregistrements" % result.count())
 
 l_keys = [

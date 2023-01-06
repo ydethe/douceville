@@ -6,9 +6,7 @@ class DVLogFormatter(logging.Formatter):
         if notime:
             fmt = "[%(levelname)s] - %(message)s"
         else:
-            fmt = (
-                "[%(levelname)s] - %(asctime)s - L%(lineno)d@%(filename)s - %(message)s"
-            )
+            fmt = "[%(levelname)s] - %(asctime)s - L%(lineno)d@%(filename)s - %(message)s"
 
         super().__init__(fmt=fmt, datefmt=None, style="%")
 

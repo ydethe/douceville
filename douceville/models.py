@@ -83,9 +83,7 @@ class Nature(db.Model):
     idx = db.Column(db.Integer, primary_key=True, nullable=False)
     nature = db.Column(db.String(191), nullable=False)
 
-    etablissement_id = db.Column(
-        db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False
-    )
+    etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
 
     def __repr__(self):
         r = self.asDict()
@@ -112,9 +110,7 @@ class Resultat(db.Model):
     admis = db.Column(db.Integer)
     mentions = db.Column(db.Integer)
 
-    etablissement_id = db.Column(
-        db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False
-    )
+    etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
 
     def __repr__(self):
         r = self.asDict()
