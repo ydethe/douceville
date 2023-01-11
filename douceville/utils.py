@@ -33,17 +33,6 @@ class Serializer(object):
         return d
 
 
-def logged(fct):
-    log = logging.getLogger("douceville_logger")
-
-    @wraps(fct)
-    def wrapper(*args, **kwds):
-        kwds["logger"] = log
-        return fct(*args, **kwds)
-
-    return wrapper
-
-
 if __name__ == "__main__":
     import doctest
 

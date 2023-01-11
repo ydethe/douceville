@@ -2,7 +2,7 @@ from flask import jsonify, request
 from flask_login import login_required, current_user
 
 from douceville import logger
-from douceville.utils import logged, Serializer
+from douceville.utils import Serializer
 from douceville.blueprints.isochrone import isochrone_bp
 from douceville.blueprints.isochrone.geographique import calcIsochrone
 

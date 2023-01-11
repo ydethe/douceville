@@ -1,5 +1,5 @@
+from pathlib import Path
 import pickle
-import argparse
 import os
 import logging
 from collections import defaultdict
@@ -9,11 +9,11 @@ import numpy as np
 from sqlalchemy import create_engine, inspect, or_
 from sqlalchemy.orm import sessionmaker
 
+import typer
 import pandas as pd
-import tqdm
+import rich.progress as rp
 
 import douceville
-from douceville.utils import logged
 from douceville.models import *
 from douceville.scripts.conv_utils import *
 from douceville.config import Config
@@ -53,8 +53,9 @@ def findEtabPosition(etab):
     return etab
 
 
-@logged
-def insert_or_update_resulat(session, etab_res, nature, resultat, logger=None):
+def insert_or_update_resulat(session, etab_res, nature, resultat):
+    logger = logging.getLogger("douceville_logger")
+
     q = session.query(Etablissement).filter(Etablissement.UAI == resultat["etablissement_id"])
     if q.count() == 0:
         etab = findEtabPosition(etab_res)
@@ -81,8 +82,7 @@ def insert_or_update_resulat(session, etab_res, nature, resultat, logger=None):
     # logger.warning("Duplicat resulat : %s" % str(resultat))
 
 
-@logged
-def insert_or_update_nature(session, nature, logger=None):
+def insert_or_update_nature(session, nature):
     q = (
         session.query(Nature)
         .filter(Nature.etablissement_id == nature["etablissement_id"])
@@ -94,8 +94,7 @@ def insert_or_update_nature(session, nature, logger=None):
     # logger.warning("Duplicat nature : %s" % str(nature))
 
 
-@logged
-def insert_or_update_etab(session, etab, logger=None):
+def insert_or_update_etab(session, etab):
     l_keys = [
         "UAI",
         "nom",
@@ -125,8 +124,9 @@ def insert_or_update_etab(session, etab, logger=None):
         q.update(etab)
 
 
-@logged
-def import_geoloc(session, file, row_limit=None, logger=None):
+def import_geoloc(session, file, row_limit=None):
+    logger = logging.getLogger("douceville_logger")
+
     logger.info("Importation données géoloc '%s'..." % file)
 
     df = pd.read_pickle(file)
@@ -174,7 +174,7 @@ def import_geoloc(session, file, row_limit=None, logger=None):
     else:
         n = row_limit
 
-    for index, row in tqdm.tqdm(df.iterrows(), total=n):
+    for index, row in rp.track(df.iterrows(), total=n):
         etab = defaultdict(lambda: None)
         etab["import_status"] = ImportStatus.OK
 
@@ -218,12 +218,11 @@ def import_geoloc(session, file, row_limit=None, logger=None):
     session.commit()
 
 
-@logged
-def import_geoloc2(session, file, logger=None):
+def import_geoloc2(session, file):
     info = pickle.loads(open(file, "rb").read())
 
     db = {}
-    for rec in tqdm.tqdm(info):
+    for krec,rec in rp.track(enumerate(info)):
         if not "@id" in rec.keys():
             continue
 
@@ -255,7 +254,7 @@ def import_geoloc2(session, file, logger=None):
                 if gouv_dat is None:
                     dat = None
                 else:
-                    secteur = gouv_dat["statut_public_prive"].lower()
+                    secteur = gouv_dat["secteur_public_prive_libe"].lower()
                     secteur = secteur.replace("é", "e")
                     dat["secteur"] = secteur
                     assert dat["secteur"] in ["public", "prive"]
@@ -277,7 +276,7 @@ def import_geoloc2(session, file, logger=None):
     db["0310087B"] = {"UAI": "0310087B", "longitude": 1.474957, "latitude": 43.549452}
     db["0311879Z"] = {"UAI": "0311879Z", "longitude": 1.551114, "latitude": 43.473410}
 
-    for etab in db.values():
+    for etab in rp.track(db.values()):
         etab = findEtabPosition(etab)
         if etab is None:
             continue
@@ -285,7 +284,6 @@ def import_geoloc2(session, file, logger=None):
         insert_or_update_etab(session, etab)
 
 
-@logged
 def import_sheet(
     session,
     xls,
@@ -296,8 +294,9 @@ def import_sheet(
     year,
     inv_mention,
     row_limit,
-    logger=None,
 ):
+    logger = logging.getLogger("douceville_logger")
+
     df = pd.read_excel(xls, sheet_name, skiprows=range(skp))
 
     if row_limit is None:
@@ -305,7 +304,7 @@ def import_sheet(
     else:
         n = row_limit
 
-    for index, row in tqdm.tqdm(df.iterrows(), total=n):
+    for index, row in rp.track(df.iterrows(), total=n):
         # ==========================
         # Analyse de l'établissement
         # ==========================
@@ -422,17 +421,16 @@ def import_sheet(
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 # https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 
+app = typer.Typer()
 
-@logged
-def import_main(logger=None):
+
+@app.command()
+def import_etablissements(cfg: Path = typer.Argument(..., help="Fichier de config (.yml)")):
+    """Maillage France"""
+    logger = logging.getLogger("douceville_logger")
     logger.info("Maillage, version %s" % douceville.__version__)
 
-    parser = argparse.ArgumentParser(description="Maillage France")
-    parser.add_argument("cfg", help="fichier config", type=str)
-
-    args = parser.parse_args()
-
-    cfg = loadConfig(args.cfg)
+    cfg = loadConfig(cfg)
 
     logger.info("Base de données : %s" % Config.SQLALCHEMY_DATABASE_URI)
     engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
@@ -468,5 +466,5 @@ def import_main(logger=None):
                 )
 
 
-if __name__ == "__main__":
-    import_main()
+def import_main():
+    app()

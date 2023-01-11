@@ -2,35 +2,21 @@ ident:
   ver: 2
 options:
  # - row_limit: 10
-# geoloc: douceville/raw/geolocalisation-etablissements-premier-et-second-degre.pkl
-# geoloc: douceville/raw/simplifie.pkl
-# geoloc: douceville/raw/complet.pkl
-geoloc2: douceville/raw/data_dict.raw
-# sources:
-#  - fichier: douceville/raw/brevet_%i.xls
-#    onglets:
-#    - Sheet
-#    diplome: brevet
-#    inv_mention: true
-#    annees:
-#    - 2018
-#  - fichier: douceville/raw/brevet_%i.xls
-#    onglets:
-#    - Rapport 1
-#    diplome: brevet
-#    inv_mention: true
-#    annees:
-#    - 2017
-#    - 2016
-#  - fichier: douceville/raw/brevet_%i.xls
-#    onglets:
-#    - Rapport 1
-#    diplome: brevet
-#    inv_mention: true
-#    skiprows: 3
-#    annees:
-#    - 2015
-#  - fichier: douceville/raw/bac_%i.xls
+# geoloc: data/geolocalisation-etablissements-premier-et-second-degre.pkl
+# geoloc: data/simplifie.pkl
+# geoloc: data/complet.pkl
+geoloc2: data/data_dict.raw
+sources:
+ - fichier: data/brevet_%i.xls
+   onglets:
+   - Sheet
+   diplome: brevet
+   inv_mention: true
+   annees:
+   - 2018
+   - 2017
+   - 2016
+#  - fichier: data/bac_%i.xls
 #    onglets:
 #    - MENTIONS_GT
 #    - REUSSITE_GT
@@ -41,9 +27,8 @@ geoloc2: douceville/raw/data_dict.raw
 #    - ES
 #    backup_group: GT
 #    annees:
-#    - 2018
-#    - 2017
-#  - fichier: douceville/raw/bac_%i.xls
+#    - 2021
+#  - fichier: data/bac_%i.xls
 #    onglets:
 #    - MENTIONS_PRO
 #    - REUSSITE_PRO
@@ -51,9 +36,8 @@ geoloc2: douceville/raw/data_dict.raw
 #    groupes:
 #    - PRO
 #    annees:
-#    - 2018
-#    - 2017
-#  - fichier: douceville/raw/bac_%i.xls
+#    - 2021
+#  - fichier: data/bac_%i.xls
 #    onglets:
 #    - MENTIONS_GT
 #    - REUSSITE_GT
@@ -67,9 +51,8 @@ geoloc2: douceville/raw/data_dict.raw
 #    - TMD
 #    - STHR
 #    annees:
-#    - 2018
-#    - 2017
-#  - fichier: douceville/raw/bac_%i.xls
+#    - 2021
+#  - fichier: data/bac_%i.xls
 #    onglets:
 #    - REUSSITE_GT
 #    diplome: general
@@ -88,7 +71,7 @@ geoloc2: douceville/raw/data_dict.raw
 #    - 2010
 #    - 2009
 #    - 2008
-#  - fichier: douceville/raw/bac_%i.xls
+#  - fichier: data/bac_%i.xls
 #    onglets:
 #    - REUSSITE_PRO
 #    diplome: pro
@@ -104,7 +87,7 @@ geoloc2: douceville/raw/data_dict.raw
 #    - 2010
 #    - 2009
 #    - 2008
-#  - fichier: douceville/raw/bac_%i.xls
+#  - fichier: data/bac_%i.xls
 #    onglets:
 #    - REUSSITE_GT
 #    diplome: techno

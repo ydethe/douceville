@@ -1,18 +1,26 @@
 import json
+import logging
+from pathlib import Path
 import pickle
 import time
-import argparse
 
+import typer
 import pandas as pd
-import tqdm
 from rdflib import Graph
 
-from douceville.utils import logged
 from douceville.scripts.read_config import loadConfig
 
 
-@logged
-def create_cache(cfg, src, logger=None):
+app = typer.Typer()
+
+
+@app.command()
+def create_cache(
+    cfg: Path = typer.Argument(..., help="Fichier de config"),
+    src: Path = typer.Argument(..., help="Fichier .xlsx"),
+):
+    """Conversion rdf"""
+    logger = logging.getLogger("douceville_logger")
     logger.info("Creating geoloc cache '%s'..." % src)
 
     c = loadConfig(cfg)
@@ -48,16 +56,4 @@ def import_geoloc_db(fic):
 
 
 def conv_geoloc_enseignement_main():
-    # src : maillage/raw/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.xlsx
-
-    parser = argparse.ArgumentParser(description="Conversion rdf")
-    parser.add_argument("cfg", help="fichier config", type=str)
-    parser.add_argument("src", help="fichier in", type=str)
-
-    args = parser.parse_args()
-
-    create_cache(args.cfg, args.src)
-
-
-if __name__ == "__main__":
-    conv_geoloc_enseignement_main()
+    app()

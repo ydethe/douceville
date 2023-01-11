@@ -15,7 +15,7 @@ from werkzeug.urls import url_parse
 
 from douceville.blueprints.users.manage_users import add_user
 from douceville.config import Config
-from douceville.utils import logged, Serializer
+from douceville.utils import Serializer
 from douceville.blueprints.users import users_bp
 from douceville.blueprints.users.forms import LoginForm, SignupForm
 from douceville.models import db, User

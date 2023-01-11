@@ -18,6 +18,7 @@ from flask_mail import Mail
 from flask_login import current_user
 from flask_nav import Nav
 from flask_nav.elements import *
+from flask_alembic import Alembic
 
 from sqlalchemy import event
 
@@ -61,13 +62,16 @@ app.config.from_object(Config)
 app.logger.addHandler(file_handler)
 
 db = SQLAlchemy(app)
-# migrate = Migrate(app, db)
+migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 bcrypt = Bcrypt(app)
 mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
+
+alembic = Alembic()
+alembic.init_app(app)  # call in the app factory if you're using that pattern
 
 stripe.api_key = Config.STRIPE_SECRET_KEY
 
@@ -93,44 +97,44 @@ if os.environ.get("FLASK_INIT_DB", "0") != "0":
     db.init_app(app)
     db.create_all()
 
-# from douceville.blueprints.carte import carte_bp
+from douceville.blueprints.carte import carte_bp
 
-# app.register_blueprint(carte_bp, url_prefix="/carte")
+app.register_blueprint(carte_bp, url_prefix="/carte")
 
-# from douceville.blueprints.users import users_bp
+from douceville.blueprints.users import users_bp
 
-# app.register_blueprint(users_bp, url_prefix="/users/")
+app.register_blueprint(users_bp, url_prefix="/users/")
 
-# from douceville.blueprints.isochrone import isochrone_bp
+from douceville.blueprints.isochrone import isochrone_bp
 
-# app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
+app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
 
-# from douceville.blueprints.payment import payment_bp
+from douceville.blueprints.payment import payment_bp
 
-# app.register_blueprint(payment_bp, url_prefix="/pay")
+app.register_blueprint(payment_bp, url_prefix="/pay")
 
-# from douceville.blueprints.enseignement import enseignement_bp
+from douceville.blueprints.enseignement import enseignement_bp
 
-# app.register_blueprint(enseignement_bp, url_prefix="/enseignement")
+app.register_blueprint(enseignement_bp, url_prefix="/enseignement")
 
-# admin = Admin(app, name="douceville", template_mode="bootstrap3")
+admin = Admin(app, name="douceville", template_mode="bootstrap3")
 
-# from douceville import models
+from douceville import models
 
-# admin.add_view(UserModelView(models.Etablissement, db.session))
-# admin.add_view(UserModelView(models.Nature, db.session))
-# admin.add_view(UserModelView(models.Resultat, db.session))
-# admin.add_view(UserModelView(models.User, db.session))
+admin.add_view(UserModelView(models.Etablissement, db.session))
+admin.add_view(UserModelView(models.Nature, db.session))
+admin.add_view(UserModelView(models.Resultat, db.session))
+admin.add_view(UserModelView(models.User, db.session))
 
-# topbar = Navbar(
-#     "douceville.fr",
-#     View("Carte", "carte.carte"),
-#     View("Recherche", "carte.recherche"),
-#     View("Profil", "users.profile"),
-# )
+topbar = Navbar(
+    "douceville.fr",
+    View("Carte", "carte.carte"),
+    View("Recherche", "carte.recherche"),
+    View("Profil", "users.profile"),
+)
 
-# # registers the "top" menubar
-# nav = Nav()
-# nav.register_element("top", topbar)
+# registers the "top" menubar
+nav = Nav()
+nav.register_element("top", topbar)
 
-# nav.init_app(app)
+nav.init_app(app)

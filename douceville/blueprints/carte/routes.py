@@ -12,7 +12,7 @@ from flask_login import login_required, current_user
 
 from douceville import logger
 from douceville.config import Config
-from douceville.utils import logged, Serializer
+from douceville.utils import Serializer
 from douceville.blueprints.carte import carte_bp
 from douceville.blueprints.carte.forms import QueryForm
 from douceville.blueprints.isochrone.geographique import geocodeUserAddress

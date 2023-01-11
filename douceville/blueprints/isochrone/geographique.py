@@ -1,9 +1,9 @@
 from collections import defaultdict
+import logging
 
 from openrouteservice import client, geocode
 
 from douceville.config import Config
-from douceville.utils import logged
 
 
 def calcIsochrone(center, dist, transp):
@@ -25,8 +25,7 @@ def calcIsochrone(center, dist, transp):
     return iso
 
 
-@logged
-def geocodeUserAddress(query, logger=None):
+def geocodeUserAddress(query):
     api_key = Config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
@@ -43,10 +42,7 @@ def geocodeUserAddress(query, logger=None):
         return lon, lat
 
 
-@logged
-def findCoordFromAddress(
-    nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None, logger=None
-):
+def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None):
     """
 
     Examples:
@@ -58,6 +54,8 @@ def findCoordFromAddress(
     # (2.551383, 48.838077)
 
     """
+    logger = logging.getLogger("douceville_logger")
+
     etab_maj = defaultdict(lambda: None)
 
     api_key = Config.OPENROUTESERVICE_KEY

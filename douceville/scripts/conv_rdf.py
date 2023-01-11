@@ -1,27 +1,27 @@
 import json
+import logging
+from pathlib import Path
 import pickle
 import time
-import argparse
 
-import tqdm
-from rdflib import Graph
+import typer
+from rdflib import Graph, plugin
+from rdflib.serializer import Serializer
 
-from douceville.utils import logged
 from douceville.scripts.read_config import loadConfig
 
 
-@logged
-def create_cache(logger=None):
+app = typer.Typer()
+
+
+@app.command()
+def create_cache(
+    cfg: Path = typer.Argument(..., help="Fichier de config"),
+    src: Path = typer.Argument(..., help="Fichier .ttl"),
+):
+    logger = logging.getLogger("douceville_logger")
     # src : CollegesLycees/raw/dataset-564055.ttl
     # dst : CollegesLycees/raw/data_dict.raw
-
-    parser = argparse.ArgumentParser(description="Conversion rdf")
-    parser.add_argument("cfg", help="fichier config", type=str)
-    parser.add_argument("src", help="fichier in", type=str)
-
-    args = parser.parse_args()
-    cfg = args.cfg
-    src = args.src
 
     logger.info("[%s]Creating geoloc cache 'data_dict.raw'..." % time.ctime())
 
@@ -46,8 +46,4 @@ def create_cache(logger=None):
 
 
 def conv_rdf_main():
-    create_cache()
-
-
-if __name__ == "__main__":
-    conv_rdf_main()
+    app()

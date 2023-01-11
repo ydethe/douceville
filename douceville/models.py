@@ -23,7 +23,7 @@ class ImportStatus(object):
 class User(UserMixin, db.Model):
     __tablename__ = "user"
 
-    id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
+    id = db.Column(db.BigInteger, nullable=False, primary_key=True)
     email = db.Column(db.String(1024), nullable=False, unique=True)
     hashed_pwd = db.Column(db.String(128), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
@@ -82,7 +82,6 @@ class Nature(db.Model):
 
     idx = db.Column(db.Integer, primary_key=True, nullable=False)
     nature = db.Column(db.String(191), nullable=False)
-
     etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
 
     def __repr__(self):
@@ -109,7 +108,6 @@ class Resultat(db.Model):
     presents = db.Column(db.Integer)
     admis = db.Column(db.Integer)
     mentions = db.Column(db.Integer)
-
     etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
 
     def __repr__(self):
@@ -136,6 +134,7 @@ class Etablissement(db.Model):
     lieu_dit = db.Column(db.String(191))
     code_postal = db.Column(db.String(6), nullable=False)
     commune = db.Column(db.String(191), nullable=False)
+    # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
     position = db.Column(Geometry("POINT"), nullable=False)
     # position = db.Column(db.String(191), nullable=False)
     departement = db.Column(db.Integer, nullable=False)
@@ -143,8 +142,6 @@ class Etablissement(db.Model):
     secteur = db.Column(db.String(191), nullable=False)
     ouverture = db.Column(db.DateTime())
     import_status = db.Column(db.Integer, nullable=False)
-    # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-
     resultats = db.relationship("Resultat", backref="etablissement", lazy="dynamic")
     natures = db.relationship("Nature", backref="etablissement", lazy="dynamic")
 

@@ -1,7 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, inspect
 
-from douceville.utils import logged
 from douceville.models import *
 from douceville.config import Config
 

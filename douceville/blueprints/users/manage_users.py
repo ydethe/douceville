@@ -1,16 +1,30 @@
 from getpass import getpass
-import argparse
+import logging
 
 from flask_mail import Message
+import typer
 
 import douceville
 from douceville.models import *
 from douceville import app, bcrypt, mail
 from douceville.config import Config
-from douceville.utils import logged, Serializer
+from douceville.utils import Serializer
 
 
-def add_user(email=None, pwd=None, admin=False, active=False):
+app = typer.Typer()
+
+
+@app.command()
+def add_user(
+    email: str = typer.Argument(None, help="Email"),
+    pwd: str = typer.Argument(None, help="Password"),
+    admin: bool = typer.Option(False, help="Falg to grant the user admin privilege"),
+    active: bool = typer.Option(False, help="Flag to make the user active"),
+):
+    """Register a user in the base"""
+    logger = logging.getLogger("douceville_logger")
+    logger.info("Maillage, version %s" % douceville.__version__)
+
     if email is None:
         email = input("email: ")
     if pwd is None:
@@ -19,7 +33,7 @@ def add_user(email=None, pwd=None, admin=False, active=False):
     q = User.query.filter_by(email=email)
     if q.count() == 0:
         hpwd = bcrypt.generate_password_hash(pwd, Config.BCRYPT_ROUNDS)
-        user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, is_active=active)
+        user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
 
         if not active:
             s = Serializer()
@@ -35,27 +49,10 @@ def add_user(email=None, pwd=None, admin=False, active=False):
 
         db.session.add(user)
         db.session.commit()
-        return True
+        print("OK")
     else:
-        return False
+        print("!!! NOK !!!")
 
 
-@logged
-def main(logger=None):
-    logger.info("Maillage, version %s" % douceville.__version__)
-
-    parser = argparse.ArgumentParser(description="Maillage France - Gestion utilisateurs")
-    parser.add_argument("action", help="action", type=str)
-    parser.add_argument("email", help="email", type=str, default=None)
-    parser.add_argument("password", help="password", type=str, default=None)
-    parser.add_argument("--admin", help="admin", action="store_true")
-    parser.add_argument("--active", help="active", action="store_true")
-
-    args = parser.parse_args()
-
-    if args.action == "add":
-        print(add_user(args.email, args.password, args.admin, args.active))
-
-
-if __name__ == "__main__":
-    main()
+def add_user_main():
+    app()

@@ -9,7 +9,7 @@ from geoalchemy2 import func
 
 from douceville.config import Config
 from douceville.models import *
-from douceville.utils import logged, Serializer
+from douceville.utils import Serializer
 from douceville.blueprints.enseignement import enseignement_bp
 from douceville.blueprints.isochrone.geographique import calcIsochrone
 
