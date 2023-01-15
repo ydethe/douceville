@@ -33,8 +33,9 @@ dependencies = [
     "pyopenssl==20.0.1",
     "python-slugify==4.0.1",
     "PyYaml==5.4.1",
-    "rich==13.0.1",
     "rdflib==6.0.1",
+    "rdfpandas>=1.1.1",
+    "rich==13.0.1",
     "shapely==1.7.1",
     "sqlalchemy==1.4.0",
     "stripe==2.55.1",
@@ -42,6 +43,7 @@ dependencies = [
     "uwsgi==2.0.19.1",
     "werkzeug==1.0.1",
     "wtforms==3.0.0",
+    "xlrd==2.0.1"
 ]
 requires-python = ">=3.8,<3.12"
 

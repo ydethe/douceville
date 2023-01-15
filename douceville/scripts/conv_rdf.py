@@ -14,6 +14,45 @@ from douceville.scripts.read_config import loadConfig
 app = typer.Typer()
 
 
+def conv_rec(rec):
+    rec2 = dict()
+    for k in rec.keys():
+        if k == "@type":
+            continue
+
+        k2 = k[:]
+        if "#" in k2:
+            k2 = k.split("#")[-1]
+        if "@" in k2:
+            k2 = k2.split("@")[-1]
+        if "/" in k2:
+            k2 = k2.split("/")[-1]
+
+        v2 = rec[k]
+
+        if isinstance(v2, list):
+            assert len(v2) == 1
+            v2 = v2[0]
+        if isinstance(v2, str):
+            if "/" in v2:
+                v2 = v2.split("/")[-1]
+        elif isinstance(v2, dict):
+            if not "@value" in v2.keys():
+                continue
+            v2 = v2["@value"]
+        else:
+            raise TypeError(f"Unknown type for {v2}")
+
+        if isinstance(v2, str) and "#" in v2:
+            v2 = v2.split("#")[-1]
+        if k2 == "id":
+            v2 = v2.split("/")[-1].upper()
+
+        rec2[k2] = v2
+
+    return rec2
+
+
 @app.command()
 def create_cache(
     cfg: Path = typer.Argument(..., help="Fichier de config"),

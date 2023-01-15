@@ -1,14 +1,14 @@
+from datetime import datetime
 from pathlib import Path
 import pickle
 import os
 import logging
 from collections import defaultdict
 
-import numpy as np
-
 from sqlalchemy import create_engine, inspect, or_
 from sqlalchemy.orm import sessionmaker
 
+import numpy as np
 import typer
 import pandas as pd
 import rich.progress as rp
@@ -129,7 +129,7 @@ def import_geoloc(session, file, row_limit=None):
 
     logger.info("Importation données géoloc '%s'..." % file)
 
-    df = pd.read_pickle(file)
+    df = pd.read_excel(file)
 
     names = [
         ("UAI", to_maj),
@@ -218,11 +218,11 @@ def import_geoloc(session, file, row_limit=None):
     session.commit()
 
 
-def import_geoloc2(session, file):
+def import_geoloc2(session, df, file):
     info = pickle.loads(open(file, "rb").read())
 
     db = {}
-    for krec,rec in rp.track(enumerate(info)):
+    for krec, rec in rp.track(enumerate(info)):
         if not "@id" in rec.keys():
             continue
 
@@ -449,7 +449,7 @@ def import_etablissements(cfg: Path = typer.Argument(..., help="Fichier de confi
         corr = corr_diplome(src)
 
         for annee in src.annees:
-            xls = pd.ExcelFile(src.fichier % annee)
+            xls = src.fichier % annee
             for ong in src.onglets:
                 rt = os.path.split(src.fichier % annee)[-1]
                 logger.info("Importation %s@%s, %s %i..." % (ong, rt, corr["nom_diplome"], annee))

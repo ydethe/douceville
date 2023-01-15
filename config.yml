@@ -2,10 +2,11 @@ ident:
   ver: 2
 options:
  # - row_limit: 10
+# geoloc: data/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.xlsx
 # geoloc: data/geolocalisation-etablissements-premier-et-second-degre.pkl
 # geoloc: data/simplifie.pkl
 # geoloc: data/complet.pkl
-geoloc2: data/data_dict.raw
+# geoloc2: data/data_dict.raw
 sources:
  - fichier: data/brevet_%i.xls
    onglets:

@@ -19,6 +19,8 @@ Résultats du brevet `<https://www.data.gouv.fr/fr/datasets/diplome-national-du-
 
 Immobilier `<https://www.data.gouv.fr/fr/reuses/extension-web-pour-investisseur-immobilier-toutes-les-donnees-immobilieres-integrees-a-votre-navigateur>`_
 
+https://github.com/cadmiumkitty/rdfpandas
+
 A venir
 *******
 - RSA
