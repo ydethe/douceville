@@ -13,7 +13,7 @@ Environment=DOUCEVILLE_CONFIG=prod
 Environment=OPENROUTESERVICE_KEY=5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7
 WorkingDirectory=/home/ydethe/douceville
 # ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
-ExecStart=uwsgi --socket 127.0.0.1:3031 --module "douceville:app"
+ExecStart=/home/ydethe/douceville/.venv/bin/uwsgi --socket 127.0.0.1:3031 --module "douceville:app"
 
 [Install]
 WantedBy=multi-user.target

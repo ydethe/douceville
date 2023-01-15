@@ -21,9 +21,6 @@ from douceville.scripts.read_config import loadConfig
 from douceville.scripts.crawler import search_data_gouv
 from douceville.blueprints.isochrone.geographique import findCoordFromAddress
 
-# def findCoordFromAddress(*args, **kwargs):
-#     return 0,0
-
 
 def findEtabPosition(etab):
     lat = etab.pop("latitude", None)
@@ -68,7 +65,7 @@ def insert_or_update_resulat(session, etab_res, nature, resultat):
         )
 
         session.add(Etablissement(**etab))
-        insert_or_update_nature(session, nature, logger=logger)
+        insert_or_update_nature(session, nature)
 
     q = (
         session.query(Resultat)
