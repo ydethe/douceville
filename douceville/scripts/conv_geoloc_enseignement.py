@@ -11,10 +11,10 @@ from rdflib import Graph
 from douceville.scripts.read_config import loadConfig
 
 
-app = typer.Typer()
+tapp = typer.Typer()
 
 
-@app.command()
+@tapp.command()
 def create_cache(
     cfg: Path = typer.Argument(..., help="Fichier de config"),
     src: Path = typer.Argument(..., help="Fichier .xlsx"),
@@ -56,4 +56,4 @@ def import_geoloc_db(fic):
 
 
 def conv_geoloc_enseignement_main():
-    app()
+    tapp()

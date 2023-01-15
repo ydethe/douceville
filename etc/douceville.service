@@ -1,7 +1,7 @@
 # /etc/systemd/system/douceville.service
 
 [Unit]
-Description=Gunicorn instance to serve maillage
+Description=Gunicorn instance to serve douceville
 After=network.target
 
 [Service]
@@ -12,8 +12,9 @@ Environment=STRIPE_PUBLISHABLE_KEY=pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEt
 Environment=DOUCEVILLE_CONFIG=prod
 Environment=OPENROUTESERVICE_KEY=5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7
 WorkingDirectory=/home/ydethe/douceville
+Environment="PATH=/home/ydethe/douceville/.venv/bin"
 # ExecStart=/usr/local/bin/uwsgi etc/uwsgi.ini
-ExecStart=/home/ydethe/douceville/.venv/bin/uwsgi --socket 127.0.0.1:3031 --module "douceville:app"
+ExecStart=/home/ydethe/douceville/.venv/bin/gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:3031 douceville:app
 
 [Install]
 WantedBy=multi-user.target

@@ -418,10 +418,10 @@ def import_sheet(
 # https://www.data.gouv.fr/fr/datasets/diplome-national-du-brevet-par-etablissement
 # https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=DonneesLocales&version=V0.1&provider=insee
 
-app = typer.Typer()
+tapp = typer.Typer()
 
 
-@app.command()
+@tapp.command()
 def import_etablissements(cfg: Path = typer.Argument(..., help="Fichier de config (.yml)")):
     """Maillage France"""
     logger = logging.getLogger("douceville_logger")
@@ -464,4 +464,4 @@ def import_etablissements(cfg: Path = typer.Argument(..., help="Fichier de confi
 
 
 def import_main():
-    app()
+    tapp()

@@ -11,10 +11,10 @@ from douceville.config import Config
 from douceville.utils import Serializer
 
 
-app = typer.Typer()
+tapp = typer.Typer()
 
 
-@app.command()
+@tapp.command()
 def add_user(
     email: str = typer.Argument(None, help="Email"),
     pwd: str = typer.Argument(None, help="Password"),
@@ -55,4 +55,4 @@ def add_user(
 
 
 def add_user_main():
-    app()
+    tapp()

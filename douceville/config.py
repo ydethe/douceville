@@ -24,12 +24,12 @@ class BaseConfig(object):
         "pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk",
     )
 
-    MAIL_SERVER = "box.johncloud.fr"
+    MAIL_SERVER = "mx.johncloud.fr"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     MAIL_USERNAME = "yann@johncloud.fr"
-    MAIL_PASSWORD = "c86WHgSpo6hdPj"
+    MAIL_PASSWORD = "9fq!86JvA@u3q*I"
     MAIL_DEFAULT_SENDER = ("Yann", "yann@johncloud.fr")
 
 
