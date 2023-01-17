@@ -36,7 +36,7 @@ class BaseConfig(object):
 class ProdConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://douceville:douceville@localhost/douceville"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    HOST = "https://douceville.fr"
+    HOST = "https://douceville.johncloud.fr"
     PORT = 443
     PRICE_ID = "price_1HoCr3GFonhtEiXEAgLKb9WD"
 

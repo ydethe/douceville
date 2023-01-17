@@ -32,8 +32,10 @@ def profile():
     session = stripe.billing_portal.Session.create(customer=sid, return_url=return_url)
 
     t = current_user.getCurrentPeriodEnd()
-    if t < 0:
-        dt = "Inactive"
+    if current_user.admin:
+        dt = "Permanent (admin)"
+    elif t < 0:
+        dt = "Inactif"
     else:
         ts = time.gmtime(t)
         dt = "Jusqu'au " + time.strftime("%A %d %B à %Hh%M", ts)

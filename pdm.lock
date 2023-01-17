@@ -826,7 +826,7 @@ dependencies = [
 
 [[package]]
 name = "stripe"
-version = "2.55.1"
+version = "5.0.0"
 requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 summary = "Python bindings for the Stripe API"
 dependencies = [
@@ -928,7 +928,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:12c4bd71b73be32aef2ddfc2b20d3cc87223a7405828f67fb62228bb1edde47a"
+content_hash = "sha256:4ab38b0e1cd141739a99503ea633b0d044f97b2e05d7d31fc921615ca1182f95"
 
 [metadata.files]
 "alembic 1.9.1" = [
@@ -1782,9 +1782,9 @@ content_hash = "sha256:12c4bd71b73be32aef2ddfc2b20d3cc87223a7405828f67fb62228bb1
     {url = "https://files.pythonhosted.org/packages/ff/33/caaa7394f7f324dccd1faf377604e2c9fee0345ce0032fc04258e9dae6f6/SQLAlchemy-1.4.0-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:7fdec39fe2495a1c833b917d7c0c8b9d06c0b1b91df74e45be7dc7af325a40fa"},
     {url = "https://files.pythonhosted.org/packages/ff/e1/9243dbeafce51fa44ce118b7ed2c31b6bd58f08c9edbb22ae76f671910cc/SQLAlchemy-1.4.0-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:bc626e44fec23d9ea92aeecd2359720e8620c1f963c8e24bfdd27e757ed0548c"},
 ]
-"stripe 2.55.1" = [
-    {url = "https://files.pythonhosted.org/packages/0d/3b/5ecfa38ca2fb146c5de4fd5743e6619bc2523fe8eed0fcae0954ee820804/stripe-2.55.1-py2.py3-none-any.whl", hash = "sha256:fd98ae43b105e75cb4f1d23ba3d0c16b45e3957d432002398a2f75d083d606ce"},
-    {url = "https://files.pythonhosted.org/packages/c7/3f/eb7a222837b0ad8fc751e343d1aef7a78edcbd3051d18939e763c6db162e/stripe-2.55.1.tar.gz", hash = "sha256:6b70e2cf87cfbe0cb891b725b690495bc3d34ab0d82545a5989ecd3b5fa83e2a"},
+"stripe 5.0.0" = [
+    {url = "https://files.pythonhosted.org/packages/6f/97/3747172dcfca4b5fc22c86a7dfe1225ba2fcc93727c0a9cbed6dd2aa474f/stripe-5.0.0.tar.gz", hash = "sha256:bdc8c5ee8e6b53c4767bbe720752cedb8af91db46ad96e511edd0fb74964ac5d"},
+    {url = "https://files.pythonhosted.org/packages/ac/80/54d640d546dd4e8e839ea0fa9f492a1843ee50e25b706863d59401cec439/stripe-5.0.0-py2.py3-none-any.whl", hash = "sha256:50f69a5fc9cd6f7629861b80ea70a3c6da0c76401ddc159474f2d45fab9215d6"},
 ]
 "termcolor 2.2.0" = [
     {url = "https://files.pythonhosted.org/packages/aa/f4/8ddd8a684b4c005345f45740a449d93d0af7ccecd91319d0f4426cf08b36/termcolor-2.2.0-py3-none-any.whl", hash = "sha256:91ddd848e7251200eac969846cbae2dacd7d71c2871e92733289e7e3666f48e7"},
