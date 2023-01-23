@@ -5,6 +5,8 @@ venv
 *.xls*
 *.raw
 *.pkl
+.pdm.toml
+.vscode
 
 instance
 htmlcov

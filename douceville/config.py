@@ -48,6 +48,7 @@ class DevConfig(BaseConfig):
     HOST = "https://localhost"
     PORT = 5000
     PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
+    DEBUG = True
 
 
 class Dev2Config(BaseConfig):
@@ -56,6 +57,7 @@ class Dev2Config(BaseConfig):
     HOST = "https://localhost"
     PORT = 5000
     PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
+    DEBUG = True
 
 
 tgt_conf = os.environ.get("DOUCEVILLE_CONFIG", "dev")

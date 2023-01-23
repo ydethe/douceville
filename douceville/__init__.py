@@ -7,6 +7,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
+from rich.logging import RichHandler
 import stripe
 from flask import Flask, redirect
 from flask_sqlalchemy import SQLAlchemy
@@ -23,7 +24,6 @@ from flask_alembic import Alembic
 from sqlalchemy import event
 
 from douceville.config import Config
-from douceville.DVLogFormatter import DVLogFormatter
 
 
 try:
@@ -37,22 +37,12 @@ __email__ = "yann@johncloud.fr"
 
 # création de l'objet logger qui va nous servir à écrire dans les logs
 logger = logging.getLogger("douceville_logger")
-# on met le niveau du logger à DEBUG, comme ça il écrit tout
-logger.setLevel(logging.DEBUG)
-# logger.setLevel(logging.INFO)
+logger.setLevel(os.environ.get("LOGLEVEL", "INFO").upper())
 
-# création d'un formateur qui va ajouter le temps, le niveau
-# de chaque message quand on écrira un message dans le log
-formatter = DVLogFormatter(notime=True)
-# création d'un handler qui va rediriger chaque écriture de log
-# sur la console
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(formatter)
+stream_handler = RichHandler()
 logger.addHandler(stream_handler)
 
-formatter = DVLogFormatter(notime=False)
 file_handler = RotatingFileHandler("douceville.log", maxBytes=10e6, backupCount=5)
-file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 

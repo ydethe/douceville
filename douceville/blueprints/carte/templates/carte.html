@@ -32,7 +32,7 @@
 
       axios.get('{{ points_request }}')
       .then(response => {
-          // console.log(response.data);
+          console.log(response.data);
           // document.getElementById("rescountid").innerHTML = 'Nombre de résultats : ' + response.data.length;
           L.geoJSON(response.data, {onEachFeature: onEachFeature}).addTo(mymap);
       })
@@ -41,7 +41,7 @@
       .then(response => {
           var bb1 = [response.data.bbox[1], response.data.bbox[0]];
           var bb2 = [response.data.bbox[3], response.data.bbox[2]];
-          // console.log([bb1,bb2]);
+          console.log([bb1,bb2]);
           L.geoJSON(response.data).addTo(mymap);
           mymap.fitBounds([bb1,bb2]);
       })
