@@ -2,6 +2,10 @@
 *.bak
 venv
 *.raw
+data
+.vscode
+.venv
+pdm.lock
 
 instance
 htmlcov

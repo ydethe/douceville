@@ -1,67 +1,40 @@
 import os
 
-from cryptography.fernet import Fernet
-
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-class BaseConfig(object):
+class Config(object):
     FLASK_ADMIN_SWATCH = "cerulean"
     BCRYPT_ROUNDS = 10
-    # SECRET_KEY = Fernet.generate_key()
-    SECRET_KEY = "VLt1XfxWyYcHcIZm92vcDAeoOUWqSQgx3_Mq8c7CCKE="
+    SECRET_KEY = os.environ.get(
+        "SECRET_KEY",
+        None,
+    )
     OPENROUTESERVICE_KEY = os.environ.get(
         "OPENROUTESERVICE_KEY",
-        "5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7",
+        None,
     )
     STRIPE_SECRET_KEY = os.environ.get(
         "STRIPE_SECRET_KEY",
-        "sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL",
+        None,
     )
     STRIPE_PUBLISHABLE_KEY = os.environ.get(
         "STRIPE_PUBLISHABLE_KEY",
-        "pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk",
+        None,
     )
 
-    MAIL_SERVER = "mx.johncloud.fr"
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USE_SSL = False
-    MAIL_USERNAME = "yann@johncloud.fr"
-    MAIL_PASSWORD = "9fq!86JvA@u3q*I"
-    MAIL_DEFAULT_SENDER = ("Yann", "yann@johncloud.fr")
+    MAIL_SERVER = os.environ.get("MAIL_SERVER", None)
+    MAIL_PORT = os.environ.get("MAIL_PORT", None)
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", None)
+    MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", None)
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME", None)
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", None)
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", None)
 
-
-class ProdConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://douceville:douceville@localhost/douceville"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    HOST = "https://douceville.johncloud.fr"
-    PORT = 443
-    PRICE_ID = "price_1HoCr3GFonhtEiXEAgLKb9WD"
-
-
-class DevConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///%s/mydb.db" % basedir
-    SQLITE_SPATIALITE_PATH = "/usr/local/lib/mod_spatialite.so"
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    HOST = "https://localhost"
-    PORT = 5000
-    PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
-    DEBUG = True
-
-
-class Dev2Config(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://douceville:douceville@localhost/douceville"
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    HOST = "https://localhost"
-    PORT = 5000
-    PRICE_ID = "price_1HmzS4GFonhtEiXEjsWOdekb"
-    DEBUG = True
-
-
-tgt_conf = os.environ.get("DOUCEVILLE_CONFIG", "dev")
-if tgt_conf == "prod":
-    Config = ProdConfig
-else:
-    Config = Dev2Config
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI", None)
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", None)
+    HOST = os.environ.get("HOST", None)
+    PORT = os.environ.get("PORT", None)
+    PRICE_ID = os.environ.get("PRICE_ID", None)
+    DEBUG = os.environ.get("DEBUG", None)
