@@ -6,6 +6,11 @@ data
 .vscode
 .venv
 pdm.lock
+migrations
+etc
+.pdm.toml
+qtest.py
+.git
 
 instance
 htmlcov

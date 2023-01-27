@@ -31,10 +31,11 @@ class Config(object):
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME", None)
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", None)
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", None)
+    MAIL_DEBUG = 0
 
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI", None)
-    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", None)
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
     HOST = os.environ.get("HOST", None)
-    PORT = os.environ.get("PORT", None)
+    PORT = int(os.environ.get("PORT", 3031))
     PRICE_ID = os.environ.get("PRICE_ID", None)
     DEBUG = os.environ.get("DEBUG", None)

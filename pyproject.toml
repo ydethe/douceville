@@ -15,7 +15,7 @@ dependencies = [
     "flask-bootstrap==3.3.7.1",
     "flask-login==0.4.1",
     "flask-mail==0.9.1",
-    "Flask-Migrate==2.6.0",
+    "flask-migrate==2.6.0",
     "flask-nav==0.6",
     "flask-shell-ipython==0.4.1",
     "flask-sqlalchemy==2.4.4",

@@ -1,7 +1,7 @@
 # docker build -t douceville . --network=host
 # docker tag douceville:latest ydethe/douceville:latest
 # docker push ydethe/douceville:latest
-FROM ubuntu:jammy
+FROM python:3.9-bullseye
 
 ARG SECRET_KEY
 ARG OPENROUTESERVICE_KEY
@@ -44,7 +44,8 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 RUN echo "tzdata tzdata/Areas select Europe" > preseed.txt
 RUN echo "tzdata tzdata/Zones/Europe select Berlin" >> preseed.txt
 RUN debconf-set-selections preseed.txt
+RUN mkdir log
 RUN apt-get update --allow-releaseinfo-change && apt-get install -yqq --no-install-recommends python3-dev python3-pip python3-venv gcc g++ gnupg2 libssl-dev libpq-dev curl libgeos-dev libpq-dev
 RUN curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
 RUN /root/.local/bin/pdm install --prod
-CMD /app/.venv/bin/gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:3031 douceville:app
+CMD /app/.venv/bin/gunicorn --access-logfile log/douceville-access.log --error-logfile log/douceville-error.log --workers 3 --bind 0.0.0.0:3031 douceville:app

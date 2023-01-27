@@ -1,31 +1,32 @@
-version: "3.9"
+version: "3.4"
 
 services:
   douceville:
-    build: .
+    image: douceville:latest
     ports:
       - "3031:3031"
     environment:
-     - SECRET_KEY: VLt1XfxWyYcHcIZm92vcDAeoOUWqSQgx3_Mq8c7CCKE
-     - OPENROUTESERVICE_KEY: 5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7
-     - STRIPE_SECRET_KEY: sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL
-     - STRIPE_PUBLISHABLE_KEY: pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk
-     - MAIL_SERVER: mx.johncloud.fr
-     - MAIL_PORT: 587
-     - MAIL_USE_TLS: True
-     - MAIL_USE_SSL: False
-     - MAIL_USERNAME: yann@johncloud.fr
-     - MAIL_PASSWORD: 9fq!86JvA@u3q*I
-     - MAIL_SENDER_NAME: Yann
-     - MAIL_SENDER_EMAIL: yann@johncloud.fr
-     - DATABASE_URI: postgresql+psycopg2://douceville:douceville@db/douceville
-     - HOST: https://douceville.johncloud.fr
-     - PORT: 443
-     - PRICE_ID: price_1HoCr3GFonhtEiXEAgLKb9WD
+      SECRET_KEY: VLt1XfxWyYcHcIZm92vcDAeoOUWqSQgx3_Mq8c7CCKE
+      OPENROUTESERVICE_KEY: 5b3ce3597851110001cf6248f1d3b3fb5b69489b954df2b1842b88d7
+      STRIPE_SECRET_KEY: sk_test_51HlJlVGFonhtEiXEelNtjMjZL6WjoUNqT2pSvGo6n71DjzHq2E9QCzgEgF310xHFrcs4ucp4po2Hc0H4TBpmp3vn00JnZPpkrL
+      STRIPE_PUBLISHABLE_KEY: pk_test_51HlJlVGFonhtEiXEqSa9aIeqpQis9hpyiHEtDbrZUnnDInKdxZzBLxxZAre5bTh5qntfqwzloQriY0PCCeURxten00QB0hoezk
+      MAIL_SERVER: mx.johncloud.fr
+      MAIL_PORT: 587
+      MAIL_USE_TLS: True
+      MAIL_USE_SSL: False
+      MAIL_USERNAME: yann@johncloud.fr
+      MAIL_PASSWORD: 9fq!86JvA@u3q*I
+      MAIL_SENDER_NAME: Yann
+      MAIL_SENDER_EMAIL: yann@johncloud.fr
+      DATABASE_URI: postgresql+psycopg2://douceville:douceville@db/douceville
+      HOST: https://douceville.johncloud.fr
+      PORT: 443
+      PRICE_ID: price_1HoCr3GFonhtEiXEAgLKb9WD
   db:
     image: postgres
     restart: always
     environment:
-     - POSTGRES_DB: douceville
-     - POSTGRES_USER: douceville
-     - POSTGRES_PASSWORD: douceville
+      POSTGRES_DB: douceville
+      POSTGRES_USER: douceville
+      POSTGRES_PASSWORD: douceville
+      
