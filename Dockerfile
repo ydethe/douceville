@@ -37,15 +37,16 @@ ENV HOST $HOST
 ENV PORT $PORT
 ENV PRICE_ID $PRICE_ID
 
-COPY . /app/
-WORKDIR /app
 SHELL ["/bin/bash", "-c"]
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 RUN echo "tzdata tzdata/Areas select Europe" > preseed.txt
 RUN echo "tzdata tzdata/Zones/Europe select Berlin" >> preseed.txt
 RUN debconf-set-selections preseed.txt
-RUN mkdir log
 RUN apt-get update --allow-releaseinfo-change && apt-get install -yqq --no-install-recommends python3-dev python3-pip python3-venv gcc g++ gnupg2 libssl-dev libpq-dev curl libgeos-dev libpq-dev
 RUN curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
+COPY . /app/
+WORKDIR /app
+RUN mkdir -p log
 RUN /root/.local/bin/pdm install --prod
+EXPOSE 3031
 CMD /app/.venv/bin/gunicorn --access-logfile log/douceville-access.log --error-logfile log/douceville-error.log --workers 3 --bind 0.0.0.0:3031 douceville:app
