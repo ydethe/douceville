@@ -8,6 +8,10 @@ venv
 .pdm.toml
 .vscode
 data
+.env
+.pdm-python
+*.whl
+requirements.txt
 
 instance
 htmlcov

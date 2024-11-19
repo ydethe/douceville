@@ -1,13 +1,11 @@
 from getpass import getpass
-import logging
 
 from flask_mail import Message
 import typer
 
-import douceville
-from douceville.models import *
+from douceville.models import db, User
 from douceville import app, bcrypt, mail
-from douceville.config import Config
+from douceville.config import config
 from douceville.utils import Serializer
 
 
@@ -22,8 +20,7 @@ def add_user(
     active: bool = typer.Option(False, help="Flag to make the user active"),
 ):
     """Register a user in the base"""
-    logger = logging.getLogger("douceville_logger")
-    logger.info("Maillage, version %s" % douceville.__version__)
+    # logger = logging.getLogger("douceville_logger")
 
     if email is None:
         email = input("email: ")
@@ -32,7 +29,7 @@ def add_user(
 
     q = User.query.filter_by(email=email)
     if q.count() == 0:
-        hpwd = bcrypt.generate_password_hash(pwd, Config.BCRYPT_ROUNDS)
+        hpwd = bcrypt.generate_password_hash(pwd, config.BCRYPT_ROUNDS)
         user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
 
         if not active:
@@ -41,8 +38,8 @@ def add_user(
             with app.app_context():
                 msg = Message("Hello", recipients=[email])
                 msg.html = '<a href="%s:%s/users/confirm?token=%s">Click here to confirm</a>' % (
-                    Config.HOST,
-                    Config.PORT,
+                    config.HOST,
+                    config.PORT,
                     token,
                 )
                 mail.send(msg)

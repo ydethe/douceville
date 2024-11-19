@@ -1,11 +1,10 @@
 import json
-import time
 
 import stripe
-from flask import render_template, request, jsonify, url_for
+from flask import request, jsonify, url_for
 from flask_login import login_required, current_user
 
-from douceville.config import Config
+from douceville.config import config
 from douceville.blueprints.payment import payment_bp
 
 
@@ -13,7 +12,7 @@ from douceville.blueprints.payment import payment_bp
 @login_required
 def create_checkout_session():
     data = json.loads(request.data)
-    domain_url = "%s:%s" % (Config.HOST, Config.PORT)
+    domain_url = "%s:%s" % (config.HOST, config.PORT)
 
     try:
         # Create new Checkout Session for the order

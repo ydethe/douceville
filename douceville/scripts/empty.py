@@ -1,8 +1,4 @@
-from sqlalchemy import create_engine, inspect, or_
-from sqlalchemy.orm import sessionmaker
-
-from douceville.models import *
-from douceville.config import Config
+from douceville.models import db, Nature, Resultat, Etablissement
 
 
 s = db.session

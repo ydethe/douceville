@@ -3,12 +3,12 @@ import logging
 
 from openrouteservice import client, geocode
 
-from douceville.config import Config
+from douceville.config import config
 
 
 def calcIsochrone(center, dist, transp):
     # https://openrouteservice.org/dev/#/home?tab=1
-    api_key = Config.OPENROUTESERVICE_KEY
+    api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
     # Request of isochrones with 15 minute footwalk.
@@ -26,7 +26,7 @@ def calcIsochrone(center, dist, transp):
 
 
 def geocodeUserAddress(query):
-    api_key = Config.OPENROUTESERVICE_KEY
+    api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
     lon = lat = None
@@ -58,20 +58,20 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
 
     etab_maj = defaultdict(lambda: None)
 
-    api_key = Config.OPENROUTESERVICE_KEY
+    api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
     def geocode_query(clnt, nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None):
         query = ""
-        if not nom is None:
+        if nom is not None:
             query += nom + ","
-        if not adresse is None:
+        if adresse is not None:
             etab_maj["adresse"] = adresse
             query += adresse + ","
-        if not cp is None:
+        if cp is not None:
             etab_maj["code_postal"] = cp
             query += cp + ","
-        if not commune is None:
+        if commune is not None:
             etab_maj["commune"] = commune
             query += commune + ","
         else:
@@ -86,7 +86,7 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
             layers=["postalcode", "address", "locality", "venue"],
         )
         for f in j["features"]:
-            if not "locality" in f["properties"].keys():
+            if "locality" not in f["properties"].keys():
                 continue
 
             if len(j["features"]) == 1 or f["properties"]["locality"].lower() == commune.lower():
@@ -97,13 +97,13 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
     if lat is None or lon is None:
         lon, lat = geocode_query(clnt, nom, adresse, cp, commune)
 
-    if lat is None and not adresse is None:
+    if lat is None and adresse is not None:
         lon, lat = geocode_query(clnt, nom=nom, adresse=None, cp=cp, commune=commune)
 
-    if lat is None and not nom is None:
+    if lat is None and nom is not None:
         lon, lat = geocode_query(clnt, nom=None, adresse=None, cp=cp, commune=commune)
 
-    if lat is None and not cp is None:
+    if lat is None and cp is not None:
         lon, lat = geocode_query(clnt, nom=None, adresse=None, cp=None, commune=commune)
 
     if lat is None:

@@ -1,14 +1,11 @@
-import json
 import logging
 
 from flask import jsonify, request
-from flask_login import login_required, current_user
-from sqlalchemy import not_
+from flask_login import login_required
 from geoalchemy2.shape import to_shape
 from geoalchemy2 import func
 
-from douceville.config import Config
-from douceville.models import *
+from douceville.models import db, Etablissement, Nature
 from douceville.utils import Serializer
 from douceville.blueprints.enseignement import enseignement_bp
 from douceville.blueprints.isochrone.geographique import calcIsochrone
@@ -63,7 +60,7 @@ def enseignement():
 
         stat = 0
         for res in e.resultats:
-            if not res.admis is None and res.annee == int(year):
+            if res.admis is not None and res.annee == int(year):
                 stat = int(100 * res.admis / res.presents)
                 info += "<br>Réussite %s %i : %i%%" % (res.diplome, res.annee, stat)
 

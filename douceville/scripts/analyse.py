@@ -1,8 +1,4 @@
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine, inspect
-
-from douceville.models import *
-from douceville.config import Config
+from douceville.models import db, Etablissement, ImportStatus
 
 # from douceville.blueprints.isochrone.geographique import findCoordFromAddress
 
@@ -31,7 +27,7 @@ for e in result.all():
     for k in l_keys:
         if k == "UAI":
             print(ed[k])
-        if not k in ed.keys() or ed[k] is None:
+        if k not in ed.keys() or ed[k] is None:
             print("   %s" % k)
 
 # result = s.query(Nature).filter(Nature.etablissement_id=='0010005A')

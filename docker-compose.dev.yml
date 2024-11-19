@@ -1,7 +1,6 @@
 services:
-  douceville:
-    image: douceville:latest
-    restart: unless-stopped
+  web:
+    build: .
     depends_on:
       - db
     environment:
@@ -37,7 +36,7 @@ services:
 
   db:
     image: postgres
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: $POSTGRES_DB
       POSTGRES_USER: $POSTGRES_USER

@@ -1,11 +1,10 @@
-from datetime import datetime
 from pathlib import Path
 import pickle
 import os
 import logging
 from collections import defaultdict
 
-from sqlalchemy import create_engine, inspect, or_
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import numpy as np
@@ -13,10 +12,19 @@ import typer
 import pandas as pd
 import rich.progress as rp
 
-import douceville
-from douceville.models import *
-from douceville.scripts.conv_utils import *
-from douceville.config import Config
+from douceville.models import Nature, Resultat, Etablissement, ImportStatus
+from douceville.scripts.conv_utils import (
+    to_maj,
+    to_cap,
+    to_lieu_dit,
+    to_float,
+    to_nature,
+    cp_to_dep,
+    secteur_to_bool,
+    idty,
+    corr_diplome,
+)
+from douceville.config import config
 from douceville.scripts.read_config import loadConfig
 from douceville.scripts.crawler import search_data_gouv
 from douceville.blueprints.isochrone.geographique import findCoordFromAddress
@@ -27,17 +35,17 @@ def findEtabPosition(etab):
     lon = etab.pop("longitude", None)
 
     adresse = {}
-    if not etab["nom"] is None:
+    if etab["nom"] is not None:
         adresse["nom"] = etab["nom"]
-    if not lat is None:
+    if lat is not None:
         adresse["lat"] = lat
-    if not lon is None:
+    if lon is not None:
         adresse["lon"] = lon
-    if not etab.get("adresse", None) is None:
+    if etab.get("adresse", None) is not None:
         adresse["adresse"] = etab["adresse"]
-    if not etab.get("code_postal", None) is None:
+    if etab.get("code_postal", None) is not None:
         adresse["cp"] = etab["code_postal"]
-    if not etab.get("commune", None) is None:
+    if etab.get("commune", None) is not None:
         adresse["commune"] = etab["commune"]
 
     etab_maj = findCoordFromAddress(**adresse)
@@ -108,7 +116,7 @@ def insert_or_update_etab(session, etab):
 
     nom_aff = False
     for k in l_keys:
-        if not k in etab.keys() or etab.keys() is None:
+        if k not in etab.keys() or etab.keys() is None:
             if not nom_aff:
                 print(etab["nom"])
                 nom_aff = True
@@ -209,7 +217,7 @@ def import_geoloc(session, file, row_limit=None):
             nature = {"etablissement_id": etab["UAI"], "nature": n}
             insert_or_update_nature(session, nature)
 
-        if not row_limit is None and index >= row_limit:
+        if row_limit is not None and index >= row_limit:
             break
 
     session.commit()
@@ -220,7 +228,7 @@ def import_geoloc2(session, df, file):
 
     db = {}
     for krec, rec in rp.track(enumerate(info)):
-        if not "@id" in rec.keys():
+        if "@id" not in rec.keys():
             continue
 
         uai = rec["@id"].split("/")[-1].upper()
@@ -246,7 +254,7 @@ def import_geoloc2(session, df, file):
                 "@value"
             ]
             dat["secteur"] = secteur_to_bool(denom)
-            if not dat["secteur"] in ["public", "prive"]:
+            if dat["secteur"] not in ["public", "prive"]:
                 gouv_dat = search_data_gouv(uai)
                 if gouv_dat is None:
                     dat = None
@@ -258,7 +266,7 @@ def import_geoloc2(session, df, file):
             else:
                 assert dat["secteur"] in ["public", "prive"]
 
-        if not dat is None:
+        if dat is not None:
             db[uai] = dat
 
     db["0312843X"] = {"UAI": "0312843X", "longitude": 1.398089, "latitude": 43.464582}
@@ -320,10 +328,10 @@ def import_sheet(
                 else:
                     val = None
 
-                if not val is None:
+                if val is not None:
                     etab[db_k] = val
 
-        if not "UAI" in etab.keys():
+        if "UAI" not in etab.keys():
             logger.error("'UAI' attribute not found @row %i : %s, %s" % (index, row, etab))
 
         uai = etab["UAI"]
@@ -386,7 +394,7 @@ def import_sheet(
         # =====================
         # Filtrage
         # =====================
-        if not "presents" in res.keys():
+        if "presents" not in res.keys():
             logger.warning("'presents' attribute not found : %s => rec ignored" % res)
             continue
 
@@ -398,7 +406,7 @@ def import_sheet(
         # =====================
         insert_or_update_resulat(session, etab, nature, res)
 
-        if not row_limit is None and index >= row_limit:
+        if row_limit is not None and index >= row_limit:
             break
 
     session.commit()
@@ -425,21 +433,20 @@ tapp = typer.Typer()
 def import_etablissements(cfg: Path = typer.Argument(..., help="Fichier de config (.yml)")):
     """Maillage France"""
     logger = logging.getLogger("douceville_logger")
-    logger.info("Maillage, version %s" % douceville.__version__)
 
     cfg = loadConfig(cfg)
 
-    logger.info("Base de données : %s" % Config.SQLALCHEMY_DATABASE_URI)
-    engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+    logger.info("Base de données : %s" % config.SQLALCHEMY_DATABASE_URI)
+    engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
 
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
 
-    if not cfg.geoloc is None:
+    if cfg.geoloc is not None:
         import_geoloc(s, cfg.geoloc, row_limit=cfg.options["row_limit"])
 
-    if not cfg.geoloc2 is None:
+    if cfg.geoloc2 is not None:
         import_geoloc2(s, cfg.geoloc2)
 
     for src in cfg.sources:

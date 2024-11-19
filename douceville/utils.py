@@ -1,9 +1,7 @@
-import logging
-from functools import wraps
 from cryptography.fernet import Fernet
 import json
 
-from douceville.config import Config
+from douceville.config import config
 
 
 class Serializer(object):
@@ -20,7 +18,7 @@ class Serializer(object):
     """
 
     def __init__(self):
-        self.fernet = Fernet(Config.SECRET_KEY)
+        self.fernet = Fernet(config.SECRET_KEY)
 
     def serialize(self, d):
         j = json.dumps(d).encode()

@@ -6,12 +6,12 @@ from flask import (
     flash,
     redirect,
     url_for,
-    Markup,
 )
+from markupsafe import Markup
 from flask_login import login_required, current_user
 
 from douceville import logger
-from douceville.config import Config
+from douceville.config import config
 from douceville.utils import Serializer
 from douceville.blueprints.carte import carte_bp
 from douceville.blueprints.carte.forms import QueryForm
@@ -59,13 +59,13 @@ def carte():
         s = Serializer()
         dat = s.deserialize(token)
 
-        year = dat.get("year", "2018")
+        # year = dat.get("year", "2018")
         address = dat.pop("address", "")
-        transp = dat.get("transp", "")
-        dist = dat.get("dist", "300")
-        nature = dat.get("nature", [])
-        secteur = dat.get("secteur", [])
-        stat_min = dat.get("stat_min", "0")
+        # transp = dat.get("transp", "")
+        # dist = dat.get("dist", "300")
+        # nature = dat.get("nature", [])
+        # secteur = dat.get("secteur", [])
+        # stat_min = dat.get("stat_min", "0")
 
         if address != "":
             dat["lon"], dat["lat"] = geocodeUserAddress(address)
@@ -74,6 +74,6 @@ def carte():
 
     return render_template(
         "carte.html",
-        points_request="%s:%i/enseignement?token=%s" % (Config.HOST, Config.PORT, token),
-        isochrone_request="%s:%i/isochrone?token=%s" % (Config.HOST, Config.PORT, token),
+        points_request="%s:%i/enseignement?token=%s" % (config.HOST, config.PORT, token),
+        isochrone_request="%s:%i/isochrone?token=%s" % (config.HOST, config.PORT, token),
     )

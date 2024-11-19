@@ -1,5 +1,4 @@
 from flask import render_template
-from sqlalchemy import distinct
 
 from douceville import app
 
