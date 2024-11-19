@@ -4,8 +4,8 @@ import stripe
 from flask import request, jsonify, url_for
 from flask_login import login_required, current_user
 
-from douceville.config import config
-from douceville.blueprints.payment import payment_bp
+from ...config import config
+from ...blueprints.payment import payment_bp
 
 
 @payment_bp.route("/create-checkout-session", methods=["POST"])

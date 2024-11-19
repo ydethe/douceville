@@ -1,5 +1,3 @@
-import os
-
 import stripe
 from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -57,7 +55,7 @@ def accueil():
     return redirect(url_for("carte.carte"))
 
 
-if os.environ.get("FLASK_INIT_DB", "0") != "0":
+if config.FLASK_INIT_DB:
     db.init_app(app)
     db.create_all()
 
