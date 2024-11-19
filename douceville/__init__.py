@@ -9,7 +9,7 @@ import os
 
 from rich.logging import RichHandler
 
-# from douceville.config import config
+# from .config import config
 
 __author__ = "Y. de The"
 __email__ = "yann@johncloud.fr"

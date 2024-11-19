@@ -1,7 +1,7 @@
 from cryptography.fernet import Fernet
 import json
 
-from douceville.config import config
+from .config import config
 
 
 class Serializer(object):

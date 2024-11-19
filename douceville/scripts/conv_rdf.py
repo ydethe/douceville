@@ -5,10 +5,9 @@ import pickle
 import time
 
 import typer
-from rdflib import Graph, plugin
-from rdflib.serializer import Serializer
+from rdflib import Graph
 
-from douceville.scripts.read_config import loadConfig
+from .read_config import loadConfig
 
 
 tapp = typer.Typer()
@@ -37,7 +36,7 @@ def conv_rec(rec):
             if "/" in v2:
                 v2 = v2.split("/")[-1]
         elif isinstance(v2, dict):
-            if not "@value" in v2.keys():
+            if "@value" not in v2.keys():
                 continue
             v2 = v2["@value"]
         else:

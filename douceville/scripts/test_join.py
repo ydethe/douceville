@@ -1,4 +1,4 @@
-﻿from douceville.models import *
+﻿from ..models import db, Etablissement
 
 
 # uai = '0010005A' # 1 resultat

@@ -1,14 +1,10 @@
-import json
 import logging
 from pathlib import Path
-import pickle
-import time
 
 import typer
 import pandas as pd
-from rdflib import Graph
 
-from douceville.scripts.read_config import loadConfig
+from .read_config import loadConfig
 
 
 tapp = typer.Typer()

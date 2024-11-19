@@ -12,8 +12,8 @@ import typer
 import pandas as pd
 import rich.progress as rp
 
-from douceville.models import Nature, Resultat, Etablissement, ImportStatus
-from douceville.scripts.conv_utils import (
+from ..models import Nature, Resultat, Etablissement, ImportStatus
+from .conv_utils import (
     to_maj,
     to_cap,
     to_lieu_dit,
@@ -24,10 +24,10 @@ from douceville.scripts.conv_utils import (
     idty,
     corr_diplome,
 )
-from douceville.config import config
-from douceville.scripts.read_config import loadConfig
-from douceville.scripts.crawler import search_data_gouv
-from douceville.blueprints.isochrone.geographique import findCoordFromAddress
+from ..config import config
+from .read_config import loadConfig
+from .crawler import search_data_gouv
+from ..blueprints.isochrone.geographique import findCoordFromAddress
 
 
 def findEtabPosition(etab):

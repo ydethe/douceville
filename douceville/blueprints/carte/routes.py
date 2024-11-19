@@ -10,12 +10,12 @@ from flask import (
 from markupsafe import Markup
 from flask_login import login_required, current_user
 
-from douceville import logger
-from douceville.config import config
-from douceville.utils import Serializer
-from douceville.blueprints.carte import carte_bp
-from douceville.blueprints.carte.forms import QueryForm
-from douceville.blueprints.isochrone.geographique import geocodeUserAddress
+from . import logger
+from ...config import config
+from ...utils import Serializer
+from ...blueprints.carte import carte_bp
+from ...blueprints.carte.forms import QueryForm
+from ...blueprints.isochrone.geographique import geocodeUserAddress
 
 
 @carte_bp.route("/query", methods=["GET", "POST"])

@@ -1,10 +1,10 @@
 from flask import jsonify, request
-from flask_login import login_required, current_user
+from flask_login import login_required
 
-from douceville import logger
-from douceville.utils import Serializer
-from douceville.blueprints.isochrone import isochrone_bp
-from douceville.blueprints.isochrone.geographique import calcIsochrone
+from .. import logger
+from ...utils import Serializer
+from ...blueprints.isochrone import isochrone_bp
+from ...blueprints.isochrone.geographique import calcIsochrone
 
 
 @isochrone_bp.route("/", methods=["GET"])

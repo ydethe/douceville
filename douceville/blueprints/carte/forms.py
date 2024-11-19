@@ -2,19 +2,18 @@ from flask_wtf import FlaskForm
 from wtforms.fields import SelectMultipleField as DVSelField
 from wtforms.fields import SelectField
 from wtforms.fields import StringField, SubmitField, FloatField
-from wtforms.validators import DataRequired
-
 from sqlalchemy import distinct
-from douceville.models import db, Nature, Etablissement
+
+from ...models import db, Nature, Etablissement
 
 
 def buildList(attr):
     elem = [str(x[0]) for x in db.session.query(distinct(attr)).all()]
     elem.sort()
 
-    l = [(str(x), str(x)) for x in elem]
+    ret_list = [(str(x), str(x)) for x in elem]
 
-    return l
+    return ret_list
 
 
 class QueryForm(FlaskForm):

@@ -11,13 +11,13 @@ from flask import (
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.urls import url_parse
 
-from douceville.blueprints.users.manage_users import add_user
-from douceville.config import config
-from douceville.utils import Serializer
-from douceville.blueprints.users import users_bp
-from douceville.blueprints.users.forms import LoginForm, SignupForm
-from douceville.models import db, User
-from douceville import logger
+from ...blueprints.users.manage_users import add_user
+from ...config import config
+from ...utils import Serializer
+from ...blueprints.users import users_bp
+from ...blueprints.users.forms import LoginForm, SignupForm
+from ...models import db, User
+from .. import logger
 
 
 @users_bp.route("/profile", methods=["GET"])

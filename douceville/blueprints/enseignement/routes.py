@@ -5,10 +5,10 @@ from flask_login import login_required
 from geoalchemy2.shape import to_shape
 from geoalchemy2 import func
 
-from douceville.models import db, Etablissement, Nature
-from douceville.utils import Serializer
-from douceville.blueprints.enseignement import enseignement_bp
-from douceville.blueprints.isochrone.geographique import calcIsochrone
+from ...models import db, Etablissement, Nature
+from ...utils import Serializer
+from ...blueprints.enseignement import enseignement_bp
+from ...blueprints.isochrone.geographique import calcIsochrone
 
 
 @enseignement_bp.route("/", methods=["GET"])

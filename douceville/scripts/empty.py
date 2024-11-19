@@ -1,4 +1,4 @@
-from douceville.models import db, Nature, Resultat, Etablissement
+from ..models import db, Nature, Resultat, Etablissement
 
 
 s = db.session

@@ -1,6 +1,6 @@
-from douceville.models import db, Etablissement, ImportStatus
+from ..models import db, Etablissement, ImportStatus
 
-# from douceville.blueprints.isochrone.geographique import findCoordFromAddress
+# from ..blueprints.isochrone.geographique import findCoordFromAddress
 
 
 s = db.session

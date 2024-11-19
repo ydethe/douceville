@@ -15,13 +15,13 @@ from flask_alembic import Alembic
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
-from douceville.blueprints.users import users_bp
-from douceville.blueprints.carte import carte_bp
-from douceville.blueprints.isochrone import isochrone_bp
-from douceville.blueprints.payment import payment_bp
-from douceville.blueprints.enseignement import enseignement_bp
-from douceville import models
-from douceville.config import config
+from .blueprints.users import users_bp
+from .blueprints.carte import carte_bp
+from .blueprints.isochrone import isochrone_bp
+from .blueprints.payment import payment_bp
+from .blueprints.enseignement import enseignement_bp
+from . import models
+from .config import config
 
 
 class UserModelView(ModelView):

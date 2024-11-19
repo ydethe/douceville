@@ -3,10 +3,10 @@ from getpass import getpass
 from flask_mail import Message
 import typer
 
-from douceville.models import db, User
-from douceville import app, bcrypt, mail
-from douceville.config import config
-from douceville.utils import Serializer
+from ...models import db, User
+from ...app import app, bcrypt, mail
+from ...config import config
+from ...utils import Serializer
 
 
 tapp = typer.Typer()

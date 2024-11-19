@@ -3,7 +3,7 @@ import logging
 
 from openrouteservice import client, geocode
 
-from douceville.config import config
+from ...config import config
 
 
 def calcIsochrone(center, dist, transp):
