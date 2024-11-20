@@ -45,7 +45,7 @@ dependencies = [
     "shapely",
     "sqlalchemy",
     "stripe",
-    "typer",
+    "typer>=0.13.1",
     "werkzeug",
     "wtforms",
     "xlrd",
@@ -53,6 +53,8 @@ dependencies = [
     "pydantic-settings>=2.6.1",
     "logfire>=2.3.0",
     "waitress>=3.0.2",
+    "requests>=2.32.3",
+    "pydantic>=2.9.2",
 ]
 requires-python = ">=3.10,<3.12"
 
