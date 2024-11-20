@@ -18,6 +18,7 @@ dependencies = [
     # Requirements dated 30/01/2021
     "cryptography",
     "email-validator",
+    "flask",
     "flask-admin",
     "flask-alembic",
     "flask-bcrypt",
@@ -27,7 +28,6 @@ dependencies = [
     "flask-migrate",
     "flask-sqlalchemy",
     "flask-wtf",
-    "flask",
     "GeoAlchemy2",
     "geojson",
     "itsdangerous",
@@ -49,10 +49,10 @@ dependencies = [
     "werkzeug",
     "wtforms",
     "xlrd",
-    "uvicorn>=0.32.0",
     "flask-nav3>=0.7.2",
     "pydantic-settings>=2.6.1",
     "logfire>=2.3.0",
+    "waitress>=3.0.2",
 ]
 requires-python = ">=3.10,<3.12"
 

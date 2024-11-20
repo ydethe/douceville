@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:f188b844ad5cc2e3e2c0ab2d3234ea744f89413e67ae5dcfc1a5d99ce61ea1c7"
+content_hash = "sha256:aa23dcf9da1372c276ad13b25025b4609570697760e3aa118e681f43ac70d700"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.12"
@@ -514,21 +514,21 @@ files = [
 
 [[package]]
 name = "flask"
-version = "3.1.0"
-requires_python = ">=3.9"
+version = "2.3.3"
+requires_python = ">=3.8"
 summary = "A simple framework for building complex web applications."
 groups = ["default"]
 dependencies = [
     "Jinja2>=3.1.2",
-    "Werkzeug>=3.1",
-    "blinker>=1.9",
+    "Werkzeug>=2.3.7",
+    "blinker>=1.6.2",
     "click>=8.1.3",
-    "importlib-metadata>=3.6; python_version < \"3.10\"",
-    "itsdangerous>=2.2",
+    "importlib-metadata>=3.6.0; python_version < \"3.10\"",
+    "itsdangerous>=2.1.2",
 ]
 files = [
-    {file = "flask-3.1.0-py3-none-any.whl", hash = "sha256:d667207822eb83f1c4b50949b1623c8fc8d51f2341d65f72e1a1815397551136"},
-    {file = "flask-3.1.0.tar.gz", hash = "sha256:5f873c5184c897c8d9d1b05df1e3d01b14910ce69607a117bd3277098a5836ac"},
+    {file = "flask-2.3.3-py3-none-any.whl", hash = "sha256:f69fcd559dc907ed196ab9df0e48471709175e696d6e698dd4dbe940f96ce66b"},
+    {file = "flask-2.3.3.tar.gz", hash = "sha256:09c347a92aa7ff4a8e7f3206795f30d826654baf38b873d0744cd571ca609efc"},
 ]
 
 [[package]]
@@ -548,18 +548,18 @@ files = [
 
 [[package]]
 name = "flask-alembic"
-version = "3.1.1"
-requires_python = ">=3.9"
-summary = "Integrate Alembic with Flask."
+version = "2.0.1"
+summary = "Flask extension to integrate Alembic migrations"
 groups = ["default"]
 dependencies = [
-    "alembic>=1.13",
-    "flask>=3.0",
-    "sqlalchemy>=2.0",
+    "Flask-SQLAlchemy",
+    "Flask>=0.10",
+    "SQLAlchemy",
+    "alembic>=0.8",
 ]
 files = [
-    {file = "flask_alembic-3.1.1-py3-none-any.whl", hash = "sha256:1d0cda58518d4332d8563da555bee03107fe2169c7157f61a2e0759d0150209b"},
-    {file = "flask_alembic-3.1.1.tar.gz", hash = "sha256:358a0ad8f74e2969273a8d89feaf5842f65cc909064b51fde4b51415790d92f4"},
+    {file = "Flask-Alembic-2.0.1.tar.gz", hash = "sha256:05a1e6f4148dbfcc9280a393373bfbd250af6f9f4f0ca9f744ef8f7376a3deec"},
+    {file = "Flask_Alembic-2.0.1-py2.py3-none-any.whl", hash = "sha256:7e67740b0b08d58dcae0c701d56b56e60f5fa4af907bb82b4cb0469229ba94ff"},
 ]
 
 [[package]]
@@ -750,20 +750,6 @@ files = [
     {file = "greenlet-3.1.1-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:1776fd7f989fc6b8d8c8cb8da1f6b82c5814957264d1f6cf818d475ec2bf6395"},
     {file = "greenlet-3.1.1-cp311-cp311-win_amd64.whl", hash = "sha256:48ca08c771c268a768087b408658e216133aecd835c0ded47ce955381105ba39"},
     {file = "greenlet-3.1.1.tar.gz", hash = "sha256:4ce3ac6cdb6adf7946475d7ef31777c26d94bccc377e070a7986bd2d5c515467"},
-]
-
-[[package]]
-name = "h11"
-version = "0.14.0"
-requires_python = ">=3.7"
-summary = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
-groups = ["default"]
-dependencies = [
-    "typing-extensions; python_version < \"3.8\"",
-]
-files = [
-    {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
-    {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
 ]
 
 [[package]]
@@ -2081,22 +2067,6 @@ files = [
 ]
 
 [[package]]
-name = "uvicorn"
-version = "0.32.0"
-requires_python = ">=3.8"
-summary = "The lightning-fast ASGI server."
-groups = ["default"]
-dependencies = [
-    "click>=7.0",
-    "h11>=0.8",
-    "typing-extensions>=4.0; python_version < \"3.11\"",
-]
-files = [
-    {file = "uvicorn-0.32.0-py3-none-any.whl", hash = "sha256:60b8f3a5ac027dcd31448f411ced12b5ef452c646f76f02f8cc3f25d8d26fd82"},
-    {file = "uvicorn-0.32.0.tar.gz", hash = "sha256:f78b36b143c16f54ccdb8190d0a26b5f1901fe5a3c777e1ab29f26391af8551e"},
-]
-
-[[package]]
 name = "virtualenv"
 version = "20.27.1"
 requires_python = ">=3.8"
@@ -2120,6 +2090,17 @@ summary = "A tiny pythonic visitor implementation."
 groups = ["default"]
 files = [
     {file = "visitor-0.1.3.tar.gz", hash = "sha256:2c737903b2b6864ebc6167eef7cf3b997126f1aa94bdf590f90f1436d23e480a"},
+]
+
+[[package]]
+name = "waitress"
+version = "3.0.2"
+requires_python = ">=3.9.0"
+summary = "Waitress WSGI server"
+groups = ["default"]
+files = [
+    {file = "waitress-3.0.2-py3-none-any.whl", hash = "sha256:c56d67fd6e87c2ee598b76abdd4e96cfad1f24cacdea5078d382b1f9d7b5ed2e"},
+    {file = "waitress-3.0.2.tar.gz", hash = "sha256:682aaaf2af0c44ada4abfb70ded36393f0e307f4ab9456a215ce0020baefc31f"},
 ]
 
 [[package]]

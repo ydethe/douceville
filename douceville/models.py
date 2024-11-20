@@ -5,14 +5,8 @@ from geoalchemy2 import Geometry
 import stripe
 from flask_login import UserMixin
 
-from .app import db, bcrypt, login_manager
+from .app import db, bcrypt
 from . import logger
-
-
-@login_manager.user_loader
-def load_user(userid):
-    user = User.query.filter(User.id == userid).first()
-    return user
 
 
 class ImportStatus(object):

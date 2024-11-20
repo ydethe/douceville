@@ -64,4 +64,4 @@ RUN pip install -r requirements.txt
 COPY *.whl /code
 RUN pip install /code/*.whl
 EXPOSE 3566
-CMD ["sh", "-c", "uvicorn --host=0.0.0.0 --port 3566 douceville.app:app"]
+CMD ["sh", "-c", "waitress-serve --host=0.0.0.0 --port 3566 douceville.app:app"]

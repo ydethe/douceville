@@ -47,6 +47,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
+
+@login_manager.user_loader
+def load_user(userid):
+    from .models import User
+
+    user = User.query.filter(User.id == userid).first()
+    return user
+
+
 alembic = Alembic()
 alembic.init_app(app)  # call in the app factory if you're using that pattern
 
