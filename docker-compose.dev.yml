@@ -4,6 +4,8 @@ services:
     depends_on:
       - db
     environment:
+      - LOGFIRE_TOKEN=$LOGFIRE_TOKEN
+      - LOGLEVEL=$LOGLEVEL
       - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
       - BCRYPT_ROUNDS=$BCRYPT_ROUNDS
       - SECRET_KEY=$SECRET_KEY
@@ -18,7 +20,11 @@ services:
       - MAIL_PASSWORD=$MAIL_PASSWORD
       - MAIL_DEFAULT_SENDER=$MAIL_DEFAULT_SENDER
       - MAIL_DEBUG=$MAIL_DEBUG
-      - DATABASE_URI=postgresql+psycopg2://douceville:douceville@$COMPOSE_PROJECT_NAME-db-1/douceville
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - FLASK_INIT_DB=$FLASK_INIT_DB
       - HOST=https://$HOST
       - PORT=$PORT
       - PRICE_ID=$PRICE_ID

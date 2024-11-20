@@ -22,6 +22,7 @@ from .blueprints.enseignement import enseignement_bp
 
 # from . import models
 from .config import config
+from . import logger
 
 
 class UserModelView(ModelView):
@@ -58,8 +59,9 @@ def accueil():
 
 
 if config.FLASK_INIT_DB:
-    db.init_app(app)
-    db.create_all()
+    logger.info("Initializing database: table creation")
+    with app.app_context():
+        db.create_all()
 
 app.register_blueprint(carte_bp, url_prefix="/carte")
 app.register_blueprint(users_bp, url_prefix="/users/")
