@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added retreiver ([b6ec830](https://github.com/ydethe/douceville/commit/b6ec830cc4abfb8c25a3dca60dab5a54944c86b5) by Yann de The).
 - Added CHANGELOG and TODO ([46c0747](https://github.com/ydethe/douceville/commit/46c074758da9d73d02a961585abcea88fd809612) by Yann de The).
 - Added docker-compose.yml ([3fe39f9](https://github.com/ydethe/douceville/commit/3fe39f905421819b74941468949fa98f18fdd190) by Yann de The).
 - Added conda env ([b9cf384](https://github.com/ydethe/douceville/commit/b9cf3843a226d1fa21d7e4de92b447b05db7939e) by Yann de The).

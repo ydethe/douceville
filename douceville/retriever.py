@@ -171,6 +171,43 @@ class ResultatLyceeGeneral(BaseModel):
     nombre_de_mentions_ab_t: int | None
 
 
+class Etablissements(BaseModel):
+    numero_uai: str | int | None
+    appellation_officielle: str | int | None
+    denomination_principale: str | int | None
+    patronyme_uai: str | int | None
+    secteur_public_prive_libe: str | int | None
+    adresse_uai: str | int | None
+    lieu_dit_uai: str | int | None
+    boite_postale_uai: str | int | None
+    code_postal_uai: str | int | None
+    localite_acheminement_uai: str | int | None
+    libelle_commune: str | int | None
+    coordonnee_x: str | float | None
+    coordonnee_y: str | float | None
+    epsg: str | int | None
+    latitude: str | float | None
+    longitude: str | float | None
+    appariement: str | int | None
+    localisation: str | int | None
+    nature_uai: str | int | None
+    nature_uai_libe: str | int | None
+    etat_etablissement: str | int | None
+    etat_etablissement_libe: str | int | None
+    code_departement: str | int | None
+    code_region: str | int | None
+    code_academie: str | int | None
+    code_commune: str | int | None
+    libelle_departement: str | int | None
+    libelle_region: str | int | None
+    libelle_academie: str | int | None
+    secteur_prive_code_type_contrat: str | int | None
+    secteur_prive_libelle_type_contrat: str | int | None
+    code_ministere: str | int | None
+    libelle_ministere: str | int | None
+    date_ouverture: str | int | None
+
+
 def liste_brevet() -> T.List[ResultatBrevet]:
     url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-dnb-par-etablissement/records?limit={limit}&offset={offset}"
     response = requests.get(url.format(offset=1, limit=1))
@@ -221,7 +258,33 @@ def liste_bac_general() -> T.List[ResultatLyceeGeneral]:
     return records
 
 
+def liste_etablissements() -> T.List[Etablissements]:
+    url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/records?limit={limit}&offset={offset}"
+    response = requests.get(url.format(offset=1, limit=1))
+    data = response.json()
+    total_count = data["total_count"]
+
+    limit = 100
+    records = []
+    number_of_batch = total_count // limit
+    for batch_num in rp.track(range(number_of_batch)):
+        response = requests.get(url.format(offset=batch_num * limit, limit=limit))
+        data = response.json()
+        if "results" not in data.keys():
+            continue
+        records.extend([Etablissements.model_validate(res) for res in data["results"]])
+
+    last_offset = number_of_batch * limit
+    response = requests.get(url.format(offset=last_offset, limit=limit))
+    data = response.json()
+    if "results" in data.keys():
+        records.extend([Etablissements.model_validate(res) for res in data["results"]])
+
+    return records
+
+
 if __name__ == "__main__":
     # liste = liste_brevet()
-    liste = liste_bac_general()
+    # liste = liste_bac_general()
+    liste_etablissements()
     # print(len(liste))
