@@ -30,7 +30,7 @@ from .crawler import search_data_gouv
 from ..blueprints.isochrone.geographique import findCoordFromAddress
 
 
-def findEtabPosition(etab):
+def findEtabPosition(etab: dict) -> dict:
     lat = etab.pop("latitude", None)
     lon = etab.pop("longitude", None)
 

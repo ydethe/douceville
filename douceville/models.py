@@ -9,6 +9,9 @@ from .app import db, bcrypt
 from . import logger
 
 
+__all__ = ["User", "Nature", "Resultat", "Etablissement"]
+
+
 class ImportStatus(object):
     OK = 0
     COORD_FROM_ADDRESS = 1

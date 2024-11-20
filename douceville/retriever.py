@@ -1,11 +1,15 @@
+from datetime import datetime
 import typing as T
 
 import requests
 from pydantic import BaseModel
 import rich.progress as rp
 
+from .models import Etablissement
+from .scripts.import_etablissements import findEtabPosition
 
-class ResultatBrevet(BaseModel):
+
+class ResultatBrevetAPI(BaseModel):
     session: str
     numero_d_etablissement: str
     type_d_etablissement: str
@@ -29,7 +33,7 @@ class ResultatBrevet(BaseModel):
     taux_de_reussite: str
 
 
-class ResultatLyceeGeneral(BaseModel):
+class ResultatLyceeGeneralAPI(BaseModel):
     etablissement: str | int | None
     annee: str | int | None
     ville: str | int | None
@@ -171,11 +175,11 @@ class ResultatLyceeGeneral(BaseModel):
     nombre_de_mentions_ab_t: int | None
 
 
-class Etablissements(BaseModel):
-    numero_uai: str | int | None
-    appellation_officielle: str | int | None
-    denomination_principale: str | int | None
-    patronyme_uai: str | int | None
+class EtablissementAPI(BaseModel):
+    numero_uai: str
+    appellation_officielle: str
+    denomination_principale: str
+    patronyme_uai: str | None
     secteur_public_prive_libe: str | int | None
     adresse_uai: str | int | None
     lieu_dit_uai: str | int | None
@@ -207,8 +211,26 @@ class Etablissements(BaseModel):
     libelle_ministere: str | int | None
     date_ouverture: str | int | None
 
+    def build_db_record(self) -> Etablissement:
+        etab_dict = {}
+        etab_dict["nom"] = self.appellation_officielle.title()
+        etab_dict["adresse"] = self.adresse_uai
+        etab_dict["code_postal"] = self.code_postal_uai
+        etab_dict["commune"] = self.libelle_commune
+        etab_dict = findEtabPosition(etab_dict.copy())
 
-def liste_brevet() -> T.List[ResultatBrevet]:
+        etab_dict["UAI"] = self.numero_uai
+        etab_dict["lieu_dit"] = self.lieu_dit_uai
+        etab_dict["academie"] = self.libelle_academie
+        etab_dict["secteur"] = self.secteur_public_prive_libe.lower().replace("é", "e")
+        etab_dict["ouverture"] = datetime.strptime(self.date_ouverture, "%Y-%m-%d")
+
+        db_etab = Etablissement(**etab_dict)
+
+        return db_etab
+
+
+def liste_brevet() -> T.List[ResultatBrevetAPI]:
     url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-dnb-par-etablissement/records?limit={limit}&offset={offset}"
     response = requests.get(url.format(offset=1, limit=1))
     data = response.json()
@@ -222,18 +244,18 @@ def liste_brevet() -> T.List[ResultatBrevet]:
         data = response.json()
         if "results" not in data.keys():
             continue
-        records.extend([ResultatBrevet.model_validate(res) for res in data["results"]])
+        records.extend([ResultatBrevetAPI.model_validate(res) for res in data["results"]])
 
     last_offset = number_of_batch * limit
     response = requests.get(url.format(offset=last_offset, limit=limit))
     data = response.json()
     if "results" in data.keys():
-        records.extend([ResultatBrevet.model_validate(res) for res in data["results"]])
+        records.extend([ResultatBrevetAPI.model_validate(res) for res in data["results"]])
 
     return records
 
 
-def liste_bac_general() -> T.List[ResultatLyceeGeneral]:
+def liste_bac_general() -> T.List[ResultatLyceeGeneralAPI]:
     url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-indicateurs-de-resultat-des-lycees-denseignement-general-et-technologique/records?limit={limit}&offset={offset}"
     response = requests.get(url.format(offset=1, limit=1))
     data = response.json()
@@ -247,18 +269,18 @@ def liste_bac_general() -> T.List[ResultatLyceeGeneral]:
         data = response.json()
         if "results" not in data.keys():
             continue
-        records.extend([ResultatLyceeGeneral.model_validate(res) for res in data["results"]])
+        records.extend([ResultatLyceeGeneralAPI.model_validate(res) for res in data["results"]])
 
     last_offset = number_of_batch * limit
     response = requests.get(url.format(offset=last_offset, limit=limit))
     data = response.json()
     if "results" in data.keys():
-        records.extend([ResultatLyceeGeneral.model_validate(res) for res in data["results"]])
+        records.extend([ResultatLyceeGeneralAPI.model_validate(res) for res in data["results"]])
 
     return records
 
 
-def liste_etablissements() -> T.List[Etablissements]:
+def liste_etablissements() -> T.List[EtablissementAPI]:
     url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/records?limit={limit}&offset={offset}"
     response = requests.get(url.format(offset=1, limit=1))
     data = response.json()
@@ -272,19 +294,21 @@ def liste_etablissements() -> T.List[Etablissements]:
         data = response.json()
         if "results" not in data.keys():
             continue
-        records.extend([Etablissements.model_validate(res) for res in data["results"]])
+        records.extend([EtablissementAPI.model_validate(res) for res in data["results"]])
 
     last_offset = number_of_batch * limit
     response = requests.get(url.format(offset=last_offset, limit=limit))
     data = response.json()
     if "results" in data.keys():
-        records.extend([Etablissements.model_validate(res) for res in data["results"]])
+        records.extend([EtablissementAPI.model_validate(res) for res in data["results"]])
 
     return records
 
 
-if __name__ == "__main__":
-    # liste = liste_brevet()
-    # liste = liste_bac_general()
-    liste_etablissements()
-    # print(len(liste))
+def build_db_records():
+    list_etab = liste_etablissements()
+
+    records = []
+    for etab in list_etab:
+        db_etab = etab.build_db_record()
+        records.append(db_etab)
