@@ -10,17 +10,16 @@ from flask import (
 from markupsafe import Markup
 from flask_login import login_required, current_user
 
-from . import logger
-from ...config import config
-from ...utils import Serializer
-from ...blueprints.carte import carte_bp
-from ...blueprints.carte.forms import QueryForm
-from ...blueprints.isochrone.geographique import geocodeUserAddress
+from . import carte_bp
 
 
 @carte_bp.route("/query", methods=["GET", "POST"])
 @login_required
 def recherche():
+    from ... import logger
+    from ...utils import Serializer
+    from .forms import QueryForm
+
     form = QueryForm()
 
     if current_user.getCurrentPeriodEnd() < time.time() and not current_user.admin:
@@ -53,6 +52,10 @@ def recherche():
 @carte_bp.route("/", methods=["GET"])
 @login_required
 def carte():
+    from ...config import config
+    from ...utils import Serializer
+    from ...blueprints.isochrone.geographique import geocodeUserAddress
+
     token = request.args.get("token", "")
 
     if token != "":

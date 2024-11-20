@@ -4,10 +4,10 @@ from wtforms.fields import SelectField
 from wtforms.fields import StringField, SubmitField, FloatField
 from sqlalchemy import distinct
 
-from ...models import db, Nature, Etablissement
-
 
 def buildList(attr):
+    from ...models import db
+
     elem = [str(x[0]) for x in db.session.query(distinct(attr)).all()]
     elem.sort()
 
@@ -17,6 +17,8 @@ def buildList(attr):
 
 
 class QueryForm(FlaskForm):
+    from ...models import db, Nature, Etablissement
+
     address = StringField("Adresse")
     transp = SelectField(
         "Transport", choices=[("driving-car", "Voiture"), ("cycling-road", "Vélo")]

@@ -10,7 +10,8 @@ from flask_login import current_user
 from flask_nav3 import Nav
 from flask_nav3.elements import View, Navbar
 from flask_alembic import Alembic
-from flask_admin import Admin
+
+# from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from .blueprints.users import users_bp
@@ -18,7 +19,8 @@ from .blueprints.carte import carte_bp
 from .blueprints.isochrone import isochrone_bp
 from .blueprints.payment import payment_bp
 from .blueprints.enseignement import enseignement_bp
-from . import models
+
+# from . import models
 from .config import config
 
 
@@ -65,12 +67,12 @@ app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
 app.register_blueprint(payment_bp, url_prefix="/pay")
 app.register_blueprint(enseignement_bp, url_prefix="/enseignement")
 
-admin = Admin(app, name="douceville", template_mode="bootstrap3")
+# admin = Admin(app, name="douceville", template_mode="bootstrap3")
 
-admin.add_view(UserModelView(models.Etablissement, db.session))
-admin.add_view(UserModelView(models.Nature, db.session))
-admin.add_view(UserModelView(models.Resultat, db.session))
-admin.add_view(UserModelView(models.User, db.session))
+# admin.add_view(UserModelView(models.Etablissement, db.session))
+# admin.add_view(UserModelView(models.Nature, db.session))
+# admin.add_view(UserModelView(models.Resultat, db.session))
+# admin.add_view(UserModelView(models.User, db.session))
 
 topbar = Navbar(
     "douceville.fr",

@@ -4,13 +4,14 @@ import stripe
 from flask import request, jsonify, url_for
 from flask_login import login_required, current_user
 
-from ...config import config
-from ...blueprints.payment import payment_bp
+from . import payment_bp
 
 
 @payment_bp.route("/create-checkout-session", methods=["POST"])
 @login_required
 def create_checkout_session():
+    from ...config import config
+
     data = json.loads(request.data)
     domain_url = "%s:%s" % (config.HOST, config.PORT)
 

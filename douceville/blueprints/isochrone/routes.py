@@ -1,15 +1,16 @@
 from flask import jsonify, request
 from flask_login import login_required
 
-from .. import logger
-from ...utils import Serializer
-from ...blueprints.isochrone import isochrone_bp
-from ...blueprints.isochrone.geographique import calcIsochrone
+from . import isochrone_bp
+from .geographique import calcIsochrone
 
 
 @isochrone_bp.route("/", methods=["GET"])
 @login_required
 def isochrone():
+    from .. import logger
+    from ...utils import Serializer
+
     token = request.args.get("token", "")
     if token == "":
         return jsonify({})

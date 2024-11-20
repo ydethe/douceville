@@ -1,4 +1,5 @@
 import time
+from urllib3.util import parse_url
 
 import stripe
 from flask import (
@@ -9,15 +10,9 @@ from flask import (
     url_for,
 )
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.urls import url_parse
 
-from ...blueprints.users.manage_users import add_user
-from ...config import config
-from ...utils import Serializer
-from ...blueprints.users import users_bp
-from ...blueprints.users.forms import LoginForm, SignupForm
-from ...models import db, User
-from .. import logger
+from . import users_bp
+from .forms import LoginForm, SignupForm
 
 
 @users_bp.route("/profile", methods=["GET"])
@@ -25,6 +20,8 @@ from .. import logger
 def profile():
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
+    from ...config import config
+
     return_url = "%s:%s%s" % (config.HOST, config.PORT, url_for(".profile"))
     sid = current_user.getStripeID()
 
@@ -51,6 +48,8 @@ def profile():
 
 @users_bp.route("/login", methods=["GET", "POST"])
 def login():
+    from ...models import User
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -66,7 +65,7 @@ def login():
         else:
             login_user(user)
             next_page = request.args.get("next")
-            if not next_page or url_parse(next_page).netloc != "":
+            if not next_page or parse_url(next_page).netloc != "":
                 next_page = url_for("carte.recherche")
             return redirect(next_page)
 
@@ -75,6 +74,8 @@ def login():
 
 @users_bp.route("/signup", methods=["GET", "POST"])
 def signup():
+    from ...blueprints.users.manage_users import add_user
+
     form = SignupForm()
 
     if form.validate_on_submit():
@@ -90,6 +91,10 @@ def signup():
 
 @users_bp.route("/confirm", methods=["GET"])
 def confirm():
+    from ...utils import Serializer
+    from ...models import db, User
+    from .. import logger
+
     token = request.args.get("token", "")
 
     s = Serializer()
@@ -111,6 +116,7 @@ def confirm():
 
 @users_bp.route("/logout", methods=["GET"])
 def logout():
+
     logout_user()
 
     return redirect(url_for(".login"))

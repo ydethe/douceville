@@ -3,17 +3,18 @@ import logging
 from flask import jsonify, request
 from flask_login import login_required
 from geoalchemy2.shape import to_shape
-from geoalchemy2 import func
+from sqlalchemy import func
 
-from ...models import db, Etablissement, Nature
-from ...utils import Serializer
-from ...blueprints.enseignement import enseignement_bp
-from ...blueprints.isochrone.geographique import calcIsochrone
+from . import enseignement_bp
 
 
 @enseignement_bp.route("/", methods=["GET"])
 @login_required
 def enseignement():
+    from ...models import db, Etablissement, Nature
+    from ...utils import Serializer
+    from ...blueprints.isochrone.geographique import calcIsochrone
+
     logger = logging.getLogger("douceville_logger")
     token = request.args.get("token", "")
     if token == "":

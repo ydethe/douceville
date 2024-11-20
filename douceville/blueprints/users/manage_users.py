@@ -3,11 +3,6 @@ from getpass import getpass
 from flask_mail import Message
 import typer
 
-from ...models import db, User
-from ...app import app, bcrypt, mail
-from ...config import config
-from ...utils import Serializer
-
 
 tapp = typer.Typer()
 
@@ -21,6 +16,10 @@ def add_user(
 ):
     """Register a user in the base"""
     # logger = logging.getLogger("douceville_logger")
+    from ...models import db, User
+    from ...app import app, bcrypt, mail
+    from ...config import config
+    from ...utils import Serializer
 
     if email is None:
         email = input("email: ")

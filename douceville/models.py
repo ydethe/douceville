@@ -5,7 +5,8 @@ from geoalchemy2 import Geometry
 import stripe
 from flask_login import UserMixin
 
-from douceville import db, bcrypt, login_manager, logger
+from .app import db, bcrypt, login_manager
+from . import logger
 
 
 @login_manager.user_loader
@@ -45,7 +46,7 @@ class User(UserMixin, db.Model):
         return t
 
     def getStripeID(self):
-        if not self.stripe_id is None:
+        if self.stripe_id is not None:
             return self.stripe_id
 
         ret = stripe.Customer.list(email=self.email)

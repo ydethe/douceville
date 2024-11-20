@@ -35,6 +35,7 @@ services:
       - "homepage.description=$HOME_DESCRIPTION"
 
   db:
+    # sudo docker run -d --name tst_dv_psql -e POSTGRES_PASSWORD=douceville -e POSTGRES_USER=douceville -e POSTGRES_DB=douceville postgres
     image: postgres
     restart: always
     environment:
