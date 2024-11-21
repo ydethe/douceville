@@ -177,8 +177,8 @@ class ResultatLyceeGeneralAPI(BaseModel):
 
 class EtablissementAPI(BaseModel):
     numero_uai: str
-    appellation_officielle: str
-    denomination_principale: str
+    appellation_officielle: str | None
+    denomination_principale: str | None
     patronyme_uai: str | None
     secteur_public_prive_libe: str | int | None
     adresse_uai: str | int | None
@@ -211,9 +211,17 @@ class EtablissementAPI(BaseModel):
     libelle_ministere: str | int | None
     date_ouverture: str | int | None
 
+    @property
+    def nom(self) -> str:
+        if self.appellation_officielle is None:
+            nom = self.nature_uai_libe.title()
+        else:
+            nom = self.appellation_officielle.title()
+        return nom
+
     def build_db_record(self) -> Etablissement:
         etab_dict = {}
-        etab_dict["nom"] = self.appellation_officielle.title()
+        etab_dict["nom"] = self.nom
         etab_dict["adresse"] = self.adresse_uai
         etab_dict["code_postal"] = self.code_postal_uai
         etab_dict["commune"] = self.libelle_commune
@@ -281,26 +289,51 @@ def liste_bac_general() -> T.List[ResultatLyceeGeneralAPI]:
 
 
 def liste_etablissements() -> T.List[EtablissementAPI]:
-    url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/records?limit={limit}&offset={offset}"
-    response = requests.get(url.format(offset=1, limit=1))
-    data = response.json()
-    total_count = data["total_count"]
+    from . import logger
 
-    limit = 100
+    limit = 20
+
+    # url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/records?where=code_departement%3D%2202A%22&limit=20"
+    url = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/records?where=code_departement%3D%22{code_departement}%22&limit={limit}&offset={offset}"
+
+    list_dpts = [f"{c:03d}" for c in range(1, 96)]
+    list_dpts.remove("020")
+    list_dpts.extend(["02A", "02B"])
+
     records = []
-    number_of_batch = total_count // limit
-    for batch_num in rp.track(range(number_of_batch)):
-        response = requests.get(url.format(offset=batch_num * limit, limit=limit))
+    for code in list_dpts:
+        response = requests.get(url.format(code_departement=code, limit=1, offset=1))
+        data = response.json()
+        total_count = data["total_count"]
+
+        logger.info(f"Téléchargement du département {code} - {total_count} établissements")
+
+        number_of_batch = total_count // limit
+        for batch_num in rp.track(range(number_of_batch)):
+            response = requests.get(
+                url.format(code_departement=code, offset=batch_num * limit, limit=limit)
+            )
+            data = response.json()
+            if "results" not in data.keys():
+                logger.warning(f"Error '{data['message']}'")
+                continue
+            new_recs = [EtablissementAPI.model_validate(res) for res in data["results"]]
+            records.extend(new_recs)
+            for r in new_recs:
+                if "carnot" in r.nom.lower() and "dijon" in r.libelle_commune.lower():
+                    print(r)
+
+        last_offset = number_of_batch * limit
+        response = requests.get(url.format(code_departement=code, offset=last_offset, limit=limit))
         data = response.json()
         if "results" not in data.keys():
+            logger.warning(f"Error '{data['message']}'")
             continue
-        records.extend([EtablissementAPI.model_validate(res) for res in data["results"]])
-
-    last_offset = number_of_batch * limit
-    response = requests.get(url.format(offset=last_offset, limit=limit))
-    data = response.json()
-    if "results" in data.keys():
-        records.extend([EtablissementAPI.model_validate(res) for res in data["results"]])
+        new_recs = [EtablissementAPI.model_validate(res) for res in data["results"]]
+        records.extend(new_recs)
+        for r in new_recs:
+            if "carnot" in r.nom.lower() and "dijon" in r.libelle_commune.lower():
+                print(r)
 
     return records
 
@@ -311,4 +344,6 @@ def build_db_records():
     records = []
     for etab in list_etab:
         db_etab = etab.build_db_record()
+        if db_etab.commune.lower() == "dijon" and "carnot" in db_etab.nom:
+            print(db_etab)
         records.append(db_etab)

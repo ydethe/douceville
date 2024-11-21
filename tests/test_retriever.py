@@ -6,3 +6,4 @@ if __name__ == "__main__":
     # liste = liste_bac_general()
     liste_etablissements()
     # print(len(liste))
+    # build_db_records()

@@ -9,7 +9,7 @@ from .app import db, bcrypt
 from . import logger
 
 
-__all__ = ["User", "Nature", "Resultat", "Etablissement"]
+__all__ = ["User", "Resultat", "Etablissement"]
 
 
 class ImportStatus(object):
@@ -74,26 +74,26 @@ class User(UserMixin, db.Model):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 
-class Nature(db.Model):
-    __tablename__ = "nature"
-    __table_args__ = (db.UniqueConstraint("nature", "etablissement_id"),)
+# class Nature(db.Model):
+#     __tablename__ = "nature"
+#     __table_args__ = (db.UniqueConstraint("nature", "etablissement_id"),)
 
-    idx = db.Column(db.Integer, primary_key=True, nullable=False)
-    nature = db.Column(db.String(191), nullable=False)
-    etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
+#     idx = db.Column(db.Integer, primary_key=True, nullable=False)
+#     nature = db.Column(db.String(191), nullable=False)
+#     etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
 
-    def __repr__(self):
-        r = self.asDict()
-        r.pop("position", None)
-        r.pop("idx", None)
-        ks = list(r.keys())
-        for k in ks:
-            if r[k] is None:
-                r.pop(k)
-        return str(r)
+#     def __repr__(self):
+#         r = self.asDict()
+#         r.pop("position", None)
+#         r.pop("idx", None)
+#         ks = list(r.keys())
+#         for k in ks:
+#             if r[k] is None:
+#                 r.pop(k)
+#         return str(r)
 
-    def asDict(self):
-        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+#     def asDict(self):
+#         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 
 class Resultat(db.Model):

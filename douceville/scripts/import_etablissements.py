@@ -12,7 +12,7 @@ import typer
 import pandas as pd
 import rich.progress as rp
 
-from ..models import Nature, Resultat, Etablissement, ImportStatus
+from ..models import Resultat, Etablissement, ImportStatus
 from .conv_utils import (
     to_maj,
     to_cap,
@@ -58,7 +58,7 @@ def findEtabPosition(etab: dict) -> dict:
     return etab
 
 
-def insert_or_update_resulat(session, etab_res, nature, resultat):
+def insert_or_update_resulat(session, etab_res, resultat):
     logger = logging.getLogger("douceville_logger")
 
     q = session.query(Etablissement).filter(Etablissement.UAI == resultat["etablissement_id"])
@@ -73,7 +73,6 @@ def insert_or_update_resulat(session, etab_res, nature, resultat):
         )
 
         session.add(Etablissement(**etab))
-        insert_or_update_nature(session, nature)
 
     q = (
         session.query(Resultat)
@@ -87,16 +86,16 @@ def insert_or_update_resulat(session, etab_res, nature, resultat):
     # logger.warning("Duplicat resulat : %s" % str(resultat))
 
 
-def insert_or_update_nature(session, nature):
-    q = (
-        session.query(Nature)
-        .filter(Nature.etablissement_id == nature["etablissement_id"])
-        .filter(Nature.nature == nature["nature"])
-    )
-    if q.count() == 0:
-        session.add(Nature(**nature))
-    # else:
-    # logger.warning("Duplicat nature : %s" % str(nature))
+# def insert_or_update_nature(session, nature):
+#     q = (
+#         session.query(Nature)
+#         .filter(Nature.etablissement_id == nature["etablissement_id"])
+#         .filter(Nature.nature == nature["nature"])
+#     )
+#     if q.count() == 0:
+#         session.add(Nature(**nature))
+# else:
+# logger.warning("Duplicat nature : %s" % str(nature))
 
 
 def insert_or_update_etab(session, etab):
@@ -211,11 +210,11 @@ def import_geoloc(session, file, row_limit=None):
             continue
 
         insert_or_update_etab(session, etab)
-        for n in list_natures:
-            if n == "":
-                logger.debug(index)
-            nature = {"etablissement_id": etab["UAI"], "nature": n}
-            insert_or_update_nature(session, nature)
+        # for n in list_natures:
+        #     if n == "":
+        #         logger.debug(index)
+        #     nature = {"etablissement_id": etab["UAI"], "nature": n}
+        #     insert_or_update_nature(session, nature)
 
         if row_limit is not None and index >= row_limit:
             break
