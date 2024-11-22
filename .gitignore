@@ -12,6 +12,8 @@ data
 .pdm-python
 *.whl
 requirements.txt
+*.geojson
+*.parquet
 
 instance
 htmlcov

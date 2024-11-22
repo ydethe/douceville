@@ -17,7 +17,7 @@ def buildList(attr):
 
 
 class QueryForm(FlaskForm):
-    from ...models import db, Nature, Etablissement
+    from ...models import db, Etablissement
 
     address = StringField("Adresse")
     transp = SelectField(
@@ -25,7 +25,7 @@ class QueryForm(FlaskForm):
     )
     dist = FloatField("Temps (min)")
     stat_min = FloatField("stat_min")
-    nature = DVSelField("Nature", choices=buildList(Nature.nature))
+    nature = DVSelField("Nature", choices=["Collège", "Lycée"])
     secteur = DVSelField("Secteur", choices=buildList(Etablissement.secteur))
 
     submit = SubmitField("Chercher")

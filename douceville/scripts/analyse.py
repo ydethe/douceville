@@ -29,12 +29,3 @@ for e in result.all():
             print(ed[k])
         if k not in ed.keys() or ed[k] is None:
             print("   %s" % k)
-
-# result = s.query(Nature).filter(Nature.etablissement_id=='0010005A')
-# print(result.all())
-
-# result = s.query(Nature).filter(Nature.nature == '')
-# print(result.count())
-# print(result.all())
-
-# print(bulidList(Nature.nature))

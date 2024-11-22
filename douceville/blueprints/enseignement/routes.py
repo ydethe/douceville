@@ -11,7 +11,7 @@ from . import enseignement_bp
 @enseignement_bp.route("/", methods=["GET"])
 @login_required
 def enseignement():
-    from ...models import db, Etablissement, Nature
+    from ...models import db, Etablissement
     from ...utils import Serializer
     from ...blueprints.isochrone.geographique import calcIsochrone
 
@@ -43,14 +43,12 @@ def enseignement():
         pg += "%f %f," % (lon, lat)
     pg = pg[:-1] + "))"
 
-    a = (
-        db.session.query(Etablissement, Nature)
-        .filter(Etablissement.UAI == Nature.etablissement_id)
-        .filter(func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg)))
+    a = db.session.query(Etablissement).filter(
+        func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
     )
 
     if nature != []:
-        a = a.filter(Nature.nature.in_(nature))
+        a = a.filter(Etablissement.nature.in_(nature))
 
     if secteur != []:
         a = a.filter(Etablissement.secteur.in_(secteur))

@@ -4,6 +4,7 @@ import typing as T
 import requests
 from pydantic import BaseModel
 import rich.progress as rp
+import pandas as pd
 
 from .models import Etablissement
 from .scripts.import_etablissements import findEtabPosition
@@ -209,7 +210,7 @@ class EtablissementAPI(BaseModel):
     secteur_prive_libelle_type_contrat: str | int | None
     code_ministere: str | int | None
     libelle_ministere: str | int | None
-    date_ouverture: str | int | None
+    date_ouverture: datetime | None
 
     @property
     def nom(self) -> str:
@@ -225,17 +226,27 @@ class EtablissementAPI(BaseModel):
         etab_dict["adresse"] = self.adresse_uai
         etab_dict["code_postal"] = self.code_postal_uai
         etab_dict["commune"] = self.libelle_commune
+        etab_dict["nature"] = self.nature_uai_libe.title()
         etab_dict = findEtabPosition(etab_dict.copy())
 
         etab_dict["UAI"] = self.numero_uai
         etab_dict["lieu_dit"] = self.lieu_dit_uai
         etab_dict["academie"] = self.libelle_academie
         etab_dict["secteur"] = self.secteur_public_prive_libe.lower().replace("é", "e")
-        etab_dict["ouverture"] = datetime.strptime(self.date_ouverture, "%Y-%m-%d")
+        etab_dict["ouverture"] = self.date_ouverture
 
         db_etab = Etablissement(**etab_dict)
 
         return db_etab
+
+    @classmethod
+    def fromPandasRow(cls, row) -> "EtablissementAPI":
+        dat = dict(**row)
+        ts = dat.pop("date_ouverture", None)
+        dt = ts.to_pydatetime()
+        row["date_ouverture"] = dt
+        res = cls(**row)
+        return res
 
 
 def liste_brevet() -> T.List[ResultatBrevetAPI]:
@@ -339,10 +350,13 @@ def liste_etablissements() -> T.List[EtablissementAPI]:
 
 
 def build_db_records():
-    list_etab = liste_etablissements()
+    df = pd.read_parquet(
+        "fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.parquet"
+    )
 
     records = []
-    for etab in list_etab:
+    for index, row in df.iterrows():
+        etab = EtablissementAPI.fromPandasRow(row)
         db_etab = etab.build_db_record()
         if db_etab.commune.lower() == "dijon" and "carnot" in db_etab.nom:
             print(db_etab)

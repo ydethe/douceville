@@ -86,18 +86,6 @@ def insert_or_update_resulat(session, etab_res, resultat):
     # logger.warning("Duplicat resulat : %s" % str(resultat))
 
 
-# def insert_or_update_nature(session, nature):
-#     q = (
-#         session.query(Nature)
-#         .filter(Nature.etablissement_id == nature["etablissement_id"])
-#         .filter(Nature.nature == nature["nature"])
-#     )
-#     if q.count() == 0:
-#         session.add(Nature(**nature))
-# else:
-# logger.warning("Duplicat nature : %s" % str(nature))
-
-
 def insert_or_update_etab(session, etab):
     l_keys = [
         "UAI",

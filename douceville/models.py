@@ -74,28 +74,6 @@ class User(UserMixin, db.Model):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 
-# class Nature(db.Model):
-#     __tablename__ = "nature"
-#     __table_args__ = (db.UniqueConstraint("nature", "etablissement_id"),)
-
-#     idx = db.Column(db.Integer, primary_key=True, nullable=False)
-#     nature = db.Column(db.String(191), nullable=False)
-#     etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
-
-#     def __repr__(self):
-#         r = self.asDict()
-#         r.pop("position", None)
-#         r.pop("idx", None)
-#         ks = list(r.keys())
-#         for k in ks:
-#             if r[k] is None:
-#                 r.pop(k)
-#         return str(r)
-
-#     def asDict(self):
-#         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
-
-
 class Resultat(db.Model):
     __tablename__ = "resultat"
     __table_args__ = (db.UniqueConstraint("diplome", "annee", "etablissement_id"),)
@@ -140,8 +118,8 @@ class Etablissement(db.Model):
     secteur = db.Column(db.String(191), nullable=False)
     ouverture = db.Column(db.DateTime())
     import_status = db.Column(db.Integer, nullable=False)
+    nature = db.Column(db.String(191), nullable=False)
     resultats = db.relationship("Resultat", backref="etablissement", lazy="dynamic")
-    natures = db.relationship("Nature", backref="etablissement", lazy="dynamic")
 
     def __repr__(self):
         r = self.asDict()

@@ -82,7 +82,6 @@ app.register_blueprint(enseignement_bp, url_prefix="/enseignement")
 # admin = Admin(app, name="douceville", template_mode="bootstrap3")
 
 # admin.add_view(UserModelView(models.Etablissement, db.session))
-# admin.add_view(UserModelView(models.Nature, db.session))
 # admin.add_view(UserModelView(models.Resultat, db.session))
 # admin.add_view(UserModelView(models.User, db.session))
 
