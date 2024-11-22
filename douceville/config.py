@@ -20,6 +20,9 @@ class Config(BaseSettings):
     STRIPE_SECRET_KEY: str
     STRIPE_PUBLISHABLE_KEY: str
 
+    ADMIN_EMAIL: str
+    ADMIN_PASSWORD: str
+
     MAIL_SERVER: str
     MAIL_PORT: int
     MAIL_USE_TLS: bool
