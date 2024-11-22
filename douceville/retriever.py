@@ -12,27 +12,34 @@ from .scripts.import_etablissements import findEtabPosition
 
 @dataclass
 class ResultatBrevetAPI:
-    session: str
-    numero_d_etablissement: str
-    type_d_etablissement: str
-    patronyme: str | None
-    secteur_d_enseignement: str
-    commune: str
-    libelle_commune: str
-    code_departement: str
-    libelle_departement: str
-    code_academie: str
-    libelle_academie: str
-    code_region: str
-    libelle_region: str
-    inscrits: int
+    annee: int
+    uai: str
     presents: int
     admis: int
     admis_sans_mention: int
-    nombre_d_admis_mention_ab: int
-    admis_mention_bien: int
-    admis_mention_tres_bien: int
-    taux_de_reussite: str
+
+    @classmethod
+    def fromPandasRow(cls, row) -> "ResultatBrevetAPI":
+        res = cls(
+            annee=int(row["session"]),
+            uai=row["numero_d_etablissement"],
+            presents=int(row["presents"]),
+            admis=int(row["admis"]),
+            admis_sans_mention=int(row["admis_sans_mention"]),
+        )
+        return res
+
+    def build_db_record(self) -> Resultat:
+        mentions = self.presents - self.admis_sans_mention
+        res = Resultat(
+            diplome="Brevet",
+            annee=self.annee,
+            presents=self.presents,
+            admis=self.admis,
+            mentions=mentions,
+            etablissement_uai=self.uai,
+        )
+        return res
 
 
 @dataclass
@@ -73,7 +80,10 @@ class ResultatLyceeGeneralAPI:
     taux_men_s2tmd: str
     taux_men_sthr: str
 
-    def build_db_record(self) -> T.List[Resultat]:
+    def build_db_record(self, liste_uai: T.List[str]) -> T.List[Resultat]:
+        if self.uai not in liste_uai:
+            return []
+
         diplomes = [
             "l",
             "es",
@@ -223,7 +233,8 @@ class EtablissementAPI:
         etab_dict = findEtabPosition(etab_dict.copy())
 
         etab_dict["UAI"] = self.numero_uai
-        etab_dict["lieu_dit"] = self.lieu_dit_uai.title()
+        if self.lieu_dit_uai is not None:
+            etab_dict["lieu_dit"] = self.lieu_dit_uai.title()
         etab_dict["academie"] = self.libelle_academie.title()
         etab_dict["secteur"] = self.secteur_public_prive_libe.lower().replace("e", "é")
         etab_dict["ouverture"] = self.date_ouverture
@@ -243,37 +254,52 @@ class EtablissementAPI:
         return res
 
 
-def build_db_records():
+def build_db_records() -> T.Tuple[T.List[Etablissement], T.List[Resultat]]:
     from . import logger
 
     # ========================================
     # Traitement des établissement
     # ========================================
-    # df = pd.read_parquet(
-    #     "fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.parquet"
-    # )
+    df = pd.read_parquet(
+        "fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.parquet"
+    )
 
-    # records = []
-    # for index, row in rp.track(df.iterrows(),total=len(df)):
-    #     etab = EtablissementAPI.fromPandasRow(row)
-    #     db_etab = etab.build_db_record()
-    #     if db_etab is None:
-    #         continue
-    #     records.append(db_etab)
+    liste_etablissements: T.List[Etablissement] = []
+    for index, row in rp.track(df.iterrows(), total=len(df), description="Annuaire"):
+        etab = EtablissementAPI.fromPandasRow(row)
+        db_etab = etab.build_db_record()
+        if db_etab is None:
+            continue
+        liste_etablissements.append(db_etab)
 
-    # logger.info(f"{len(records)} établissements chargés")
+    logger.info(f"{len(liste_etablissements)} établissements chargés")
+    liste_uai = [x.UAI for x in liste_etablissements]
 
+    liste_resultats: T.List[Resultat] = []
     # ========================================
-    # Traitement des résultats du BAC
+    # Traitement des résultats du BAC GT
     # ========================================
     df = pd.read_parquet("fr-en-indicateurs-de-resultat-des-lycees-gt_v2.parquet")
-    print(df["presents_s"])
-    records = []
-    for index, row in rp.track(df.iterrows(), total=len(df)):
-        etab = ResultatLyceeGeneralAPI.fromPandasRow(row)
-        db_etab = etab.build_db_record()
-        if db_etab is None or len(db_etab) == 0:
-            continue
-        records.extend(db_etab)
 
-    logger.info(f"{len(records)} résultats pour le BAC chargés")
+    for index, row in rp.track(df.iterrows(), total=len(df), description="Bac GT"):
+        resultats = ResultatLyceeGeneralAPI.fromPandasRow(row)
+        db_resultats = resultats.build_db_record(liste_uai)
+        if db_resultats is None or len(db_resultats) == 0:
+            continue
+        liste_resultats.extend(db_resultats)
+
+    # ========================================
+    # Traitement des résultats du DNB
+    # ========================================
+    df = pd.read_parquet("fr-en-dnb-par-etablissement.parquet")
+
+    for index, row in rp.track(df.iterrows(), total=len(df), description="DNB"):
+        resultat = ResultatBrevetAPI.fromPandasRow(row)
+        db_resultat = resultat.build_db_record()
+        if db_resultat is None or db_resultat.etablissement_uai not in liste_uai:
+            continue
+        liste_resultats.append(db_resultat)
+
+    logger.info(f"{len(liste_resultats)} résultats chargés")
+
+    return liste_etablissements, liste_resultats
