@@ -18,7 +18,6 @@ services:
       - MAIL_USERNAME=$MAIL_USERNAME
       - MAIL_PASSWORD=$MAIL_PASSWORD
       - MAIL_DEFAULT_SENDER=$MAIL_DEFAULT_SENDER
-      - MAIL_DEBUG=$MAIL_DEBUG
       - DATABASE_URI=postgresql+psycopg2://douceville:douceville@$COMPOSE_PROJECT_NAME-db-1/douceville
       - HOST=https://$HOST
       - PORT=$PORT
@@ -39,6 +38,7 @@ services:
     image: postgres
     restart: unless-stopped
     environment:
+      TZ: $TZ
       POSTGRES_DB: $POSTGRES_DB
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD

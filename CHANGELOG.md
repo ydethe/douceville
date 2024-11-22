@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - fix urls in README.rst ([9ab8b2d](https://github.com/ydethe/douceville/commit/9ab8b2d0d149338f9fb4e4c3dfdb56a877f93fd9) by Jonathan-David Schröder).
 
+### Removed
+
+- Removed hardcoding of parquet paths ([b53f946](https://github.com/ydethe/douceville/commit/b53f9467519bfda5a1207e14104381fad8373417) by Yann de The).
+
 <!-- insertion marker -->
 ## [v1.0.0](https://github.com/ydethe/douceville/releases/tag/v1.0.0) - 2020-11-16
 

@@ -20,7 +20,6 @@ from .blueprints.isochrone import isochrone_bp
 from .blueprints.payment import payment_bp
 from .blueprints.enseignement import enseignement_bp
 
-# from . import models
 from .config import config
 from . import logger
 
@@ -32,6 +31,15 @@ class UserModelView(ModelView):
     def _handle_view(self, name):
         if not self.is_accessible():
             return redirect(url_for("users.login"))
+
+
+def test_db_filled() -> bool:
+    import sqlalchemy as sa
+    from .config import config
+
+    engine = sa.create_engine(config.SQLALCHEMY_DATABASE_URI)
+    insp = sa.inspect(engine)
+    return insp.has_table("resultat", schema="dbo")
 
 
 # create and configure the app
@@ -67,7 +75,7 @@ def accueil():
     return redirect(url_for("carte.carte"))
 
 
-if config.FLASK_INIT_DB:
+if test_db_filled():
     logger.info("Initializing database: table creation...")
     with app.app_context():
         db.create_all()

@@ -27,13 +27,11 @@ class Config(BaseSettings):
     MAIL_USERNAME: str
     MAIL_PASSWORD: str
     MAIL_DEFAULT_SENDER: str
-    MAIL_DEBUG: bool
 
     POSTGRES_HOST: str
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-    FLASK_INIT_DB: bool
     HOST: str
     PORT: int
     PRICE_ID: str
