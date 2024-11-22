@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added parquet parsing ([790ed2a](https://github.com/ydethe/douceville/commit/790ed2a1dcd9cbe6505311f4b159aa704037cd95) by Yann de The).
 - Added API to db record conversion for Etablissement table ([14164e0](https://github.com/ydethe/douceville/commit/14164e0412b8b94fbfaf8ebb7f6a2285b3d08447) by Yann de The).
 - Added retreiver ([b6ec830](https://github.com/ydethe/douceville/commit/b6ec830cc4abfb8c25a3dca60dab5a54944c86b5) by Yann de The).
 - Added CHANGELOG and TODO ([46c0747](https://github.com/ydethe/douceville/commit/46c074758da9d73d02a961585abcea88fd809612) by Yann de The).

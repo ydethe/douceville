@@ -76,7 +76,7 @@ class User(UserMixin, db.Model):
 
 class Resultat(db.Model):
     __tablename__ = "resultat"
-    __table_args__ = (db.UniqueConstraint("diplome", "annee", "etablissement_id"),)
+    __table_args__ = (db.UniqueConstraint("diplome", "annee", "etablissement_uai"),)
 
     idx = db.Column(db.Integer, primary_key=True, nullable=False)
     diplome = db.Column(db.String(191), nullable=False)
@@ -84,7 +84,7 @@ class Resultat(db.Model):
     presents = db.Column(db.Integer)
     admis = db.Column(db.Integer)
     mentions = db.Column(db.Integer)
-    etablissement_id = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
+    etablissement_uai = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
 
     def __repr__(self):
         r = self.asDict()

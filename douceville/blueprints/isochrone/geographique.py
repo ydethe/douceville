@@ -78,19 +78,19 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
             logger.error("In findCoordFromAddress, argument 'commune' must not be None")
             return None, None
 
-        lon = lat = None
-        j = geocode.pelias_search(
-            clnt,
-            query,
-            country="FR",
-            layers=["postalcode", "address", "locality", "venue"],
-        )
-        for f in j["features"]:
-            if "locality" not in f["properties"].keys():
-                continue
+        # lon = lat = None
+        # j = geocode.pelias_search(
+        #     clnt,
+        #     query,
+        #     country="FR",
+        #     layers=["postalcode", "address", "locality", "venue"],
+        # )
+        # for f in j["features"]:
+        #     if "locality" not in f["properties"].keys():
+        #         continue
 
-            if len(j["features"]) == 1 or f["properties"]["locality"].lower() == commune.lower():
-                lon, lat = f["geometry"]["coordinates"]
+        #     if len(j["features"]) == 1 or f["properties"]["locality"].lower() == commune.lower():
+        #         lon, lat = f["geometry"]["coordinates"]
 
         return lon, lat
 
@@ -106,11 +106,11 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
     if lat is None and cp is not None:
         lon, lat = geocode_query(clnt, nom=None, adresse=None, cp=None, commune=commune)
 
-    if lat is None:
-        logger.error("geoloc failed : %s, %s, %s, %s" % (nom, adresse, cp, commune))
-        return None
+    # if lat is None:
+    #     logger.error("geoloc failed : %s, %s, %s, %s" % (nom, adresse, cp, commune))
+    #     return None
 
-    if nom is None or adresse is None or cp is None:
+    if (nom is None or adresse is None or cp is None) and lon is not None and lat is not None:
         j = geocode.pelias_reverse(clnt, [lon, lat], country="FR")
         for f in j["features"]:
             p = f["properties"]
@@ -118,7 +118,8 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
                 adresse = p["name"]
                 cp = p["postalcode"].zfill(5)
 
-    etab_maj["position"] = "POINT(%f %f)" % (lon, lat)
+    if lon is not None and lat is not None:
+        etab_maj["position"] = "POINT(%f %f)" % (lon, lat)
     etab_maj["commune"] = commune
     etab_maj["code_postal"] = cp
     etab_maj["adresse"] = adresse

@@ -36,17 +36,17 @@ def findEtabPosition(etab: dict) -> dict:
 
     adresse = {}
     if etab["nom"] is not None:
-        adresse["nom"] = etab["nom"]
+        adresse["nom"] = etab["nom"].title()
     if lat is not None:
         adresse["lat"] = lat
     if lon is not None:
         adresse["lon"] = lon
     if etab.get("adresse", None) is not None:
-        adresse["adresse"] = etab["adresse"]
+        adresse["adresse"] = etab["adresse"].title()
     if etab.get("code_postal", None) is not None:
         adresse["cp"] = etab["code_postal"]
     if etab.get("commune", None) is not None:
-        adresse["commune"] = etab["commune"]
+        adresse["commune"] = etab["commune"].title()
 
     etab_maj = findCoordFromAddress(**adresse)
     if etab_maj is None:
@@ -61,7 +61,7 @@ def findEtabPosition(etab: dict) -> dict:
 def insert_or_update_resulat(session, etab_res, resultat):
     logger = logging.getLogger("douceville_logger")
 
-    q = session.query(Etablissement).filter(Etablissement.UAI == resultat["etablissement_id"])
+    q = session.query(Etablissement).filter(Etablissement.UAI == resultat["etablissement_uai"])
     if q.count() == 0:
         etab = findEtabPosition(etab_res)
         if etab is None:
@@ -76,7 +76,7 @@ def insert_or_update_resulat(session, etab_res, resultat):
 
     q = (
         session.query(Resultat)
-        .filter(Resultat.etablissement_id == resultat["etablissement_id"])
+        .filter(Resultat.etablissement_uai == resultat["etablissement_uai"])
         .filter(Resultat.annee == resultat["annee"])
         .filter(Resultat.diplome == resultat["diplome"])
     )
@@ -198,11 +198,6 @@ def import_geoloc(session, file, row_limit=None):
             continue
 
         insert_or_update_etab(session, etab)
-        # for n in list_natures:
-        #     if n == "":
-        #         logger.debug(index)
-        #     nature = {"etablissement_id": etab["UAI"], "nature": n}
-        #     insert_or_update_nature(session, nature)
 
         if row_limit is not None and index >= row_limit:
             break
@@ -300,11 +295,6 @@ def import_sheet(
         # ==========================
         # Analyse de l'établissement
         # ==========================
-        if corr_dict["nom_diplome"] == "brevet":
-            nature = {"nature": "college"}
-        elif "bac" in corr_dict["nom_diplome"]:
-            nature = {"nature": "lycee"}
-
         etab = defaultdict(lambda: None)
         etab["import_status"] = ImportStatus.OK
         for xl_k in corr_dict["etabl"].keys():
@@ -327,8 +317,6 @@ def import_sheet(
 
         etab["import_status"] = ImportStatus.ETAB_FROM_RESULT
 
-        nature["etablissement_id"] = uai
-
         # =====================
         # Analyse des résultats
         # =====================
@@ -339,7 +327,7 @@ def import_sheet(
             "presents": [],
             "mentions": [],
             "taux": [],
-            "etablissement_id": uai,
+            "etablissement_uai": uai,
         }
         for xl_k in corr_dict["res"].keys():
             db_k, fct = corr_dict["res"][xl_k]
@@ -391,7 +379,7 @@ def import_sheet(
         # =====================
         # Insertion
         # =====================
-        insert_or_update_resulat(session, etab, nature, res)
+        insert_or_update_resulat(session, etab, res)
 
         if row_limit is not None and index >= row_limit:
             break
