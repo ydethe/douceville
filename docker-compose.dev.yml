@@ -2,7 +2,8 @@ services:
   web:
     build: .
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - LOGFIRE_TOKEN=$LOGFIRE_TOKEN
       - LOGLEVEL=$LOGLEVEL
@@ -40,8 +41,13 @@ services:
 
   db:
     # sudo docker run -d --name tst_dv_psql -e POSTGRES_PASSWORD=douceville -e POSTGRES_USER=douceville -e POSTGRES_DB=douceville postgres
-    image: postgres
-    restart: always
+    image: postgis/postgis
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       TZ: $TZ
       POSTGRES_DB: $POSTGRES_DB

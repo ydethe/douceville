@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed docker ([7afa495](https://github.com/ydethe/douceville/commit/7afa495dfce0ca378716c813629f6021d89ef1bb) by Yann de The).
 - fix urls in README.rst ([9ab8b2d](https://github.com/ydethe/douceville/commit/9ab8b2d0d149338f9fb4e4c3dfdb56a877f93fd9) by Jonathan-David Schröder).
 
 ### Removed

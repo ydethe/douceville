@@ -3,7 +3,8 @@ services:
     image: douceville:latest
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
       - BCRYPT_ROUNDS=$BCRYPT_ROUNDS
@@ -35,8 +36,13 @@ services:
       - "homepage.description=$HOME_DESCRIPTION"
 
   db:
-    image: postgres
+    image: postgis/postgis
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       TZ: $TZ
       POSTGRES_DB: $POSTGRES_DB

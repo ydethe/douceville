@@ -19,7 +19,7 @@ class ImportStatus(object):
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = "user"
+    __tablename__ = "dvuser"
 
     id = db.Column(db.BigInteger, nullable=False, primary_key=True)
     email = db.Column(db.String(1024), nullable=False, unique=True)

@@ -75,11 +75,13 @@ def accueil():
     return redirect(url_for("carte.carte"))
 
 
-if test_db_filled():
+if not test_db_filled():
     logger.info("Initializing database: table creation...")
+    from .models import User, Etablissement, Resultat  # noqa: F401
+
     with app.app_context():
         db.create_all()
-    logger.info("Done")
+    logger.info("Database tables created")
 
 app.register_blueprint(carte_bp, url_prefix="/carte")
 app.register_blueprint(users_bp, url_prefix="/users/")
