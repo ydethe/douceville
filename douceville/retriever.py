@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 import typing as T
 from dataclasses import dataclass
 
@@ -254,15 +255,15 @@ class EtablissementAPI:
         return res
 
 
-def build_db_records() -> T.Tuple[T.List[Etablissement], T.List[Resultat]]:
+def build_db_records(
+    etab_pth: Path, bacgt_pth: Path, dnb_pth: Path
+) -> T.Tuple[T.List[Etablissement], T.List[Resultat]]:
     from . import logger
 
     # ========================================
     # Traitement des établissement
     # ========================================
-    df = pd.read_parquet(
-        "fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.parquet"
-    )
+    df = pd.read_parquet(etab_pth)
 
     liste_etablissements: T.List[Etablissement] = []
     for index, row in rp.track(df.iterrows(), total=len(df), description="Annuaire"):
@@ -279,7 +280,7 @@ def build_db_records() -> T.Tuple[T.List[Etablissement], T.List[Resultat]]:
     # ========================================
     # Traitement des résultats du BAC GT
     # ========================================
-    df = pd.read_parquet("fr-en-indicateurs-de-resultat-des-lycees-gt_v2.parquet")
+    df = pd.read_parquet(bacgt_pth)
 
     for index, row in rp.track(df.iterrows(), total=len(df), description="Bac GT"):
         resultats = ResultatLyceeGeneralAPI.fromPandasRow(row)
@@ -291,7 +292,7 @@ def build_db_records() -> T.Tuple[T.List[Etablissement], T.List[Resultat]]:
     # ========================================
     # Traitement des résultats du DNB
     # ========================================
-    df = pd.read_parquet("fr-en-dnb-par-etablissement.parquet")
+    df = pd.read_parquet(dnb_pth)
 
     for index, row in rp.track(df.iterrows(), total=len(df), description="DNB"):
         resultat = ResultatBrevetAPI.fromPandasRow(row)
