@@ -21,7 +21,6 @@ from .blueprints.payment import payment_bp
 from .blueprints.enseignement import enseignement_bp
 
 from .config import config
-from . import logger
 
 
 class UserModelView(ModelView):
@@ -75,22 +74,22 @@ def accueil():
     return redirect(url_for("carte.carte"))
 
 
-if not test_db_filled():
-    logger.info("Initializing database: table creation...")
-    from .models import User, Etablissement, Resultat  # noqa: F401
-    from .blueprints.users.manage_users import add_user
+# if not test_db_filled():
+#     logger.info("Initializing database: table creation...")
+#     from .models import User, Etablissement, Resultat  # noqa: F401
+#     from .blueprints.users.manage_users import add_user
 
-    with app.app_context():
-        db.create_all()
+#     with app.app_context():
+#         db.create_all()
 
-        add_user(
-            email=config.ADMIN_EMAIL,
-            pwd=config.ADMIN_PASSWORD,
-            admin=True,
-            active=True,
-        )
+#         add_user(
+#             email=config.ADMIN_EMAIL,
+#             pwd=config.ADMIN_PASSWORD,
+#             admin=True,
+#             active=True,
+#         )
 
-    logger.info("Database tables created")
+#     logger.info("Database tables created")
 
 app.register_blueprint(carte_bp, url_prefix="/carte")
 app.register_blueprint(users_bp, url_prefix="/users/")

@@ -57,6 +57,7 @@ dependencies = [
     "pydantic>=2.9.2",
     "pandas>=2.2.3",
     "fastparquet>=2024.11.0",
+    "joblib>=1.4.2",
 ]
 requires-python = ">=3.10,<3.12"
 
