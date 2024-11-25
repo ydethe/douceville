@@ -9,6 +9,7 @@ import numpy as np
 
 from .models import Etablissement, Resultat
 from .scripts.import_etablissements import findEtabPosition
+from . import logger
 
 
 @dataclass
@@ -249,13 +250,15 @@ class EtablissementAPI:
         if isinstance(self.latitude, float) and isinstance(self.longitude, float):
             if not np.isnan(self.latitude) and not np.isnan(self.longitude):
                 etab_dict["position"] = f"POINT({self.longitude} {self.latitude})"
+                etab_dict["latitude"] = self.latitude
+                etab_dict["longitude"] = self.longitude
             else:
                 etab_dict = findEtabPosition(etab_dict.copy())
         else:
             etab_dict = findEtabPosition(etab_dict.copy())
 
-        if etab_dict["position"] is None:
-            print(etab_dict)
+        # if etab_dict["position"] is None:
+        #     logger.warning(f"No position for record {etab_dict}")
 
         etab_dict["UAI"] = self.numero_uai
         if self.lieu_dit_uai is not None:
@@ -290,8 +293,6 @@ class EtablissementAPI:
 def build_db_records(
     etab_pth: Path, bacgt_pth: Path, dnb_pth: Path
 ) -> T.Tuple[T.List[Etablissement], T.List[Resultat]]:
-    from . import logger
-
     # ========================================
     # Traitement des établissement
     # ========================================
@@ -341,8 +342,6 @@ def build_db_records(
 def build_dataframes(
     etab_pth: Path, bacgt_pth: Path, dnb_pth: Path
 ) -> T.Tuple[pd.DataFrame, pd.DataFrame]:
-    from . import logger
-
     # ========================================
     # Traitement des établissement
     # ========================================
@@ -353,6 +352,9 @@ def build_dataframes(
         etab = EtablissementAPI.fromPandasRow(row)
         db_etab = etab.build_dataframe_record()
         if db_etab is None:
+            continue
+        if db_etab["position"] is None:
+            logger.warning(f"Unable to find position of {db_etab}")
             continue
         liste_etablissements.append(db_etab)
 

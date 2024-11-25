@@ -167,6 +167,8 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
     etab_maj["code_postal"] = cp
     etab_maj["adresse"] = adresse
     etab_maj["departement"] = cp[:2]
+    etab_maj["latitude"] = lat
+    etab_maj["longitude"] = lon
 
     if etab_maj["position"] is not None:
         data[key] = etab_maj

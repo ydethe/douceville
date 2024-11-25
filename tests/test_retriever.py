@@ -19,8 +19,5 @@ if __name__ == "__main__":
         dnb_pth=Path("data/fr-en-dnb-par-etablissement.parquet"),
     )
 
-    print(df_etab)
-    print(df_res)
-
     df_etab.to_parquet("data/etablissements.parquet")
     df_res.to_parquet("data/resultats.parquet")
