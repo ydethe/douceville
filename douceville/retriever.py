@@ -229,6 +229,7 @@ class EtablissementAPI:
 
     def build_dataframe_record(self) -> dict:
         etab_dict = {}
+        etab_dict["position"] = None
         etab_dict["nom"] = self.nom
         etab_dict["adresse"] = self.adresse_uai
         etab_dict["code_postal"] = self.code_postal_uai
@@ -245,7 +246,16 @@ class EtablissementAPI:
             # logger.warning(f"Unable to determine nature '{self}'")
             return None
 
-        etab_dict = findEtabPosition(etab_dict.copy())
+        if isinstance(self.latitude, float) and isinstance(self.longitude, float):
+            if not np.isnan(self.latitude) and not np.isnan(self.longitude):
+                etab_dict["position"] = f"POINT({self.longitude} {self.latitude})"
+            else:
+                etab_dict = findEtabPosition(etab_dict.copy())
+        else:
+            etab_dict = findEtabPosition(etab_dict.copy())
+
+        if etab_dict["position"] is None:
+            print(etab_dict)
 
         etab_dict["UAI"] = self.numero_uai
         if self.lieu_dit_uai is not None:

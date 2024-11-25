@@ -57,7 +57,7 @@ def geocode_query(
     lon=None,
 ):
     query = ""
-    if nom is not None:
+    if nom is not None and adresse is None:
         query += nom + ","
     if adresse is not None:
         etab_maj["adresse"] = adresse
@@ -81,12 +81,20 @@ def geocode_query(
     )
     time.sleep(1)  # To comply with rate limiting
 
+    found_feat = None
+    max_confidence = -1
     for f in j["features"]:
         if "locality" not in f["properties"].keys():
             continue
 
-        if len(j["features"]) == 1 or f["properties"]["locality"].lower() == commune.lower():
-            lon, lat = f["geometry"]["coordinates"]
+        if len(j["features"]) == 1 or f["properties"]["confidence"] > max_confidence:
+            found_feat = f.copy()
+            max_confidence = f["properties"]["confidence"]
+
+    if found_feat is not None:
+        lon, lat = found_feat["geometry"]["coordinates"]
+    else:
+        pass
 
     return lon, lat
 
@@ -112,7 +120,9 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
     data = pickle.load(cache_fd)
     key = (nom, adresse, cp, commune, lat, lon)
     if key in data.keys():
-        return data[key]
+        res = data[key]
+        if res["position"] is not None:
+            return res
 
     etab_maj = dict(
         position=None,
@@ -158,7 +168,8 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
     etab_maj["adresse"] = adresse
     etab_maj["departement"] = cp[:2]
 
-    data[key] = etab_maj
+    if etab_maj["position"] is not None:
+        data[key] = etab_maj
     cache_fd.close()
 
     with open(cache_pth, "wb") as cache_fd:
