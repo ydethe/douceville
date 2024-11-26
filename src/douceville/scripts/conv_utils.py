@@ -7,12 +7,12 @@ from slugify import slugify
 def to_cap(x):
     if x is None:
         return "<inconnu>"
-    elif type(x) == type(0.0):
+    elif isinstance(x, float):
         if isnan(x):
             return "<inconnu>"
         else:
             return str(x)
-    elif type(x) == type(""):
+    elif isinstance(x, str):
         return x.title()
 
 
@@ -110,7 +110,7 @@ def to_float(x):
         val = float(x)
         if isnan(val):
             val = None
-    except Exception as e:
+    except Exception:
         val = None
     return val
 
@@ -123,13 +123,13 @@ def to_int(x):
 
     try:
         val = int(x)
-    except Exception as e:
+    except Exception:
         val = None
     return val
 
 
 def secteur_to_bool(x):
-    if type(x) != type(""):
+    if not isinstance(x, str):
         return None
 
     x = x.lower().strip()
@@ -167,7 +167,7 @@ def cp_to_dep(x):
 
 def to_lieu_dit(x):
     ld = x
-    if type(ld) == type(""):
+    if isinstance(ld, str):
         res = to_min(x)
     else:
         res = None
@@ -217,7 +217,7 @@ def corr_diplome(src):
         corr["etabl"]["SECTEUR"] = (("secteur", secteur_to_bool),)
         corr["etabl"]["COMMUNE_UAI"] = (("commune", to_cap),)
 
-        if not src.backup_group is None:
+        if src.backup_group is not None:
             corr["res"]["Presents_%s" % src.backup_group] = "presents_bck", to_int
             corr["res"]["Admis_%s" % src.backup_group] = "admis_bck", to_int
             corr["res"]["Mentions_%s" % src.backup_group] = "mentions_bck", to_int

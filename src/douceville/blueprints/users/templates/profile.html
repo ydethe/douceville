@@ -19,7 +19,7 @@
       <script src="{{ url_for('payment.static', filename='stripe.js') }}"></script>
       <script>
       var stripe = Stripe('{{ publishableKey }}');
-  
+
       // Setup event handler to create a Checkout Session when button is clicked
       document
         .getElementById("subscribe-btn")

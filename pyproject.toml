@@ -77,9 +77,6 @@ target-version = ['py38']
 source = "scm"
 
 [tool.pdm.build]
-includes = [
-    "douceville/",
-]
 excludes = [
     "tests",
     "build",

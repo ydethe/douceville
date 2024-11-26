@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 {% endblock %}
 
-  
+
 {% block content %}
 <div class="container">
   {% block app_content %}
@@ -22,7 +22,7 @@
         maxZoom: 18,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(mymap);
-      
+
       function onEachFeature(feature, layer) {
           // does this feature have a property named info?
           if (feature.properties && feature.properties.info) {
@@ -46,9 +46,9 @@
           mymap.fitBounds([bb1,bb2]);
       })
 
-      
+
     </script>
-    
+
     {% endblock %}
 </div>
 {{super()}}
