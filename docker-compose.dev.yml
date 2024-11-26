@@ -61,8 +61,8 @@ services:
   # ----------------- ORS application configuration ------------------- #
   # https://giscience.github.io/openrouteservice/run-instance/running-with-docker
   ors:
-    # ports:
-    #   - "8082:8082"  # Expose the ORS API on port 8080
+    ports:
+      - "8082:8082"  # Expose the ORS API on port 8080
     #   - "9001:9001"  # Expose additional port for monitoring (optional)
     image: heigit/openrouteservice
     restart: unless-stopped
