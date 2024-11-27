@@ -134,7 +134,13 @@ def geocode_query(
 
 
 def findCoordFromAddress(
-    nom=None, adresse=None, departement=None, cp=None, commune=None, lat=None, lon=None
+    nom: str = None,
+    adresse: str = None,
+    departement: str = None,
+    cp: str = None,
+    commune: str = None,
+    lat: float = None,
+    lon: float = None,
 ):
     """
 
@@ -163,10 +169,8 @@ def findCoordFromAddress(
                 and res["latitude"] is not None
                 and res["longitude"] is not None
             ):
-                if "98" not in cp or res["latitude"] < 0:
+                if not cp.startswith("98") or res["latitude"] < 0:
                     return res
-
-    logger.debug("Using ORS")
 
     etab_maj = dict(
         position=None,

@@ -372,8 +372,8 @@ def build_dataframes(
     df_etab.to_parquet(destination_folder / f"etablissements_{datetime.now():%Y-%m_%d}.parquet")
 
     logger.info(f"{len(liste_etablissements)} établissements chargés")
-    liste_uai = [x["UAI"] for x in liste_etablissements]
 
+    liste_uai = [x["UAI"] for x in liste_etablissements]
     liste_resultats = []
     # ========================================
     # Traitement des résultats du BAC GT
@@ -400,7 +400,7 @@ def build_dataframes(
         liste_resultats.append(db_resultat)
 
     df_res = pd.DataFrame.from_records(liste_resultats)
-    df_res.to_parquet("data/resultats.parquet")
+    df_res.to_parquet(destination_folder / f"resultats_{datetime.now():%Y-%m_%d}.parquet")
 
     logger.info(f"{len(liste_resultats)} résultats chargés")
 

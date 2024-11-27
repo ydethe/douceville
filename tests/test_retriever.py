@@ -19,5 +19,3 @@ if __name__ == "__main__":
         dnb_pth=Path("data/fr-en-dnb-par-etablissement.parquet"),
         destination_folder=Path("data"),
     )
-
-    print(df_etab.loc[(df_etab["latitude"] > 0) & (df_etab["departement"] == "98")])
