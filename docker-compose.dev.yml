@@ -4,8 +4,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      ors:
-        condition: service_healthy
     environment:
       - LOGFIRE_TOKEN=$LOGFIRE_TOKEN
       - LOGLEVEL=$LOGLEVEL
