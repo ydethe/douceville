@@ -229,11 +229,15 @@ class EtablissementAPI:
         return nom
 
     def build_dataframe_record(self) -> dict:
+        if self.numero_uai in ["0313198H"]:
+            return None
+
         etab_dict = {}
         etab_dict["position"] = None
         etab_dict["nom"] = self.nom
         etab_dict["adresse"] = self.adresse_uai
         etab_dict["code_postal"] = self.code_postal_uai
+        etab_dict["departement"] = self.libelle_departement
         etab_dict["commune"] = self.libelle_commune
         if "lyc" in self.nature_uai_libe.lower():
             etab_dict["nature"] = "Lycée"
@@ -257,8 +261,14 @@ class EtablissementAPI:
         else:
             etab_dict = findEtabPosition(etab_dict.copy())
 
-        # if etab_dict["position"] is None:
-        #     logger.warning(f"No position for record {etab_dict}")
+        if (
+            etab_dict["latitude"] is None
+            or self.code_departement.startswith("98")
+            and etab_dict["latitude"] > 0
+        ):
+            etab_dict["position"] = None
+            etab_dict["latitude"] = None
+            etab_dict["longitude"] = None
 
         etab_dict["UAI"] = self.numero_uai
         if self.lieu_dit_uai is not None:
@@ -340,7 +350,7 @@ def build_db_records(
 
 
 def build_dataframes(
-    etab_pth: Path, bacgt_pth: Path, dnb_pth: Path
+    etab_pth: Path, bacgt_pth: Path, dnb_pth: Path, destination_folder: Path
 ) -> T.Tuple[pd.DataFrame, pd.DataFrame]:
     # ========================================
     # Traitement des établissement
@@ -357,6 +367,9 @@ def build_dataframes(
             logger.warning(f"Unable to find position of {db_etab}")
             continue
         liste_etablissements.append(db_etab)
+
+    df_etab = pd.DataFrame.from_records(liste_etablissements)
+    df_etab.to_parquet(destination_folder / f"etablissements_{datetime.now():%Y-%m_%d}.parquet")
 
     logger.info(f"{len(liste_etablissements)} établissements chargés")
     liste_uai = [x["UAI"] for x in liste_etablissements]
@@ -386,9 +399,9 @@ def build_dataframes(
             continue
         liste_resultats.append(db_resultat)
 
-    logger.info(f"{len(liste_resultats)} résultats chargés")
-
-    df_etab = pd.DataFrame.from_records(liste_etablissements)
     df_res = pd.DataFrame.from_records(liste_resultats)
+    df_res.to_parquet("data/resultats.parquet")
+
+    logger.info(f"{len(liste_resultats)} résultats chargés")
 
     return df_etab, df_res

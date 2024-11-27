@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added link to ors doc ([dce02a3](https://github.com/ydethe/douceville/commit/dce02a3e3d3378bd5d3c542f0ae882c089a61b4a) by Yann de Thé).
 - Added bac results parsing ([fc44044](https://github.com/ydethe/douceville/commit/fc44044bd2a1a7e29e7e9886e64f2ea4a4d5607d) by Yann de The).
 - Added parquet parsing ([790ed2a](https://github.com/ydethe/douceville/commit/790ed2a1dcd9cbe6505311f4b159aa704037cd95) by Yann de The).
 - Added API to db record conversion for Etablissement table ([14164e0](https://github.com/ydethe/douceville/commit/14164e0412b8b94fbfaf8ebb7f6a2285b3d08447) by Yann de The).

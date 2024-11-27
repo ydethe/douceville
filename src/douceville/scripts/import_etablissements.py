@@ -47,6 +47,8 @@ def findEtabPosition(etab: dict) -> dict:
             adresse["adresse"] = adresse["adresse"].replace("  ", " ")
     if etab.get("code_postal", None) is not None:
         adresse["cp"] = etab["code_postal"]
+    if etab.get("departement", None) is not None:
+        adresse["departement"] = etab["departement"]
     if etab.get("commune", None) is not None:
         adresse["commune"] = etab["commune"].title()
 

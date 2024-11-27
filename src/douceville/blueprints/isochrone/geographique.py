@@ -3,6 +3,7 @@ import pickle
 import time
 
 from openrouteservice import client, geocode
+import requests
 
 from ...config import config
 from ... import logger
@@ -36,6 +37,7 @@ def geocodeUserAddress(query):
     j = geocode.pelias_search(
         clnt,
         query,
+        size=50,
         country="FR",
         layers=["postalcode", "address", "locality", "venue"],
     )
@@ -51,55 +53,89 @@ def geocode_query(
     etab_maj: dict,
     nom=None,
     adresse=None,
-    cp=None,
+    departement=None,
+    cp: str = None,
     commune=None,
     lat=None,
     lon=None,
 ):
-    query = ""
+    queryl = []
+
     if nom is not None and adresse is None:
-        query += nom + ","
+        query_name = nom.lower()
+        if "collège" in query_name:
+            query_name = query_name.replace("collège", "")
+        if "college" in query_name:
+            query_name = query_name.replace("college", "")
+        if "privé" in query_name:
+            query_name = query_name.replace("privé", "")
+        if "prive" in query_name:
+            query_name = query_name.replace("prive", "")
+        if "lycée" in query_name:
+            query_name = query_name.replace("lycée", "")
+        if "lycee" in query_name:
+            query_name = query_name.replace("lycee", "")
+        if "public" in query_name:
+            query_name = query_name.replace("public", "")
+        if "hors contrat" in query_name:
+            query_name = query_name.replace("hors contrat", "")
+        if "professionnel" in query_name:
+            query_name = query_name.replace("professionnel", "")
+        queryl.append(query_name)
+
     if adresse is not None:
         etab_maj["adresse"] = adresse
-        query += adresse + ","
-    if cp is not None:
-        etab_maj["code_postal"] = cp
-        query += cp + ","
+        queryl.append(adresse)
+
+    # if cp is not None:
+    #     etab_maj["code_postal"] = cp
+    #     queryl.append(cp)
+
     if commune is not None:
         etab_maj["commune"] = commune
-        query += commune + ","
+        queryl.append(commune)
     else:
         logger.error("In findCoordFromAddress, argument 'commune' must not be None")
         return None, None
 
+    if departement is not None:
+        etab_maj["departement"] = departement
+        queryl.append(departement)
+
+    queryl.append("France")
+
+    query = ", ".join(queryl)
+
     lon = lat = None
-    j = geocode.pelias_search(
-        clnt,
-        query,
-        country="FR",
-        layers=["postalcode", "address", "locality", "venue"],
-    )
+
+    url = "https://photon.komoot.io/api/?q={query}"
+    res = requests.get(url.format(query=query))
+    j = res.json()
+
+    # j = geocode.pelias_search(
+    #     clnt,
+    #     rect_max_y=rect_max_y,
+    #     text=query,
+    #     size=10,
+    # )
     time.sleep(1)  # To comply with rate limiting
 
-    found_feat = None
-    max_confidence = -1
-    for f in j["features"]:
-        if "locality" not in f["properties"].keys():
-            continue
-
-        if len(j["features"]) == 1 or f["properties"]["confidence"] > max_confidence:
-            found_feat = f.copy()
-            max_confidence = f["properties"]["confidence"]
-
-    if found_feat is not None:
+    if len(j["features"]) > 0:
+        found_feat = j["features"][0]
         lon, lat = found_feat["geometry"]["coordinates"]
-    else:
-        pass
+        # Il arrive que le geocoder n'arrive pas à positionner un établissement
+        # calédonien : la latitude renvoyée est positive. On considère donc que dans ce cas,
+        # l'établissement n'a pas pu être positionné
+        if cp.startswith("98") and lat > 0:
+            lon = None
+            lat = None
 
     return lon, lat
 
 
-def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None, lon=None):
+def findCoordFromAddress(
+    nom=None, adresse=None, departement=None, cp=None, commune=None, lat=None, lon=None
+):
     """
 
     Examples:
@@ -118,38 +154,32 @@ def findCoordFromAddress(nom=None, adresse=None, cp=None, commune=None, lat=None
 
     cache_fd = open(cache_pth, "rb")
     data = pickle.load(cache_fd)
-    key = (nom, adresse, cp, commune, lat, lon)
+    key = (nom, adresse, departement, cp, commune, lat, lon)
     if key in data.keys():
         res = data[key]
-        if res["position"] is not None:
-            return res
+        if "position" in res.keys() and "latitude" in res.keys() and "longitude" in res.keys():
+            if (
+                res["position"] is not None
+                and res["latitude"] is not None
+                and res["longitude"] is not None
+            ):
+                if "98" not in cp or res["latitude"] < 0:
+                    return res
+
+    logger.debug("Using ORS")
 
     etab_maj = dict(
         position=None,
         commune=None,
+        departement=None,
         code_postal=None,
         adresse=None,
-        departement=None,
     )
 
-    api_key = config.OPENROUTESERVICE_KEY
-    clnt = client.Client(key=api_key)
+    clnt = client.Client(key=config.OPENROUTESERVICE_KEY)
 
     if lat is None or lon is None:
-        lon, lat = geocode_query(clnt, etab_maj, nom, adresse, cp, commune)
-
-    if lat is None and adresse is not None:
-        lon, lat = geocode_query(clnt, etab_maj, nom=nom, adresse=None, cp=cp, commune=commune)
-
-    if lat is None and nom is not None:
-        lon, lat = geocode_query(clnt, etab_maj, nom=None, adresse=None, cp=cp, commune=commune)
-
-    if lat is None and cp is not None:
-        lon, lat = geocode_query(clnt, etab_maj, nom=None, adresse=None, cp=None, commune=commune)
-
-    # if lat is None:
-    #     logger.error("geoloc failed : %s, %s, %s, %s" % (nom, adresse, cp, commune))
-    #     return None
+        lon, lat = geocode_query(clnt, etab_maj, nom, adresse, departement, cp, commune)
 
     if (nom is None or adresse is None or cp is None) and lon is not None and lat is not None:
         j = geocode.pelias_reverse(clnt, [lon, lat], country="FR")

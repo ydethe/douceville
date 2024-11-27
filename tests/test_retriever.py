@@ -17,7 +17,7 @@ if __name__ == "__main__":
         ),
         bacgt_pth=Path("data/fr-en-indicateurs-de-resultat-des-lycees-gt_v2.parquet"),
         dnb_pth=Path("data/fr-en-dnb-par-etablissement.parquet"),
+        destination_folder=Path("data"),
     )
 
-    df_etab.to_parquet("data/etablissements.parquet")
-    df_res.to_parquet("data/resultats.parquet")
+    print(df_etab.loc[(df_etab["latitude"] > 0) & (df_etab["departement"] == "98")])
