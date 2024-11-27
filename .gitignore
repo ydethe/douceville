@@ -16,6 +16,7 @@ requirements.txt
 *.parquet
 ors-docker/
 ors.env
+nominatim-data/
 
 instance
 htmlcov
