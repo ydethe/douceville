@@ -119,7 +119,9 @@ class Etablissement(db.Model):
     ouverture = db.Column(db.DateTime())
     import_status = db.Column(db.Integer, nullable=False)
     nature = db.Column(db.String(191), nullable=False)
-    resultats = db.relationship("Resultat", backref="etablissement", lazy="dynamic")
+    resultats = db.relationship(
+        "Resultat", backref="etablissement", lazy="dynamic", cascade="all, delete"
+    )
 
     def __repr__(self):
         r = self.asDict()

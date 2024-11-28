@@ -29,6 +29,8 @@ services:
       - HOST=https://$HOST
       - PORT=$PORT
       - PRICE_ID=$PRICE_ID
+    volumes:
+      - ./dv_data:/code
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(`$HOST`)"

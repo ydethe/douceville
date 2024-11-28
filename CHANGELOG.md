@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed dev compose file ([c2c8bbf](https://github.com/ydethe/douceville/commit/c2c8bbf88c5c9609d60402e910b331cf776d6d8d) by Yann de The).
 - Fixed wrong latitudes ([06c158e](https://github.com/ydethe/douceville/commit/06c158efa6200af73987f44a721d8e0fbd579ee6) by Yann de The).
 - Fixed coordinate determination ([a62b1ec](https://github.com/ydethe/douceville/commit/a62b1ecbd2429c29119ca19d1a259e17eedd7c07) by Yann de The).
 - Fixed docker ([7afa495](https://github.com/ydethe/douceville/commit/7afa495dfce0ca378716c813629f6021d89ef1bb) by Yann de The).

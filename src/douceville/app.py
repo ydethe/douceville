@@ -74,22 +74,24 @@ def accueil():
     return redirect(url_for("carte.carte"))
 
 
-# if not test_db_filled():
-#     logger.info("Initializing database: table creation...")
-#     from .models import User, Etablissement, Resultat  # noqa: F401
-#     from .blueprints.users.manage_users import add_user
+if not test_db_filled():
+    from . import logger
 
-#     with app.app_context():
-#         db.create_all()
+    logger.info("Initializing database: table creation...")
+    from .models import User, Etablissement, Resultat  # noqa: F401
+    from .blueprints.users.manage_users import add_user
 
-#         add_user(
-#             email=config.ADMIN_EMAIL,
-#             pwd=config.ADMIN_PASSWORD,
-#             admin=True,
-#             active=True,
-#         )
+    with app.app_context():
+        db.create_all()
 
-#     logger.info("Database tables created")
+        add_user(
+            email=config.ADMIN_EMAIL,
+            pwd=config.ADMIN_PASSWORD,
+            admin=True,
+            active=True,
+        )
+
+    logger.info("Database tables created")
 
 app.register_blueprint(carte_bp, url_prefix="/carte")
 app.register_blueprint(users_bp, url_prefix="/users/")
