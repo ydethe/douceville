@@ -25,6 +25,8 @@ services:
       - HOST=https://$HOST
       - PORT=$PORT
       - PRICE_ID=$PRICE_ID
+    volumes:
+      - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/data:/code
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(`$HOST`)"
@@ -45,6 +47,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/db:/var/lib/postgresql/data
     environment:
       TZ: $TZ
       POSTGRES_DB: $POSTGRES_DB
