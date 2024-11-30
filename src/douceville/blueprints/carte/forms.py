@@ -2,13 +2,18 @@ from flask_wtf import FlaskForm
 from wtforms.fields import SelectMultipleField as DVSelField
 from wtforms.fields import SelectField
 from wtforms.fields import StringField, SubmitField, FloatField
-from sqlalchemy import distinct
+from sqlalchemy.orm import InstrumentedAttribute
+from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 
-def buildList(attr):
-    from ...models import db
+def buildList(attr: InstrumentedAttribute):
+    # TODO: solve this query
+    from ...models import get_engine
 
-    elem = [str(x[0]) for x in db.session.query(distinct(attr)).all()]
+    engine = get_engine()
+    with Session(engine) as session:
+        elem = list(session.scalars(select(attr).distinct()))
     elem.sort()
 
     ret_list = [(str(x), str(x)) for x in elem]
@@ -17,7 +22,7 @@ def buildList(attr):
 
 
 class QueryForm(FlaskForm):
-    from ...models import db, Etablissement
+    from ...models import Etablissement
 
     address = StringField("Adresse")
     transp = SelectField(

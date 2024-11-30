@@ -3,7 +3,9 @@ import logging
 from flask import jsonify, request
 from flask_login import login_required
 from geoalchemy2.shape import to_shape
-from sqlalchemy import func
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+
 
 from . import enseignement_bp
 
@@ -11,7 +13,7 @@ from . import enseignement_bp
 @enseignement_bp.route("/", methods=["GET"])
 @login_required
 def enseignement():
-    from ...models import db, Etablissement
+    from ...models import Etablissement, get_engine
     from ...utils import Serializer
     from ...blueprints.isochrone.geographique import calcIsochrone
 
@@ -43,15 +45,19 @@ def enseignement():
         pg += "%f %f," % (lon, lat)
     pg = pg[:-1] + "))"
 
-    a = db.session.query(Etablissement).filter(
-        func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
-    )
+    engine = get_engine()
+    with Session(engine) as session:
+        stmt = select(Etablissement).where(
+            func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
+        )
 
-    if nature != []:
-        a = a.filter(Etablissement.nature.in_(nature))
+        if nature != []:
+            stmt = stmt.where(Etablissement.nature.in_(nature))
 
-    if secteur != []:
-        a = a.filter(Etablissement.secteur.in_(secteur))
+        if secteur != []:
+            stmt = stmt.where(Etablissement.secteur.in_(secteur))
+
+        a = session.scalar(stmt).all()
 
     features = []
     for e, n in a.all():

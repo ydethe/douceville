@@ -1,15 +1,32 @@
 import time
 
-from sqlalchemy import inspect
+from sqlalchemy import (
+    ForeignKey,
+    String,
+    DateTime,
+    UniqueConstraint,
+    create_engine,
+    inspect,
+    select,
+)
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, relationship, Session
 from geoalchemy2 import Geometry
 import stripe
 from flask_login import UserMixin
 
-from .app import db, bcrypt
 from . import logger
 
 
-__all__ = ["User", "Resultat", "Etablissement"]
+__all__ = ["ImportStatus", "Base", "User", "Resultat", "Etablissement"]
+
+
+def get_engine() -> Engine:
+    from .config import config
+
+    engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=False)
+    return engine
 
 
 class ImportStatus(object):
@@ -18,15 +35,30 @@ class ImportStatus(object):
     ETAB_FROM_RESULT = 2
 
 
-class User(UserMixin, db.Model):
+class Base(DeclarativeBase):
+    pass
+
+
+class User(UserMixin, Base):
     __tablename__ = "dvuser"
 
-    id = db.Column(db.BigInteger, nullable=False, primary_key=True)
-    email = db.Column(db.String(1024), nullable=False, unique=True)
-    hashed_pwd = db.Column(db.String(128), nullable=False)
-    admin = db.Column(db.Boolean, nullable=False, default=False)
-    active = db.Column(db.Boolean, nullable=False, default=False)
-    stripe_id = db.Column(db.String(191), unique=True)
+    id: Mapped[int] = mapped_column(nullable=False, primary_key=True)
+    email: Mapped[str] = mapped_column(String(1024), nullable=False, unique=True)
+    hashed_pwd: Mapped[str] = mapped_column(String(128), nullable=False)
+    admin: Mapped[str] = mapped_column(nullable=False, default=False)
+    active: Mapped[str] = mapped_column(nullable=False, default=False)
+    stripe_id: Mapped[str] = mapped_column(String(191), nullable=True, unique=True)
+
+    @classmethod
+    def get_by_email(cls, email: str) -> "User":
+        engine = get_engine()
+        with Session(engine) as session:
+            stmt = select(cls).where(cls.email == email)
+            q = session.scalars(stmt).all()
+            if len(q) == 0:
+                return None
+            else:
+                return q[0]
 
     def getCurrentPeriodEnd(self):
         sid = self.getStripeID()
@@ -59,11 +91,14 @@ class User(UserMixin, db.Model):
             return None
 
         self.stripe_id = client["id"]
-        db.session.commit()
+        # TODO: solve instance update with sqlalchemy
+        # db.session.commit()
 
         return client["id"]
 
     def isCorrectPassword(self, plaintext):
+        from .app import bcrypt
+
         return bcrypt.check_password_hash(self.hashed_pwd, plaintext)
 
     def __repr__(self):
@@ -74,17 +109,19 @@ class User(UserMixin, db.Model):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 
-class Resultat(db.Model):
+class Resultat(Base):
     __tablename__ = "resultat"
-    __table_args__ = (db.UniqueConstraint("diplome", "annee", "etablissement_uai"),)
+    __table_args__ = (UniqueConstraint("diplome", "annee", "etablissement_uai"),)
 
-    idx = db.Column(db.Integer, primary_key=True, nullable=False)
-    diplome = db.Column(db.String(191), nullable=False)
-    annee = db.Column(db.Integer, nullable=False)
-    presents = db.Column(db.Integer)
-    admis = db.Column(db.Integer)
-    mentions = db.Column(db.Integer)
-    etablissement_uai = db.Column(db.String(10), db.ForeignKey("etablissement.UAI"), nullable=False)
+    idx: Mapped[int] = mapped_column(primary_key=True, nullable=False)
+    diplome: Mapped[str] = mapped_column(String(191), nullable=False)
+    annee: Mapped[int] = mapped_column(nullable=False)
+    presents: Mapped[int]
+    admis: Mapped[int]
+    mentions: Mapped[int]
+    etablissement_uai: Mapped[str] = mapped_column(
+        String(10), ForeignKey("etablissement.UAI"), nullable=False
+    )
 
     def __repr__(self):
         r = self.asDict()
@@ -100,26 +137,25 @@ class Resultat(db.Model):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 
-class Etablissement(db.Model):
+class Etablissement(Base):
     __tablename__ = "etablissement"
 
     # Identification
-    UAI = db.Column(db.String(10), primary_key=True, nullable=False)
-    nom = db.Column(db.String(191), nullable=False)
-    adresse = db.Column(db.String(191))
-    lieu_dit = db.Column(db.String(191))
-    code_postal = db.Column(db.String(6), nullable=False)
-    commune = db.Column(db.String(191), nullable=False)
+    UAI: Mapped[str] = mapped_column(String(10), primary_key=True, nullable=False)
+    nom: Mapped[str] = mapped_column(String(191), nullable=False)
+    adresse: Mapped[str] = mapped_column(String(191), nullable=True)
+    lieu_dit: Mapped[str] = mapped_column(String(191), nullable=True)
+    code_postal: Mapped[str] = mapped_column(String(6), nullable=False)
+    commune: Mapped[str] = mapped_column(String(191), nullable=False)
     # https://gist.github.com/joshuapowell/e209a4dac5c8187ea8ce#file-gistfile1-md
-    position = db.Column(Geometry("POINT"), nullable=False)
-    # position = db.Column(db.String(191), nullable=False)
-    departement = db.Column(db.Integer, nullable=False)
-    academie = db.Column(db.String(191))
-    secteur = db.Column(db.String(191), nullable=False)
-    ouverture = db.Column(db.DateTime())
-    import_status = db.Column(db.Integer, nullable=False)
-    nature = db.Column(db.String(191), nullable=False)
-    resultats = db.relationship(
+    position = mapped_column(Geometry("POINT"), nullable=False)
+    # position :Mapped[str]=  mapped_column(String(191), nullable=False)
+    departement: Mapped[str] = mapped_column(String(191), nullable=False)
+    academie: Mapped[str] = mapped_column(String(191))
+    secteur: Mapped[str] = mapped_column(String(191), nullable=False)
+    ouverture = mapped_column(DateTime(), nullable=True)
+    nature: Mapped[str] = mapped_column(String(191), nullable=False)
+    resultats = relationship(
         "Resultat", backref="etablissement", lazy="dynamic", cascade="all, delete"
     )
 

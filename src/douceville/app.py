@@ -1,7 +1,8 @@
+from sqlalchemy import select
 import stripe
+from sqlalchemy.orm import Session
+
 from flask import Flask, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -9,9 +10,6 @@ from flask_mail import Mail
 from flask_login import current_user
 from flask_nav3 import Nav
 from flask_nav3.elements import View, Navbar
-from flask_alembic import Alembic
-
-# from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from .blueprints.users import users_bp
@@ -34,9 +32,9 @@ class UserModelView(ModelView):
 
 def test_db_filled() -> bool:
     import sqlalchemy as sa
-    from .config import config
+    from .models import get_engine
 
-    engine = sa.create_engine(config.SQLALCHEMY_DATABASE_URI)
+    engine = get_engine()
     insp = sa.inspect(engine)
     return insp.has_table("resultat", schema="dbo")
 
@@ -45,8 +43,6 @@ def test_db_filled() -> bool:
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(config)
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 bcrypt = Bcrypt(app)
 mail = Mail(app)
@@ -57,14 +53,15 @@ login_manager.login_view = "users.login"
 
 @login_manager.user_loader
 def load_user(userid):
-    from .models import User
+    from .models import User, get_engine
 
-    user = User.query.filter(User.id == userid).first()
+    engine = get_engine()
+    with Session(engine) as session:
+        stmt = select(User).where(User.id == userid)
+        user = session.scalars(stmt).first()
+
     return user
 
-
-alembic = Alembic()
-alembic.init_app(app)  # call in the app factory if you're using that pattern
 
 stripe.api_key = config.STRIPE_SECRET_KEY
 
@@ -76,20 +73,20 @@ def accueil():
 
 if not test_db_filled():
     from . import logger
-
-    logger.info("Initializing database: table creation...")
-    from .models import User, Etablissement, Resultat  # noqa: F401
+    from .models import Base, get_engine
     from .blueprints.users.manage_users import add_user
 
-    with app.app_context():
-        db.create_all()
+    logger.info("Initializing database: table creation...")
 
-        add_user(
-            email=config.ADMIN_EMAIL,
-            pwd=config.ADMIN_PASSWORD,
-            admin=True,
-            active=True,
-        )
+    engine = get_engine()
+    Base.metadata.create_all(engine)
+
+    add_user(
+        email=config.ADMIN_EMAIL,
+        pwd=config.ADMIN_PASSWORD,
+        admin=True,
+        active=True,
+    )
 
     logger.info("Database tables created")
 
@@ -98,12 +95,6 @@ app.register_blueprint(users_bp, url_prefix="/users/")
 app.register_blueprint(isochrone_bp, url_prefix="/isochrone")
 app.register_blueprint(payment_bp, url_prefix="/pay")
 app.register_blueprint(enseignement_bp, url_prefix="/enseignement")
-
-# admin = Admin(app, name="douceville", template_mode="bootstrap3")
-
-# admin.add_view(UserModelView(models.Etablissement, db.session))
-# admin.add_view(UserModelView(models.Resultat, db.session))
-# admin.add_view(UserModelView(models.User, db.session))
 
 topbar = Navbar(
     "douceville.fr",

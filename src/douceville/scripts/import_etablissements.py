@@ -1,4 +1,3 @@
-from ..models import ImportStatus
 from ..blueprints.isochrone.geographique import findCoordFromAddress
 
 
@@ -28,7 +27,6 @@ def findEtabPosition(etab: dict) -> dict:
     if etab_maj is None:
         return None
 
-    etab["import_status"] = ImportStatus.COORD_FROM_ADDRESS
     etab.update(etab_maj)
 
     return etab

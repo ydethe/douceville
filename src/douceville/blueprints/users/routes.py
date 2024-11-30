@@ -10,6 +10,8 @@ from flask import (
     url_for,
 )
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy import select, update
+from sqlalchemy.orm import Session
 
 from . import users_bp
 from .forms import LoginForm, SignupForm
@@ -53,7 +55,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.get_by_email(form.email.data)
         if not user or not user.isCorrectPassword(form.password.data):
             flash("Please check your login details and try again.")
             return redirect(
@@ -92,7 +94,7 @@ def signup():
 @users_bp.route("/confirm", methods=["GET"])
 def confirm():
     from ...utils import Serializer
-    from ...models import db, User
+    from ...models import User, get_engine
     from .. import logger
 
     token = request.args.get("token", "")
@@ -104,12 +106,16 @@ def confirm():
     maj_user = {"active": True}
     maj_user.update(param)
 
-    q = db.session.query(User).filter(User.email == verif_email)
-    if q.count() == 0:
-        logger.error("Aucun utilisateur avec le mail %s" % verif_email)
-    else:
-        q.update(maj_user)
-        db.session.commit()
+    engine = get_engine()
+    with Session(engine) as session:
+        stmt = select(User).where(User.email == verif_email)
+        q = session.scalars(stmt)
+        if q.count() == 0:
+            logger.error("Aucun utilisateur avec le mail %s" % verif_email)
+        else:
+            stmt = update(User)
+            session.execute(stmt, [maj_user])
+            session.commit()
 
     return redirect(url_for(".login"))
 

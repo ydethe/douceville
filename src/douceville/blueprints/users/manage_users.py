@@ -1,5 +1,6 @@
 from getpass import getpass
 
+from sqlalchemy.orm import Session
 from flask_mail import Message
 import typer
 
@@ -16,7 +17,7 @@ def add_user(
 ):
     """Register a user in the base"""
     # logger = logging.getLogger("douceville_logger")
-    from ...models import db, User
+    from ...models import User, get_engine
     from ...app import app, bcrypt, mail
     from ...config import config
     from ...utils import Serializer
@@ -26,28 +27,29 @@ def add_user(
     if pwd is None:
         pwd = getpass("password: ")
 
-    q = User.query.filter_by(email=email)
-    if q.count() == 0:
-        hpwd = bcrypt.generate_password_hash(pwd, config.BCRYPT_ROUNDS)
-        user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
+    q = User.get_by_email(email)
+    if q is not None:
+        return
 
-        if not active:
-            s = Serializer()
-            token = s.serialize({"email": email})
-            with app.app_context():
-                msg = Message("Hello", recipients=[email])
-                msg.html = '<a href="%s:%s/users/confirm?token=%s">Click here to confirm</a>' % (
-                    config.HOST,
-                    config.PORT,
-                    token,
-                )
-                mail.send(msg)
+    hpwd = bcrypt.generate_password_hash(pwd, config.BCRYPT_ROUNDS)
+    user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
 
-        db.session.add(user)
-        db.session.commit()
-        print("OK")
-    else:
-        print("!!! NOK !!!")
+    if not active:
+        s = Serializer()
+        token = s.serialize({"email": email})
+        with app.app_context():
+            msg = Message("Hello", recipients=[email])
+            msg.html = '<a href="%s:%s/users/confirm?token=%s">Click here to confirm</a>' % (
+                config.HOST,
+                config.PORT,
+                token,
+            )
+            mail.send(msg)
+
+    engine = get_engine()
+    with Session(engine) as session:
+        session.add_all([user])
+        session.commit()
 
 
 def add_user_main():

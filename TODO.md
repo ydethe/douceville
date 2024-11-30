@@ -1,0 +1,1 @@
+- [src/douceville/models.py#L94](src/douceville/models.py#L94): solve instance update with sqlalchemy
