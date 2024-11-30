@@ -1,7 +1,9 @@
 from pathlib import Path
 
+from sqlalchemy.engine import Connection
 from sqlalchemy.dialects.postgresql import insert
 import pandas as pd
+import numpy as np
 import typer
 import rich.progress as rp
 
@@ -12,13 +14,17 @@ import_app = typer.Typer()
 app.add_typer(import_app, name="import", help="Manage parquet data in the app.")
 
 
-def upsert_df(df: pd.DataFrame, primary_key: str, table, connection):
+def upsert_df(df: pd.DataFrame, primary_key: str, table, connection: Connection):
     nb_rows = len(df)
     for index, row in rp.track(df.iterrows(), total=nb_rows):
         rec = row.to_dict()
         rec.pop("latitude", None)
         rec.pop("longitude", None)
         rec.pop("import_status", None)
+        lk = list(rec.keys())
+        for k in lk:
+            if isinstance(rec[k], float) and np.isnan(rec[k]):
+                rec[k] = -1
         insert_stmt = insert(table).values(rec)
         upsert_stmt = insert_stmt.on_conflict_do_update(
             index_elements=[primary_key],
