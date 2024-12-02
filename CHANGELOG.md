@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added BAN ([b654f09](https://github.com/ydethe/douceville/commit/b654f09f35fae9ea1b41aaf464ea212e1bf3fb47) by Yann de The).
 - Added link to ors doc ([dce02a3](https://github.com/ydethe/douceville/commit/dce02a3e3d3378bd5d3c542f0ae882c089a61b4a) by Yann de Thé).
 - Added bac results parsing ([fc44044](https://github.com/ydethe/douceville/commit/fc44044bd2a1a7e29e7e9886e64f2ea4a4d5607d) by Yann de The).
 - Added parquet parsing ([790ed2a](https://github.com/ydethe/douceville/commit/790ed2a1dcd9cbe6505311f4b159aa704037cd95) by Yann de The).

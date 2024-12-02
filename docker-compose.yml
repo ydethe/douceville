@@ -1,10 +1,12 @@
 services:
   douceville:
-    image: douceville:latest
+    image: ydethe/douceville:latest
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
+      addok:
+        condition: service_started
     environment:
       - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
       - BCRYPT_ROUNDS=$BCRYPT_ROUNDS
@@ -21,7 +23,11 @@ services:
       - MAIL_USERNAME=$MAIL_USERNAME
       - MAIL_PASSWORD=$MAIL_PASSWORD
       - MAIL_DEFAULT_SENDER=$MAIL_DEFAULT_SENDER
-      - DATABASE_URI=postgresql+psycopg2://douceville:douceville@$COMPOSE_PROJECT_NAME-db-1/douceville
+      - ADDOK_HOST=$ADDOK_HOST
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - HOST=https://$HOST
       - PORT=$PORT
       - PRICE_ID=$PRICE_ID
@@ -54,6 +60,30 @@ services:
       POSTGRES_DB: $POSTGRES_DB
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+
+  addok:
+    # https://github.com/BaseAdresseNationale/addok-docker
+    # curl "http://localhost:7878/search?q=1+rue+de+la+paix+paris"
+    image: etalab/addok
+    depends_on:
+    - addok-redis
+    volumes:
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.conf:/etc/addok/addok.conf
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.db:/data/addok.db
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/logs:/logs
+    links:
+    - addok-redis:redis
+    environment:
+      WORKERS: 1
+      WORKER_TIMEOUT: 30
+      LOG_QUERIES: 1
+      LOG_NOT_FOUND: 1
+      SLOW_QUERIES: 200
+
+  addok-redis:
+    image: etalab/addok-redis
+    volumes:
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/dump.rdb:/data/dump.rdb
 
 networks:
   default:
