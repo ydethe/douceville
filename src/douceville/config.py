@@ -32,6 +32,7 @@ class Config(BaseSettings):
     MAIL_DEFAULT_SENDER: str
 
     POSTGRES_HOST: str
+    ADDOK_HOST: str
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str

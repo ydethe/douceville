@@ -17,6 +17,9 @@ requirements.txt
 ors-docker/
 ors.env
 nominatim-data/
+addok-data/
+*.zip
+dv_data/
 
 instance
 htmlcov
