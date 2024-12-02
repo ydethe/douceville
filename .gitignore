@@ -20,7 +20,7 @@ nominatim-data/
 addok-data/
 *.zip
 dv_data/
-
+logs/
 instance
 htmlcov
 
