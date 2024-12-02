@@ -13,7 +13,7 @@ def create_checkout_session():
     from ...config import config
 
     data = json.loads(request.data)
-    domain_url = "%s:%s" % (config.HOST, config.PORT)
+    domain_url = f"{config.PROTOCOL}://{config.HOST}:{config.PORT}"
 
     try:
         # Create new Checkout Session for the order

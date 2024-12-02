@@ -8,6 +8,7 @@ services:
       addok:
         condition: service_started
     environment:
+      - LOGIN_DISABLED=$LOGIN_DISABLED
       - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
       - BCRYPT_ROUNDS=$BCRYPT_ROUNDS
       - SECRET_KEY=$SECRET_KEY
@@ -30,6 +31,7 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - HOST=https://$HOST
       - PORT=$PORT
+      - PROTOCOL=$PROTOCOL
       - PRICE_ID=$PRICE_ID
     volumes:
       - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/data:/code

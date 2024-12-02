@@ -11,6 +11,8 @@ class Config(BaseSettings):
         case_sensitive=True, env_file=".env", env_file_encoding="utf-8", extra="allow"
     )
 
+    LOGIN_DISABLED: bool
+
     LOGFIRE_TOKEN: str
     LOGLEVEL: str
     FLASK_ADMIN_SWATCH: str
@@ -38,6 +40,7 @@ class Config(BaseSettings):
     POSTGRES_PASSWORD: str
     HOST: str
     PORT: int
+    PROTOCOL: str
     PRICE_ID: str
 
     @property

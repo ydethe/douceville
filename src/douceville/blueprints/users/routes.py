@@ -24,7 +24,7 @@ def profile():
     # done managing their billing with the portal.
     from ...config import config
 
-    return_url = "%s:%s%s" % (config.HOST, config.PORT, url_for(".profile"))
+    return_url = "%s://%s:%s%s" % (config.PROTOCOL, config.HOST, config.PORT, url_for(".profile"))
     sid = current_user.getStripeID()
 
     session = stripe.billing_portal.Session.create(customer=sid, return_url=return_url)

@@ -1,6 +1,7 @@
 from pathlib import Path
 import pickle
 import time
+import typing as T
 
 from openrouteservice import client, geocode
 import requests
@@ -9,7 +10,9 @@ from ...config import config
 from ... import logger
 
 
-def calcIsochrone(center, dist, transp):
+def calcIsochrone(center: T.Tuple[float, float], dist: float, transp: str):
+    print(center, dist, transp)
+
     # https://openrouteservice.org/dev/#/home?tab=1
     api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
@@ -17,9 +20,9 @@ def calcIsochrone(center, dist, transp):
     # Request of isochrones with 15 minute footwalk.
     params_iso = {
         "profile": transp,
-        "intervals": [dist],  # time in seconds
-        "segments": dist,
-        "attributes": ["total_pop"],  # Get population count for isochrones
+        "range": [dist],  # time in seconds
+        "interval": dist,
+        "attributes": [],  # Get population count for isochrones
         "locations": [center],
     }
 

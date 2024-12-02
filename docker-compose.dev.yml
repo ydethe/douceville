@@ -7,6 +7,7 @@ services:
       addok:
         condition: service_started
     environment:
+      - LOGIN_DISABLED=$LOGIN_DISABLED
       - LOGFIRE_TOKEN=$LOGFIRE_TOKEN
       - LOGLEVEL=$LOGLEVEL
       - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
@@ -31,6 +32,7 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - HOST=https://$HOST
       - PORT=$PORT
+      - PROTOCOL=$PROTOCOL
       - PRICE_ID=$PRICE_ID
     volumes:
       - ./dv_data:/code
