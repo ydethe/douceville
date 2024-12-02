@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed proxy/test env ([97e0248](https://github.com/ydethe/douceville/commit/97e0248f2b32c2b80d65a23bf85b638c4b62bb09) by Yann de The).
 - Fixed prod ([b5c6c60](https://github.com/ydethe/douceville/commit/b5c6c60e22065b9d2681e54ec93fb2133ff4b42c) by Yann de The).
 - Fixed compose files ([adedc10](https://github.com/ydethe/douceville/commit/adedc10604f749819132f64a12115361f4c207da) by Yann de The).
 - Fixed dev compose file ([c2c8bbf](https://github.com/ydethe/douceville/commit/c2c8bbf88c5c9609d60402e910b331cf776d6d8d) by Yann de The).

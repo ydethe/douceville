@@ -39,8 +39,6 @@ class Config(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     HOST: str
-    PORT: int
-    PROTOCOL: str
     PRICE_ID: str
 
     @property

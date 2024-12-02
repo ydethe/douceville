@@ -10,10 +10,7 @@ from . import payment_bp
 @payment_bp.route("/create-checkout-session", methods=["POST"])
 @login_required
 def create_checkout_session():
-    from ...config import config
-
     data = json.loads(request.data)
-    domain_url = f"{config.PROTOCOL}://{config.HOST}:{config.PORT}"
 
     try:
         # Create new Checkout Session for the order
@@ -25,8 +22,8 @@ def create_checkout_session():
 
         # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
-            success_url="%s%s" % (domain_url, url_for("users.profile")),
-            cancel_url="%s%s" % (domain_url, url_for("users.profile")),
+            success_url=url_for("users.profile"),
+            cancel_url=url_for("users.profile"),
             payment_method_types=["card"],
             mode="subscription",
             customer=current_user.getStripeID(),

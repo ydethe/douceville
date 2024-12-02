@@ -52,7 +52,6 @@ def recherche():
 @carte_bp.route("/", methods=["GET"])
 @login_required
 def carte():
-    from ...config import config
     from ...utils import Serializer
     from ...blueprints.isochrone.geographique import geocodeUserAddress
 
@@ -77,6 +76,6 @@ def carte():
 
     return render_template(
         "carte.html",
-        points_request=f"{config.PROTOCOL}://{config.HOST}:{config.PORT}/enseignement?token={token}",
-        isochrone_request=f"{config.PROTOCOL}://{config.HOST}:{config.PORT}/isochrone?token={token}",
+        points_request=f"/enseignement?token={token}",
+        isochrone_request=f"/isochrone?token={token}",
     )
