@@ -29,9 +29,6 @@ jobs:
           name: Python wheel file
           path: dist/*.whl
 
-      - name: Check out the repo
-        uses: actions/checkout@v4
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -43,11 +40,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ydethe/douceville
-
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Python wheel file
 
       - name: Build and push Docker image
         id: push

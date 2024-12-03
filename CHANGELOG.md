@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Fixed build ([6e27e5a](https://github.com/ydethe/douceville/commit/6e27e5a29fb28552fac18d11f43e79ef0abc8331) by Yann de The).
+- Fixed build ([bfc198f](https://github.com/ydethe/douceville/commit/bfc198fb78a992afa00d9b88553d93178b405beb) by Yann de The).
 
 <!-- insertion marker -->
 ## [v1.1.1](https://github.com/ydethe/douceville/releases/tag/v1.1.1) - 2024-12-03
