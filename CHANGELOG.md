@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed image version in compose file ([3c404f8](https://github.com/ydethe/douceville/commit/3c404f8e514e9026d67a54501b864045e09d39ed) by Yann de The).
 - Fixed image verison in compose file ([7217af1](https://github.com/ydethe/douceville/commit/7217af1c0a2472b27b60028b51d6da51568e202a) by Yann de The).
 
 <!-- insertion marker -->

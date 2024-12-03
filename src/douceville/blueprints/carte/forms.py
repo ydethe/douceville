@@ -37,7 +37,7 @@ class QueryForm(FlaskForm):
     )
     dist = FloatField("Temps (min)")
     stat_min = FloatField("Taux de réussite (%)")
-    nature = DVSelField("Nature", choices=[(x, x.title()) for x in list_nature])
-    secteur = DVSelField("Secteur", choices=[(x, x.title()) for x in list_secteur])
+    nature = DVSelField("Nature", choices=list_nature)
+    secteur = DVSelField("Secteur", choices=[(x, y.title()) for (x, y) in list_secteur])
 
     submit = SubmitField("Chercher")

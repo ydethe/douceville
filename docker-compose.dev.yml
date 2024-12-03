@@ -34,7 +34,7 @@ services:
   #     - PROTOCOL=$PROTOCOL
   #     - PRICE_ID=$PRICE_ID
   #   volumes:
-  #     - ./dv_data:/code
+  #     - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/data:/code
   #   labels:
   #     - "traefik.enable=true"
   #     - "traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(`$HOST`)"
@@ -58,7 +58,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ./dv_data/db:/var/lib/postgresql/data
+      - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/db:/var/lib/postgresql/data
     environment:
       TZ: $TZ
       POSTGRES_DB: $POSTGRES_DB
@@ -74,9 +74,9 @@ services:
     ports:
     - "7878:7878"
     volumes:
-    - ./addok-data/addok.conf:/etc/addok/addok.conf
-    - ./addok-data/addok.db:/data/addok.db
-    - ./logs:/logs
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.conf:/etc/addok/addok.conf
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.db:/data/addok.db
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/logs:/logs
     links:
     - addok-redis:redis
     environment:
@@ -89,7 +89,7 @@ services:
   addok-redis:
     image: etalab/addok-redis
     volumes:
-    - ./addok-data/dump.rdb:/data/dump.rdb
+    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/dump.rdb:/data/dump.rdb
 
 networks:
   default:
