@@ -11,8 +11,6 @@ from ... import logger
 
 
 def calcIsochrone(center: T.Tuple[float, float], dist: float, transp: str):
-    print(center, dist, transp)
-
     # https://openrouteservice.org/dev/#/home?tab=1
     api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)

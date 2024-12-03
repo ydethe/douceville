@@ -17,7 +17,8 @@ def test_enseignement(client):
     token = s.serialize(req_param)
 
     response = client.get("/enseignement", follow_redirects=True, query_string={"token": token})
-    print(response.json)
+
+    return response
 
 
 if __name__ == "__main__":

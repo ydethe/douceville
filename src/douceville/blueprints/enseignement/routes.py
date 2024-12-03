@@ -79,6 +79,4 @@ def enseignement():
                 }
                 features.append(f)
 
-    print(len(features))
-
     return jsonify(features)

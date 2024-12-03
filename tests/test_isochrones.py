@@ -27,7 +27,8 @@ def test_isochrones(client):
     token = s.serialize(req_param)
 
     response = client.get("/isochrone", follow_redirects=True, query_string={"token": token})
-    print(response.json)
+
+    return response.json
 
 
 if __name__ == "__main__":
