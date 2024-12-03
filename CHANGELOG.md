@@ -6,15 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v1.1.3](https://github.com/ydethe/douceville/releases/tag/v1.1.3) - 2024-12-03
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.1.1...HEAD)</small>
+<small>[Compare with v1.1.1](https://github.com/ydethe/douceville/compare/v1.1.1...v1.1.3)</small>
 
 ### Fixed
 
 - Fixed build ([d991aab](https://github.com/ydethe/douceville/commit/d991aab81760873f31b9cba0e45864c0e95d978b) by Yann de The).
 
-<!-- insertion marker -->
 ## [v1.1.1](https://github.com/ydethe/douceville/releases/tag/v1.1.1) - 2024-12-03
 
 <small>[Compare with v1.0.0](https://github.com/ydethe/douceville/compare/v1.0.0...v1.1.1)</small>

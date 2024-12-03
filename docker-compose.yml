@@ -1,6 +1,6 @@
 services:
   douceville:
-    image: ydethe/douceville:latest
+    image: ydethe/douceville:master
     restart: unless-stopped
     depends_on:
       db:
