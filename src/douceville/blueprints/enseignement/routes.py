@@ -57,27 +57,27 @@ def enseignement():
         if secteur != []:
             stmt = stmt.where(Etablissement.secteur.in_(secteur))
 
-        a = session.scalar(stmt).all()
+        a = session.scalars(stmt)
 
-    features = []
-    for e, n in a.all():
-        info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
+        features = []
+        for e in a.all():
+            info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
 
-        stat = 0
-        for res in e.resultats:
-            if res.admis is not None and res.annee == int(year):
-                stat = int(100 * res.admis / res.presents)
-                info += "<br>Réussite %s %i : %i%%" % (res.diplome, res.annee, stat)
+            stat = 0
+            for res in e.resultats:
+                if res.admis is not None and res.annee == int(year):
+                    stat = int(100 * res.admis / res.presents)
+                    info += "<br>Réussite %s %i : %i%%" % (res.diplome, res.annee, stat)
 
-        if stat >= float(stat_min):
-            p = to_shape(e.position)
-            lon, lat = p.coords.xy
-            f = {
-                "geometry": {"coordinates": [lon[0], lat[0]], "type": "Point"},
-                "properties": {"info": info},
-                "type": "Feature",
-            }
-            features.append(f)
+            if stat >= float(stat_min):
+                p = to_shape(e.position)
+                lon, lat = p.coords.xy
+                f = {
+                    "geometry": {"coordinates": [lon[0], lat[0]], "type": "Point"},
+                    "properties": {"info": info},
+                    "type": "Feature",
+                }
+                features.append(f)
 
     print(len(features))
 
