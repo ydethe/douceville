@@ -1,7 +1,5 @@
-# docker build -t douceville . --network=host
-# docker tag douceville:latest ydethe/douceville:latest
-# docker push ydethe/douceville:latest
-FROM python:3.11-alpine
+# Stage 1: Build
+FROM python:3.11-alpine AS builder
 
 ARG LOGIN_DISABLED
 ARG LOGFIRE_TOKEN
@@ -65,5 +63,9 @@ RUN pip install -r requirements.txt
 
 COPY *.whl /code
 RUN pip install /code/*.whl
+
+# Stage 2: Production
+FROM python:3.11-alpine
+COPY --from=builder /usr/local /usr/local
 EXPOSE 3566
 CMD ["sh", "-c", "waitress-serve --url-scheme=$PROTOCOL --host=0.0.0.0 --port 3566 douceville.app:app"]
