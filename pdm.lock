@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:5767aa2f6f77acb7d0e8f1ce2da1b7f0f04247f700ac5f47c1c3e6969bb4df89"
+content_hash = "sha256:2fd864e1f065914607339441295d1242b1714ac5f49e86c521079631d9663839"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.12"
@@ -962,7 +962,7 @@ files = [
 
 [[package]]
 name = "logfire"
-version = "2.3.0"
+version = "2.6.0"
 requires_python = ">=3.8"
 summary = "The best Python observability tool! 🪵🔥"
 groups = ["default"]
@@ -977,8 +977,24 @@ dependencies = [
     "typing-extensions>=4.1.0",
 ]
 files = [
-    {file = "logfire-2.3.0-py3-none-any.whl", hash = "sha256:812febd7cc29fdd7551d40161b7aa877a1bc8b4f74ef5bcfb0f0ca790f5184f4"},
-    {file = "logfire-2.3.0.tar.gz", hash = "sha256:2a29a7a31079201cbad494b865b27bf93b75df70dd752df0f121467a23709bbb"},
+    {file = "logfire-2.6.0-py3-none-any.whl", hash = "sha256:04afc7263e3294eb5ff9e1d5b6e6a2677cc3b7ef75b48c477093a634a5f0ea43"},
+    {file = "logfire-2.6.0.tar.gz", hash = "sha256:a23378f688344b5ec7f473fcd346e70105aad2c0e28c7dd22fb3250be8ee8c85"},
+]
+
+[[package]]
+name = "logfire"
+version = "2.6.0"
+extras = ["flask"]
+requires_python = ">=3.8"
+summary = "The best Python observability tool! 🪵🔥"
+groups = ["default"]
+dependencies = [
+    "logfire==2.6.0",
+    "opentelemetry-instrumentation-flask>=0.42b0",
+]
+files = [
+    {file = "logfire-2.6.0-py3-none-any.whl", hash = "sha256:04afc7263e3294eb5ff9e1d5b6e6a2677cc3b7ef75b48c477093a634a5f0ea43"},
+    {file = "logfire-2.6.0.tar.gz", hash = "sha256:a23378f688344b5ec7f473fcd346e70105aad2c0e28c7dd22fb3250be8ee8c85"},
 ]
 
 [[package]]
@@ -1239,6 +1255,42 @@ files = [
 ]
 
 [[package]]
+name = "opentelemetry-instrumentation-flask"
+version = "0.49b2"
+requires_python = ">=3.8"
+summary = "Flask instrumentation for OpenTelemetry"
+groups = ["default"]
+dependencies = [
+    "opentelemetry-api~=1.12",
+    "opentelemetry-instrumentation-wsgi==0.49b2",
+    "opentelemetry-instrumentation==0.49b2",
+    "opentelemetry-semantic-conventions==0.49b2",
+    "opentelemetry-util-http==0.49b2",
+    "packaging>=21.0",
+]
+files = [
+    {file = "opentelemetry_instrumentation_flask-0.49b2-py3-none-any.whl", hash = "sha256:41cdd530ca335eb215200868b40d7635f93595591208884abd4e3839f7fd34fa"},
+    {file = "opentelemetry_instrumentation_flask-0.49b2.tar.gz", hash = "sha256:29c610cb509c36ab22800911cbe84476860d70840b88d83da0514ac41f5377ee"},
+]
+
+[[package]]
+name = "opentelemetry-instrumentation-wsgi"
+version = "0.49b2"
+requires_python = ">=3.8"
+summary = "WSGI Middleware for OpenTelemetry"
+groups = ["default"]
+dependencies = [
+    "opentelemetry-api~=1.12",
+    "opentelemetry-instrumentation==0.49b2",
+    "opentelemetry-semantic-conventions==0.49b2",
+    "opentelemetry-util-http==0.49b2",
+]
+files = [
+    {file = "opentelemetry_instrumentation_wsgi-0.49b2-py3-none-any.whl", hash = "sha256:95ff5133cc15e5fed102ac725ad210be82a4b93a3bc740ddae4b5bbdb771b21d"},
+    {file = "opentelemetry_instrumentation_wsgi-0.49b2.tar.gz", hash = "sha256:0bd88510fa45fa6ba70bd444060c0a1ee12e45e02bb4bcba19bc4f955269b872"},
+]
+
+[[package]]
 name = "opentelemetry-proto"
 version = "1.28.2"
 requires_python = ">=3.8"
@@ -1281,6 +1333,17 @@ dependencies = [
 files = [
     {file = "opentelemetry_semantic_conventions-0.49b2-py3-none-any.whl", hash = "sha256:51e7e1d0daa958782b6c2a8ed05e5f0e7dd0716fc327ac058777b8659649ee54"},
     {file = "opentelemetry_semantic_conventions-0.49b2.tar.gz", hash = "sha256:44e32ce6a5bb8d7c0c617f84b9dc1c8deda1045a07dc16a688cc7cbeab679997"},
+]
+
+[[package]]
+name = "opentelemetry-util-http"
+version = "0.49b2"
+requires_python = ">=3.8"
+summary = "Web util for OpenTelemetry"
+groups = ["default"]
+files = [
+    {file = "opentelemetry_util_http-0.49b2-py3-none-any.whl", hash = "sha256:e325d6511c6bee7b43170eb0c93261a210ec57e20ab1d7a99838515ef6d2bf58"},
+    {file = "opentelemetry_util_http-0.49b2.tar.gz", hash = "sha256:5958c7009f79146bbe98b0fdb23d9d7bf1ea9cd154a1c199029b1a89e0557199"},
 ]
 
 [[package]]

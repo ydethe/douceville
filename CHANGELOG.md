@@ -6,27 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v1.1.4](https://github.com/ydethe/douceville/releases/tag/v1.1.4) - 2024-12-03
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.1.3...HEAD)</small>
-
-### Fixed
-
-- Fixed image version in compose file ([3c404f8](https://github.com/ydethe/douceville/commit/3c404f8e514e9026d67a54501b864045e09d39ed) by Yann de The).
-- Fixed image verison in compose file ([7217af1](https://github.com/ydethe/douceville/commit/7217af1c0a2472b27b60028b51d6da51568e202a) by Yann de The).
-
-<!-- insertion marker -->
-## [v1.1.3](https://github.com/ydethe/douceville/releases/tag/v1.1.3) - 2024-12-03
-
-<small>[Compare with v1.1.1](https://github.com/ydethe/douceville/compare/v1.1.1...v1.1.3)</small>
-
-### Fixed
-
-- Fixed build ([d991aab](https://github.com/ydethe/douceville/commit/d991aab81760873f31b9cba0e45864c0e95d978b) by Yann de The).
-
-## [v1.1.1](https://github.com/ydethe/douceville/releases/tag/v1.1.1) - 2024-12-03
-
-<small>[Compare with v1.0.0](https://github.com/ydethe/douceville/compare/v1.0.0...v1.1.1)</small>
+<small>[Compare with v1.0.0](https://github.com/ydethe/douceville/compare/v1.0.0...v1.1.4)</small>
 
 ### Added
 
@@ -42,6 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed form ([ff7b6a8](https://github.com/ydethe/douceville/commit/ff7b6a843e22ab3d93312341aad30a54bd2b4b17) by Yann de The).
+- Fixed image version in compose file ([3c404f8](https://github.com/ydethe/douceville/commit/3c404f8e514e9026d67a54501b864045e09d39ed) by Yann de The).
+- Fixed image verison in compose file ([7217af1](https://github.com/ydethe/douceville/commit/7217af1c0a2472b27b60028b51d6da51568e202a) by Yann de The).
+- Fixed build ([d991aab](https://github.com/ydethe/douceville/commit/d991aab81760873f31b9cba0e45864c0e95d978b) by Yann de The).
 - Fixed sample.env ([19f9451](https://github.com/ydethe/douceville/commit/19f9451aa235f165764afee6e4cd636994ab70b2) by Yann de The).
 - Fixed proxy/test env ([97e0248](https://github.com/ydethe/douceville/commit/97e0248f2b32c2b80d65a23bf85b638c4b62bb09) by Yann de The).
 - Fixed prod ([b5c6c60](https://github.com/ydethe/douceville/commit/b5c6c60e22065b9d2681e54ec93fb2133ff4b42c) by Yann de The).

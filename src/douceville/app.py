@@ -1,3 +1,4 @@
+import logfire
 from sqlalchemy import select
 import stripe
 from sqlalchemy.orm import Session
@@ -49,6 +50,7 @@ mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
+logfire.instrument_flask(app)
 
 
 @login_manager.user_loader
