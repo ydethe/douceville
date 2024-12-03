@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## Unreleased
+
+<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.1.3...HEAD)</small>
+
+### Fixed
+
+- Fixed image verison in compose file ([7217af1](https://github.com/ydethe/douceville/commit/7217af1c0a2472b27b60028b51d6da51568e202a) by Yann de The).
+
+<!-- insertion marker -->
 ## [v1.1.3](https://github.com/ydethe/douceville/releases/tag/v1.1.3) - 2024-12-03
 
 <small>[Compare with v1.1.1](https://github.com/ydethe/douceville/compare/v1.1.1...v1.1.3)</small>
