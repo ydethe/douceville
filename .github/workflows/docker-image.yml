@@ -1,8 +1,9 @@
 name: Docker Image CI
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '**'
 
 jobs:
   push_to_registry:
@@ -45,4 +46,4 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
-          
+

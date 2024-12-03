@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v1.1.0](https://github.com/ydethe/douceville/releases/tag/v1.1.0) - 2024-12-03
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.0.0...HEAD)</small>
+<small>[Compare with v1.0.0](https://github.com/ydethe/douceville/compare/v1.0.0...v1.1.0)</small>
 
 ### Added
 
@@ -40,7 +40,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Removed PROTOCOL and PORT ([db5409f](https://github.com/ydethe/douceville/commit/db5409f9e7339aad3a26f3aa27f6dc714e4cb957) by Yann de The).
 - Removed hardcoding of parquet paths ([b53f946](https://github.com/ydethe/douceville/commit/b53f9467519bfda5a1207e14104381fad8373417) by Yann de The).
 
-<!-- insertion marker -->
 ## [v1.0.0](https://github.com/ydethe/douceville/releases/tag/v1.0.0) - 2020-11-16
 
 <small>[Compare with first commit](https://github.com/ydethe/douceville/compare/6448a3f07741a43017c3c9e4af931f4e038e2c28...v1.0.0)</small>
