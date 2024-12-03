@@ -6,6 +6,29 @@ on:
     #   - '**'
 
 jobs:
+  build_wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Build wheel and install
+        run: |
+          python -m pip install --user --upgrade build
+          python -m build
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Python wheel file
+          path: dist/*.whl
+
+
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
@@ -24,6 +47,11 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ydethe/douceville
+
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Python wheel file
 
       - name: Build and push Docker image
         id: push

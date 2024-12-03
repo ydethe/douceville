@@ -58,10 +58,8 @@ ENV SQLALCHEMY_TRACK_MODIFICATIONS=False
 RUN apk add --no-cache gcc musl-dev linux-headers postgresql-dev geos-dev
 
 WORKDIR /code
-COPY requirements.txt /code
-RUN pip install -r requirements.txt
 
-COPY *.whl /code
-RUN pip install /code/*.whl && rm -f /code/requirements.txt /code/*.whl
+COPY dist/*.whl /code
+RUN pip install -U /code/*.whl && rm -f /code/*.whl
 EXPOSE 3566
 CMD ["sh", "-c", "waitress-serve --url-scheme=$PROTOCOL --host=0.0.0.0 --port 3566 douceville.app:app"]
