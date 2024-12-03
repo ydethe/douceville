@@ -1,50 +1,51 @@
 services:
-  # web:
-  #   build: .
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #     addok:
-  #       condition: service_started
-  #   environment:
-  #     - LOGIN_DISABLED=$LOGIN_DISABLED
-  #     - LOGFIRE_TOKEN=$LOGFIRE_TOKEN
-  #     - LOGLEVEL=$LOGLEVEL
-  #     - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
-  #     - BCRYPT_ROUNDS=$BCRYPT_ROUNDS
-  #     - SECRET_KEY=$SECRET_KEY
-  #     - OPENROUTESERVICE_KEY=$OPENROUTESERVICE_KEY
-  #     - ADMIN_EMAIL=$ADMIN_EMAIL
-  #     - ADMIN_PASSWORD=$ADMIN_PASSWORD
-  #     - STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
-  #     - STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY
-  #     - MAIL_SERVER=$MAIL_SERVER
-  #     - MAIL_PORT=$MAIL_PORT
-  #     - MAIL_USE_TLS=$MAIL_USE_TLS
-  #     - MAIL_USE_SSL=$MAIL_USE_SSL
-  #     - MAIL_USERNAME=$MAIL_USERNAME
-  #     - MAIL_PASSWORD=$MAIL_PASSWORD
-  #     - MAIL_DEFAULT_SENDER=$MAIL_DEFAULT_SENDER
-  #     - ADDOK_HOST=$ADDOK_HOST
-  #     - POSTGRES_HOST=$POSTGRES_HOST
-  #     - POSTGRES_DB=$POSTGRES_DB
-  #     - POSTGRES_USER=$POSTGRES_USER
-  #     - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-  #     - HOST=https://$HOST
-    #   - PRICE_ID=$PRICE_ID
-    # volumes:
-    #   - ./dv_data:/code
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(`$HOST`)"
-    #   - "traefik.http.routers.$COMPOSE_PROJECT_NAME.entrypoints=websecure"
-    #   - "traefik.http.routers.$COMPOSE_PROJECT_NAME.tls.certresolver=letsencrypt"
-    #   - "traefik.http.services.$COMPOSE_PROJECT_NAME.loadbalancer.server.port=3566"
-    #   - "homepage.group=$HOME_GROUP"
-    #   - "homepage.name=$HOME_NAME"
-    #   - "homepage.icon=$HOME_ICON"
-    #   - "homepage.href=https://$HOST"
-    #   - "homepage.description=$HOME_DESCRIPTION"
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+      addok:
+        condition: service_started
+    environment:
+      - LOGIN_DISABLED=$LOGIN_DISABLED
+      - LOGFIRE_TOKEN=$LOGFIRE_TOKEN
+      - LOGLEVEL=$LOGLEVEL
+      - FLASK_ADMIN_SWATCH=$FLASK_ADMIN_SWATCH
+      - BCRYPT_ROUNDS=$BCRYPT_ROUNDS
+      - SECRET_KEY=$SECRET_KEY
+      - OPENROUTESERVICE_KEY=$OPENROUTESERVICE_KEY
+      - ADMIN_EMAIL=$ADMIN_EMAIL
+      - ADMIN_PASSWORD=$ADMIN_PASSWORD
+      - STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
+      - STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY
+      - MAIL_SERVER=$MAIL_SERVER
+      - MAIL_PORT=$MAIL_PORT
+      - MAIL_USE_TLS=$MAIL_USE_TLS
+      - MAIL_USE_SSL=$MAIL_USE_SSL
+      - MAIL_USERNAME=$MAIL_USERNAME
+      - MAIL_PASSWORD=$MAIL_PASSWORD
+      - MAIL_DEFAULT_SENDER=$MAIL_DEFAULT_SENDER
+      - ADDOK_HOST=$ADDOK_HOST
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - HOST=https://$HOST
+      - PROTOCOL=$PROTOCOL
+      - PRICE_ID=$PRICE_ID
+    volumes:
+      - ./dv_data:/code
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(`$HOST`)"
+      - "traefik.http.routers.$COMPOSE_PROJECT_NAME.entrypoints=websecure"
+      - "traefik.http.routers.$COMPOSE_PROJECT_NAME.tls.certresolver=letsencrypt"
+      - "traefik.http.services.$COMPOSE_PROJECT_NAME.loadbalancer.server.port=3566"
+      - "homepage.group=$HOME_GROUP"
+      - "homepage.name=$HOME_NAME"
+      - "homepage.icon=$HOME_ICON"
+      - "homepage.href=https://$HOST"
+      - "homepage.description=$HOME_DESCRIPTION"
 
   db:
     image: postgis/postgis

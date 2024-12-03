@@ -30,6 +30,7 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - HOST=https://$HOST
+      - PROTOCOL=$PROTOCOL
       - PRICE_ID=$PRICE_ID
     volumes:
       - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/data:/code
