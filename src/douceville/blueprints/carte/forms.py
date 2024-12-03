@@ -1,3 +1,5 @@
+import typing as T
+
 from flask_wtf import FlaskForm
 from wtforms.fields import SelectMultipleField as DVSelField
 from wtforms.fields import SelectField
@@ -24,13 +26,18 @@ def buildList(attr: InstrumentedAttribute):
 class QueryForm(FlaskForm):
     from ...models import Etablissement
 
+    list_nature: T.List[str] = buildList(Etablissement.nature)
+    list_secteur: T.List[str] = buildList(Etablissement.secteur)
+
     address = StringField("Adresse")
     transp = SelectField(
-        "Transport", choices=[("driving-car", "Voiture"), ("cycling-road", "Vélo")]
+        "Transport",
+        choices=[("driving-car", "Voiture"), ("cycling-road", "Vélo")],
+        default="driving-car",
     )
     dist = FloatField("Temps (min)")
-    stat_min = FloatField("stat_min")
-    nature = DVSelField("Nature", choices=["Collège", "Lycée"])
-    secteur = DVSelField("Secteur", choices=buildList(Etablissement.secteur))
+    stat_min = FloatField("Taux de réussite (%)")
+    nature = DVSelField("Nature", choices=[(x, x.title()) for x in list_nature])
+    secteur = DVSelField("Secteur", choices=[(x, x.title()) for x in list_secteur])
 
     submit = SubmitField("Chercher")
