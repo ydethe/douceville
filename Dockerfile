@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM python:3.11-alpine AS builder
+FROM python:3.11-alpine
 
 ARG LOGIN_DISABLED
 ARG LOGFIRE_TOKEN
@@ -62,10 +62,6 @@ COPY requirements.txt /code
 RUN pip install -r requirements.txt
 
 COPY *.whl /code
-RUN pip install /code/*.whl
-
-# Stage 2: Production
-FROM python:3.11-alpine
-COPY --from=builder /usr/local /usr/local
+RUN pip install /code/*.whl && rm -f /code/requirements.txt /code/*.whl
 EXPOSE 3566
 CMD ["sh", "-c", "waitress-serve --url-scheme=$PROTOCOL --host=0.0.0.0 --port 3566 douceville.app:app"]

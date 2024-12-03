@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+- Removed print calls ([a1b24c4](https://github.com/ydethe/douceville/commit/a1b24c4fc0b07e463fd87558035d79e12dda978c) by Yann de The).
 - Removed PROTOCOL and PORT ([db5409f](https://github.com/ydethe/douceville/commit/db5409f9e7339aad3a26f3aa27f6dc714e4cb957) by Yann de The).
 - Removed hardcoding of parquet paths ([b53f946](https://github.com/ydethe/douceville/commit/b53f9467519bfda5a1207e14104381fad8373417) by Yann de The).
 

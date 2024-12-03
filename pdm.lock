@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:b7eb5b14f3a73c10c6102eebb27fdb1ec5da0acbf10752239e05b8493ec1bbe2"
+content_hash = "sha256:5767aa2f6f77acb7d0e8f1ce2da1b7f0f04247f700ac5f47c1c3e6969bb4df89"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.12"
@@ -714,6 +714,22 @@ groups = ["default"]
 dependencies = [
     "SQLAlchemy>=1.4",
     "packaging",
+]
+files = [
+    {file = "GeoAlchemy2-0.16.0-py3-none-any.whl", hash = "sha256:b0f27d5500ee757af4654c6262e0f834b7a843504d193653ec747ef1128d2ab5"},
+    {file = "geoalchemy2-0.16.0.tar.gz", hash = "sha256:df64bb72af70daafaac3f359492c96501c37ab85ed20f9510c99cc6d02881100"},
+]
+
+[[package]]
+name = "geoalchemy2"
+version = "0.16.0"
+extras = ["shapely"]
+requires_python = ">=3.7"
+summary = "Using SQLAlchemy with Spatial Databases"
+groups = ["default"]
+dependencies = [
+    "Shapely>=1.7",
+    "geoalchemy2==0.16.0",
 ]
 files = [
     {file = "GeoAlchemy2-0.16.0-py3-none-any.whl", hash = "sha256:b0f27d5500ee757af4654c6262e0f834b7a843504d193653ec747ef1128d2ab5"},

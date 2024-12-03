@@ -25,7 +25,7 @@ dependencies = [
     "flask-login",
     "flask-mail",
     "flask-wtf",
-    "GeoAlchemy2",
+    "geoalchemy2[shapely]>=0.16.0",
     "geojson",
     "itsdangerous",
     "jinja2",
