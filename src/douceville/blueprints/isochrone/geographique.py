@@ -10,18 +10,30 @@ from ...config import config
 from ... import logger
 
 
-def calcIsochrone(center: T.Tuple[float, float], dist: float, transp: str):
+def calcIsochrone(
+    lonlat: T.Tuple[float, float],
+    dist: float,
+    transp: T.Literal[
+        "driving-car",
+        "driving-hgv",
+        "foot-walking",
+        "foot-hiking",
+        "cycling-regular",
+        "cycling-road",
+        "cycling-mountain",
+        "cycling-electric",
+    ],
+):
     # https://openrouteservice.org/dev/#/home?tab=1
     api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
 
-    # Request of isochrones with 15 minute footwalk.
     params_iso = {
         "profile": transp,
         "range": [dist],  # time in seconds
         "interval": dist,
         "attributes": [],  # Get population count for isochrones
-        "locations": [center],
+        "locations": [lonlat],
     }
 
     iso = clnt.isochrones(**params_iso)  # Perform isochrone request

@@ -32,7 +32,7 @@ class QueryForm(FlaskForm):
     address = StringField("Adresse")
     transp = SelectField(
         "Transport",
-        choices=[("driving-car", "Voiture"), ("cycling-road", "Vélo")],
+        choices=[("foot-walking", "A pied"), ("driving-car", "Voiture"), ("cycling-road", "Vélo")],
         default="driving-car",
     )
     dist = FloatField("Temps (min)")

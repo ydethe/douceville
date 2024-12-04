@@ -1,4 +1,5 @@
 import logging
+import typing as T
 
 from flask import jsonify, request
 from flask_login import login_required
@@ -8,6 +9,35 @@ from sqlalchemy.orm import Session
 
 
 from . import enseignement_bp
+from ...models import Etablissement, Resultat
+
+
+def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple[str, float]:
+    info = "<b>[%s]%s</b>" % (etab.UAI, etab.nom)
+
+    if year is not None:
+        year = int(year)
+
+    max_year = -1
+    cres: Resultat
+    res: dict | None = None
+    for cres in etab.resultats:
+        if cres.admis is None:
+            continue
+
+        if cres.annee > max_year:
+            max_year = cres.annee
+            res = cres.asDict()
+
+        if year is not None and cres.annee == year:
+            res = cres.asDict()
+            break
+
+    stat = int(100 * res["admis"] / res["presents"])
+    info_res = "<br>Réussite %s %i : %i%%" % (res["diplome"], res["annee"], stat)
+    info += info_res
+
+    return info, stat
 
 
 @enseignement_bp.route("/", methods=["GET"])
@@ -26,7 +56,7 @@ def enseignement():
     dat = s.deserialize(token)
     logger.debug("enseignement param : %s" % str(dat))
 
-    year = dat.get("year", 2018)
+    year = dat.get("year", None)
     lat = dat.get("lat", 1.39396)
     lon = dat.get("lon", 43.547864)
     dist = dat.get("dist", 600)
@@ -45,29 +75,23 @@ def enseignement():
         pg += "%f %f," % (lon, lat)
     pg = pg[:-1] + "))"
 
+    stmt = select(Etablissement).where(
+        func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
+    )
+
+    if nature != []:
+        stmt = stmt.where(Etablissement.nature.in_(nature))
+
+    if secteur != []:
+        stmt = stmt.where(Etablissement.secteur.in_(secteur))
+
     engine = get_engine()
     with Session(engine) as session:
-        stmt = select(Etablissement).where(
-            func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
-        )
-
-        if nature != []:
-            stmt = stmt.where(Etablissement.nature.in_(nature))
-
-        if secteur != []:
-            stmt = stmt.where(Etablissement.secteur.in_(secteur))
-
         a = session.scalars(stmt)
 
         features = []
         for e in a.all():
-            info = "<b>[%s]%s</b>" % (e.UAI, e.nom)
-
-            stat = 0
-            for res in e.resultats:
-                if res.admis is not None and res.annee == int(year):
-                    stat = int(100 * res.admis / res.presents)
-                    info += "<br>Réussite %s %i : %i%%" % (res.diplome, res.annee, stat)
+            info, stat = etablissement_info_display(e, year=year)
 
             if stat >= float(stat_min):
                 p = to_shape(e.position)
