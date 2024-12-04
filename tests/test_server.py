@@ -1,8 +1,4 @@
-import eventlet
-from eventlet import wsgi
-
-from douceville import logger
-from douceville.app import app
+from douceville.scripts import run
 
 
-wsgi.server(sock=eventlet.listen(("0.0.0.0", 3566)), site=app, log=logger, debug=False)
+run()

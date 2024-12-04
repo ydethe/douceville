@@ -55,7 +55,8 @@ dependencies = [
     "joblib>=1.4.2",
     "geopy>=2.4.1",
     "openrouteservice>=2.3.3",
-    "eventlet>=0.38.0",
+    "asgiref>=3.8.1",
+    "hypercorn>=0.17.3",
 ]
 requires-python = ">=3.10,<3.12"
 

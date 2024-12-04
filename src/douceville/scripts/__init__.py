@@ -1,4 +1,5 @@
 from pathlib import Path
+import asyncio
 
 from sqlalchemy.engine import Connection
 from sqlalchemy.dialects.postgresql import insert
@@ -6,8 +7,10 @@ import pandas as pd
 import numpy as np
 import typer
 import rich.progress as rp
-import eventlet
-from eventlet import wsgi
+from asgiref.wsgi import WsgiToAsgi
+from hypercorn.middleware import ProxyFixMiddleware
+from hypercorn.asyncio import serve
+from hypercorn.config import Config
 
 
 app = typer.Typer()
@@ -64,4 +67,12 @@ def run():
     from .. import logger
     from ..app import app as flask_app
 
-    wsgi.server(sock=eventlet.listen(("0.0.0.0", 3566)), site=flask_app, log=logger, debug=False)
+    asgi_app = WsgiToAsgi(flask_app)
+    fixed_app = ProxyFixMiddleware(asgi_app, mode="legacy", trusted_hops=1)
+
+    cfg = Config()
+    cfg.bind = ["0.0.0.0:3566"]
+    cfg.accesslog = logger
+    cfg.errorlog = logger
+    asyncio.run(serve(app=fixed_app, config=cfg, mode="asgi"))
+    # 3566
