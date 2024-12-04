@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v1.2.0](https://github.com/ydethe/douceville/releases/tag/v1.2.0) - 2024-12-03
+
+<small>[Compare with v1.1.4](https://github.com/ydethe/douceville/compare/v1.1.4...v1.2.0)</small>
+
+### Added
+
+- Added logfire telemetry ([679a3c2](https://github.com/ydethe/douceville/commit/679a3c26dc2dbb243edf25d2bb4da0c015bff293) by Yann de The).
+
 ## [v1.1.4](https://github.com/ydethe/douceville/releases/tag/v1.1.4) - 2024-12-03
 
 <small>[Compare with v1.0.0](https://github.com/ydethe/douceville/compare/v1.0.0...v1.1.4)</small>

@@ -23,9 +23,12 @@ def profile():
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
     from ...config import config
+    from ... import logger
 
     return_url = url_for(".profile")
     sid = current_user.getStripeID()
+    logger.debug(f"Stripe ID: {sid}")
+    logger.debug(f"Stripe return URL: {return_url}")
 
     session = stripe.billing_portal.Session.create(customer=sid, return_url=return_url)
 

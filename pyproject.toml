@@ -48,7 +48,6 @@ dependencies = [
     "flask-nav3>=0.7.2",
     "pydantic-settings>=2.6.1",
     "logfire[flask]>=2.6.0",
-    "waitress>=3.0.2",
     "requests>=2.32.3",
     "pydantic>=2.9.2",
     "pandas>=2.2.3",
@@ -56,6 +55,7 @@ dependencies = [
     "joblib>=1.4.2",
     "geopy>=2.4.1",
     "openrouteservice>=2.3.3",
+    "eventlet>=0.38.0",
 ]
 requires-python = ">=3.10,<3.12"
 

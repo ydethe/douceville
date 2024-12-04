@@ -1,6 +1,8 @@
-from waitress import serve
+import eventlet
+from eventlet import wsgi
 
+from douceville import logger
 from douceville.app import app
 
 
-serve(app, listen="*:9978")
+wsgi.server(sock=eventlet.listen(("0.0.0.0", 3566)), site=app, log=logger, debug=False)

@@ -5,11 +5,8 @@ rm -f *.whl *.log
 pdm build
 cp dist/*.whl .
 pdm export --prod -o requirements.txt
-sudo docker compose -f docker-compose.dev.yml stop
-sudo docker compose -f docker-compose.dev.yml up --build --remove-orphans -d
-sudo docker compose -f docker-compose.dev.yml logs -f
-# sudo docker compose -f docker-compose.yml stop
-# sudo docker compose -f docker-compose.yml up --build --remove-orphans -d
-# sudo docker compose -f docker-compose.yml logs -f
+sudo docker compose -f docker-compose.dev.yml -p dvtest stop
+sudo docker compose -f docker-compose.dev.yml -p dvtest up --build --remove-orphans -d
+sudo docker compose -f docker-compose.dev.yml -p dvtest logs -f
 
-# rm -f *.whl requirements.txt
+rm -f *.whl requirements.txt

@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 import typer
 import rich.progress as rp
+import eventlet
+from eventlet import wsgi
 
 
 app = typer.Typer()
@@ -55,3 +57,11 @@ def resultats(path: Path):
     with engine.connect() as conn:
         upsert_df(df, primary_key="idx", table=Resultat, connection=conn)
         conn.commit()
+
+
+@app.command()
+def run():
+    from .. import logger
+    from ..app import app as flask_app
+
+    wsgi.server(sock=eventlet.listen(("0.0.0.0", 3566)), site=flask_app, log=logger, debug=False)

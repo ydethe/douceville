@@ -17,19 +17,15 @@ from .config import config
 logger = logging.getLogger("douceville_logger")
 logger.setLevel(config.LOGLEVEL.upper())
 
-stream_handler = RichHandler()
-logger.addHandler(stream_handler)
+logfire.configure(token=config.LOGFIRE_TOKEN, console=False)
 
 log_pth = Path("logs")
 if not log_pth.exists():
     log_pth.mkdir(exist_ok=True)
 file_handler = RotatingFileHandler("logs/douceville.log", maxBytes=10e6, backupCount=5)
+term_handler = RichHandler(rich_tracebacks=False)
+lf_handler = logfire.LogfireLoggingHandler(fallback=term_handler)
+
 logger.addHandler(file_handler)
-
-logfire.configure(token=config.LOGFIRE_TOKEN)
-
-# création de l'objet logger qui va nous servir à écrire dans les logs
-logger = logging.getLogger("fireset_logger")
-logger.addHandler(logfire.LogfireLoggingHandler())
-logger.addHandler(RichHandler(rich_tracebacks=False))
-logger.setLevel(config.LOGLEVEL.upper())
+logger.addHandler(lf_handler)
+logger.addHandler(term_handler)

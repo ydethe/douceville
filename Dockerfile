@@ -62,4 +62,4 @@ WORKDIR /code
 COPY dist/*.whl /code
 RUN pip install -U /code/*.whl && rm -f /code/*.whl
 EXPOSE 3566
-CMD ["sh", "-c", "waitress-serve --url-scheme=$PROTOCOL --host=0.0.0.0 --port 3566 douceville.app:app"]
+CMD ["dv-cli", "run"]

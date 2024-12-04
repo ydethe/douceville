@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:2fd864e1f065914607339441295d1242b1714ac5f49e86c521079631d9663839"
+content_hash = "sha256:c93037d242e7952ccebe0df850d4bd79f47ba27764ad659c75b924fde2f431d8"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.12"
@@ -493,6 +493,22 @@ files = [
 ]
 
 [[package]]
+name = "eventlet"
+version = "0.38.0"
+requires_python = ">=3.7"
+summary = "Highly concurrent networking library"
+groups = ["default"]
+dependencies = [
+    "dnspython>=1.15.0",
+    "greenlet>=1.0",
+    "monotonic>=1.4; python_version < \"3.5\"",
+]
+files = [
+    {file = "eventlet-0.38.0-py3-none-any.whl", hash = "sha256:d7d457c7d0e793b16bc3f44da1e87eb48639b655c17dc430294d28cc2c67de81"},
+    {file = "eventlet-0.38.0.tar.gz", hash = "sha256:a5df970a2431526e4973bd5810bb8c41aa4da18baa531aa18799302c24e19510"},
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 requires_python = ">=3.7"
@@ -792,7 +808,6 @@ version = "3.1.1"
 requires_python = ">=3.7"
 summary = "Lightweight in-process concurrent programming"
 groups = ["default"]
-marker = "(platform_machine == \"win32\" or platform_machine == \"WIN32\" or platform_machine == \"AMD64\" or platform_machine == \"amd64\" or platform_machine == \"x86_64\" or platform_machine == \"ppc64le\" or platform_machine == \"aarch64\") and python_version < \"3.13\""
 files = [
     {file = "greenlet-3.1.1-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:0bbae94a29c9e5c7e4a2b7f0aae5c17e8e90acbfd3bf6270eeba60c39fce3563"},
     {file = "greenlet-3.1.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0fde093fb93f35ca72a556cf72c92ea3ebfda3d79fc35bb19fbe685853869a83"},
@@ -2227,17 +2242,6 @@ summary = "A tiny pythonic visitor implementation."
 groups = ["default"]
 files = [
     {file = "visitor-0.1.3.tar.gz", hash = "sha256:2c737903b2b6864ebc6167eef7cf3b997126f1aa94bdf590f90f1436d23e480a"},
-]
-
-[[package]]
-name = "waitress"
-version = "3.0.2"
-requires_python = ">=3.9.0"
-summary = "Waitress WSGI server"
-groups = ["default"]
-files = [
-    {file = "waitress-3.0.2-py3-none-any.whl", hash = "sha256:c56d67fd6e87c2ee598b76abdd4e96cfad1f24cacdea5078d382b1f9d7b5ed2e"},
-    {file = "waitress-3.0.2.tar.gz", hash = "sha256:682aaaf2af0c44ada4abfb70ded36393f0e307f4ab9456a215ce0020baefc31f"},
 ]
 
 [[package]]
