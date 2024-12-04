@@ -1,141 +1,29 @@
-[build-system]
-requires = [
-    "pdm-backend>=2.1.0,<3.0.0",
-    "setuptools>=67.0.0,<69.0.0",
-    "wheel",
-    "toml"
-]
-build-backend = "pdm.backend"
-
 [project]
 name = "douceville"
-dynamic = ["version"]
+version = "0.1.0"
 description = ""
-authors = [
-    { name = "Yann de Thé", email = "yann@gmail.com" },
-]
+readme = "README.md"
+requires-python = ">=3.8"
 dependencies = [
-    # Requirements dated 30/01/2021
-    "cryptography",
-    "email-validator",
-    "flask",
-    "flask-admin",
-    "flask-bcrypt",
-    "flask-bootstrap",
-    "flask-login",
-    "flask-mail",
-    "flask-wtf",
-    "geoalchemy2[shapely]>=0.16.0",
-    "geojson",
-    "itsdangerous",
-    "jinja2",
-    "markupsafe>=3.0.2",
-    "openpyxl",
-    "psycopg2-binary",
-    "pyopenssl",
-    "python-slugify",
-    # "PyYaml",
-    "rdflib",
-    "rdfpandas",
-    "rich",
-    "shapely",
-    "sqlalchemy",
-    "stripe",
-    "typer>=0.13.1",
-    "werkzeug",
-    "wtforms",
-    "xlrd",
-    "flask-nav3>=0.7.2",
-    "pydantic-settings>=2.6.1",
-    "logfire[flask]>=2.6.0",
-    "requests>=2.32.3",
-    "pydantic>=2.9.2",
-    "pandas>=2.2.3",
-    "fastparquet>=2024.11.0",
-    "joblib>=1.4.2",
-    "geopy>=2.4.1",
-    "openrouteservice>=2.3.3",
-    "asgiref>=3.8.1",
-    "hypercorn>=0.17.3",
-]
-requires-python = ">=3.10,<3.12"
-
-[project.urls]
-"Bug Tracker" = "https://gitlab.com/ydethe/douceville/-/issues"
-Homepage = "https://gitlab.com/ydethe/douceville"
-Source = "https://gitlab.com/ydethe/douceville"
-
-[tool.pylint.format]
-max-line-length = 100
-
-[tool.black]
-line-length = 100
-target-version = ['py38']
-
-[tool.pdm.version]
-source = "scm"
-
-[tool.pdm.build]
-excludes = [
-    "tests",
-    "build",
-    "dist",
+  "flet==0.25.1",
+  "flet-desktop>=0.25.1"
 ]
 
-[tool.pdm.dev-dependencies]
-doc = [
-    "pdoc3",
-    "pylint",
-]
-test = [
-    "pytest",
-    "pytest-cov",
-    "pytest-xdist",
-    "pytest-mock",
-    "pytest-instafail",
-    "pytest-picked",
-    "pytest-sugar",
-    "pytest-html",
-]
 
-[tool.pdm.scripts]
-site_packages = true
-test.shell = """\
-    mkdir -p build/htmldoc/tests
-    pytest --html=build/htmldoc/tests/report.html --self-contained-html --junitxml=build/junit.xml --cov-config=.coveragerc --cov douceville tests --doctest-modules douceville
-    coverage html -d build/htmldoc/coverage
-"""
-doc.shell = """\
-    mkdir -p build/htmldoc/douceville
-    mkdir -p build/htmldoc/examples
-    python -m ipykernel install --user
-    python examples/__init__.py
-    cp examples/quadcopter.png build/htmldoc/examples
-    pdoc --html --force --config latex_math=True --template-dir dev/template -o build/htmldoc douceville examples
-    pyreverse -s0 douceville -k --colorized -p douceville -m no --ignore=exceptions.py,LogFormatter.py,CSVLogger.py,PickleLogger.py,XlsLogger.py -d build/htmldoc
-    dot -Tpng build/htmldoc/classes_douceville.dot -o build/htmldoc/douceville/classes.png
-"""
-[project.scripts]
-dv-cli = "douceville.scripts:app"
+[tool.flet]
+# org name in reverse domain name notation, e.g. "com.mycompany".
+# Combined with project.name to build bundle ID for iOS and Android apps
+org = "com.mycompany"
 
-[dependency-groups]
-dev = [
-    "ipython",
-    "black",
-    "pandas",
-    "pre-commit>=4.0.1",
-]
-doc = [
-    "pdoc3",
-    "pylint",
-]
-test = [
-    "pytest",
-    "pytest-cov",
-    "pytest-xdist",
-    "pytest-mock",
-    "pytest-instafail",
-    "pytest-picked",
-    "pytest-sugar",
-    "pytest-html",
-]
+# project display name that is used as an app title on Android and iOS home screens,
+# shown in window titles and about app dialogs on desktop.
+product = "douceville"
+
+# company name to display in about app dialogs
+company = "Flet"
+
+# copyright text to display in about app dialogs
+copyright = "Copyright (C) 2024 by Flet"
+
+[tool.flet.app]
+path = "src"
