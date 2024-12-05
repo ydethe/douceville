@@ -1,3 +1,3 @@
 #! /bin/sh
 
-sudo docker compose -f docker-compose.dev.yml down
+sudo docker compose -f docker-compose.dev.yml -p dvtest stop

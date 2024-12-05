@@ -1,3 +1,34 @@
+migrations
+*.db
+*.bak
+venv
+*.xls*
+*.raw
+*.pkl
+.pdm.toml
+.vscode
+data
+.env
+.pdm-python
+*.whl
+requirements.txt
+*.geojson
+*.parquet
+ors-docker/
+ors.env
+nominatim-data/
+addok-data/
+*.zip
+dv_data/
+logs/
+instance
+htmlcov
+storage/
+
+# Generated files
+*.bin
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

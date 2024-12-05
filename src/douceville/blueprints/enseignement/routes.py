@@ -1,3 +1,4 @@
+from collections import defaultdict
 import logging
 import typing as T
 
@@ -13,29 +14,32 @@ from ...models import Etablissement, Resultat
 
 
 def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple[str, float]:
-    info = "<b>[%s]%s</b>" % (etab.UAI, etab.nom)
+    info = f"<b>{etab.nom}</b>"
 
     if year is not None:
         year = int(year)
 
-    max_year = -1
+    stat = 100
+    max_year = defaultdict(lambda: -1)
     cres: Resultat
-    res: dict | None = None
+    res: dict = {}
     for cres in etab.resultats:
-        if cres.admis is None:
+        if cres.admis is None or cres.presents is None:
             continue
 
-        if cres.annee > max_year:
-            max_year = cres.annee
-            res = cres.asDict()
+        if cres.annee > max_year[cres.diplome]:
+            max_year[cres.diplome] = cres.annee
+            res[cres.diplome] = cres.asDict()
 
         if year is not None and cres.annee == year:
-            res = cres.asDict()
+            res[cres.diplome] = cres.asDict()
             break
 
-    stat = int(100 * res["admis"] / res["presents"])
-    info_res = "<br>Réussite %s %i : %i%%" % (res["diplome"], res["annee"], stat)
-    info += info_res
+    for diplome in res.keys():
+        res_diplome = res[diplome]
+        stat = int(100 * res_diplome["admis"] / res_diplome["presents"])
+        info_res = f"<br>Réussite {diplome} {res_diplome['annee']} : {stat}%"
+        info += info_res
 
     return info, stat
 
@@ -68,16 +72,7 @@ def enseignement():
     center = [lon, lat]
     iso = calcIsochrone(center, dist, transp)
 
-    pts = iso["features"][0]["geometry"]["coordinates"][0]
-
-    pg = "POLYGON(("
-    for lon, lat in pts:
-        pg += "%f %f," % (lon, lat)
-    pg = pg[:-1] + "))"
-
-    stmt = select(Etablissement).where(
-        func.ST_Within(Etablissement.position, func.ST_GeomFromEWKT(pg))
-    )
+    stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, iso.getGeom()))
 
     if nature != []:
         stmt = stmt.where(Etablissement.nature.in_(nature))

@@ -2,12 +2,40 @@ from pathlib import Path
 import pickle
 import time
 import typing as T
+from dataclasses import dataclass
 
 from openrouteservice import client, geocode
 import requests
+from sqlalchemy import func
+from sqlalchemy.sql.functions import _FunctionGenerator
 
 from ...config import config
 from ... import logger
+
+
+@dataclass
+class Isochrone:
+    lonlat: T.Tuple[float, float]
+    dist: float
+    transp: T.Literal[
+        "driving-car",
+        "driving-hgv",
+        "foot-walking",
+        "foot-hiking",
+        "cycling-regular",
+        "cycling-road",
+        "cycling-mountain",
+        "cycling-electric",
+    ]
+    geometry: T.Iterable[T.Tuple[float, float]]
+
+    def getGeom(self) -> _FunctionGenerator:
+        pg = "POLYGON(("
+        for lon, lat in self.geometry:
+            pg += "%f %f," % (lon, lat)
+        pg = pg[:-1] + "))"
+
+        return func.ST_GeomFromEWKT(pg)
 
 
 def calcIsochrone(
@@ -23,7 +51,7 @@ def calcIsochrone(
         "cycling-mountain",
         "cycling-electric",
     ],
-):
+) -> Isochrone:
     # https://openrouteservice.org/dev/#/home?tab=1
     api_key = config.OPENROUTESERVICE_KEY
     clnt = client.Client(key=api_key)
@@ -36,8 +64,15 @@ def calcIsochrone(
         "locations": [lonlat],
     }
 
-    iso = clnt.isochrones(**params_iso)  # Perform isochrone request
+    res = clnt.isochrones(**params_iso)  # Perform isochrone request
     time.sleep(1)  # To comply with rate limiting
+
+    iso = Isochrone(
+        lonlat=lonlat,
+        dist=dist,
+        transp=transp,
+        geometry=res["features"][0]["geometry"]["coordinates"][0],
+    )
 
     return iso
 
