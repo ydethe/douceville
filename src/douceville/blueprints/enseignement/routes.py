@@ -18,6 +18,7 @@ def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple
     if year is not None:
         year = int(year)
 
+    stat = 100
     max_year = -1
     cres: Resultat
     res: dict | None = None
@@ -33,9 +34,10 @@ def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple
             res = cres.asDict()
             break
 
-    stat = int(100 * res["admis"] / res["presents"])
-    info_res = "<br>Réussite %s %i : %i%%" % (res["diplome"], res["annee"], stat)
-    info += info_res
+    if res is not None:
+        stat = int(100 * res["admis"] / res["presents"])
+        info_res = "<br>Réussite %s %i : %i%%" % (res["diplome"], res["annee"], stat)
+        info += info_res
 
     return info, stat
 
