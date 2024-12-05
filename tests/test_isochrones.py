@@ -26,7 +26,9 @@ def test_isochrones(client):
     s = Serializer()
     token = s.serialize(req_param)
 
-    response = client.get("/isochrone", follow_redirects=True, query_string={"token": token})
+    response = client.get(
+        "/isochrone", follow_redirects=True, query_string={"token": token}
+    )
 
     return response.json
 

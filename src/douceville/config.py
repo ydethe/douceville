@@ -41,6 +41,9 @@ class Config(BaseSettings):
     HOST: str
     PRICE_ID: str
 
+    GITHUB_CLIENT_ID: str
+    GITHUB_CLIENT_SECRET: str
+
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
         return f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}/{self.POSTGRES_DB}"

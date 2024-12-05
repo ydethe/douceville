@@ -8,9 +8,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- insertion marker -->
 ## Unreleased
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.2...HEAD)</small>
+<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.4...HEAD)</small>
+
+### Fixed
+
+- Fixed conflict ([bc686d3](https://github.com/ydethe/douceville/commit/bc686d3686b88f6ab34570e28fe53855585cd473) by Yann de The).
 
 <!-- insertion marker -->
+## [v1.3.4](https://github.com/ydethe/douceville/releases/tag/v1.3.4) - 2024-12-05
+
+<small>[Compare with v1.3.3](https://github.com/ydethe/douceville/compare/v1.3.3...v1.3.4)</small>
+
+## [v1.3.3](https://github.com/ydethe/douceville/releases/tag/v1.3.3) - 2024-12-05
+
+<small>[Compare with v1.3.2](https://github.com/ydethe/douceville/compare/v1.3.2...v1.3.3)</small>
+
+### Fixed
+
+- Fixed etablissement info ([50bda34](https://github.com/ydethe/douceville/commit/50bda3480980b7cc6835b80881c84d5964455bd1) by Yann de The).
+
 ## [v1.3.2](https://github.com/ydethe/douceville/releases/tag/v1.3.2) - 2024-12-04
 
 <small>[Compare with v1.3.1](https://github.com/ydethe/douceville/compare/v1.3.1...v1.3.2)</small>

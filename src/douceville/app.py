@@ -24,7 +24,9 @@ from .config import config
 
 class UserModelView(ModelView):
     def is_accessible(self):
-        return current_user.active and current_user.is_authenticated and current_user.admin
+        return (
+            current_user.active and current_user.is_authenticated and current_user.admin
+        )
 
     def _handle_view(self, name):
         if not self.is_accessible():
