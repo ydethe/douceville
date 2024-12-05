@@ -14,7 +14,7 @@ from ...models import Etablissement, Resultat
 
 
 def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple[str, float]:
-    info = "<b>[%s]%s</b>" % (etab.UAI, etab.nom)
+    info = f"<b>{etab.nom}</b>"
 
     if year is not None:
         year = int(year)
@@ -38,7 +38,7 @@ def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple
     for diplome in res.keys():
         res_diplome = res[diplome]
         stat = int(100 * res_diplome["admis"] / res_diplome["presents"])
-        info_res = "<br>Réussite %s %i : %i%%" % (diplome, res_diplome["annee"], stat)
+        info_res = f"<br>Réussite {diplome} {res_diplome['annee']} : {stat}%"
         info += info_res
 
     return info, stat
