@@ -23,6 +23,7 @@ dv_data/
 logs/
 instance
 htmlcov
+storage/
 
 # Generated files
 *.bin
