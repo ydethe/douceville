@@ -211,11 +211,7 @@ def findCoordFromAddress(
     key = (nom, adresse, departement, cp, commune, lat, lon)
     if key in data.keys():
         res = data[key]
-        if (
-            "position" in res.keys()
-            and "latitude" in res.keys()
-            and "longitude" in res.keys()
-        ):
+        if "position" in res.keys() and "latitude" in res.keys() and "longitude" in res.keys():
             if (
                 res["position"] is not None
                 and res["latitude"] is not None
@@ -237,11 +233,7 @@ def findCoordFromAddress(
     if lat is None or lon is None:
         lon, lat = geocode_query(clnt, etab_maj, nom, adresse, departement, cp, commune)
 
-    if (
-        (nom is None or adresse is None or cp is None)
-        and lon is not None
-        and lat is not None
-    ):
+    if (nom is None or adresse is None or cp is None) and lon is not None and lat is not None:
         j = geocode.pelias_reverse(clnt, [lon, lat], country="FR")
         time.sleep(1)  # To comply with rate limiting
 

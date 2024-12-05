@@ -84,9 +84,7 @@ def signup():
     form = SignupForm()
 
     if form.validate_on_submit():
-        lstat = add_user(
-            email=form.email.data, pwd=form.password.data, admin=False, active=False
-        )
+        lstat = add_user(email=form.email.data, pwd=form.password.data, admin=False, active=False)
         if lstat:
             return redirect(url_for("carte.carte"))
         else:

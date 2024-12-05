@@ -369,9 +369,7 @@ def build_dataframes(
         liste_etablissements.append(db_etab)
 
     df_etab = pd.DataFrame.from_records(liste_etablissements)
-    df_etab.to_parquet(
-        destination_folder / f"etablissements_{datetime.now():%Y-%m_%d}.parquet"
-    )
+    df_etab.to_parquet(destination_folder / f"etablissements_{datetime.now():%Y-%m_%d}.parquet")
 
     logger.info(f"{len(liste_etablissements)} établissements chargés")
 
@@ -402,9 +400,7 @@ def build_dataframes(
         liste_resultats.append(db_resultat)
 
     df_res = pd.DataFrame.from_records(liste_resultats)
-    df_res.to_parquet(
-        destination_folder / f"resultats_{datetime.now():%Y-%m_%d}.parquet"
-    )
+    df_res.to_parquet(destination_folder / f"resultats_{datetime.now():%Y-%m_%d}.parquet")
 
     logger.info(f"{len(liste_resultats)} résultats chargés")
 

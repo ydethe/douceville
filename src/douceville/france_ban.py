@@ -20,9 +20,7 @@ class ResultatBAN:
 def requete_ban(query: str) -> ResultatBAN:
     from .config import config
 
-    dat = requests.get(
-        f"http://{config.ADDOK_HOST}:7878/search?q={urllib.parse.quote(query)}"
-    )
+    dat = requests.get(f"http://{config.ADDOK_HOST}:7878/search?q={urllib.parse.quote(query)}")
     data = dat.json()
 
     dat = data["features"][0]

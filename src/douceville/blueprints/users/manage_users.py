@@ -39,9 +39,7 @@ def add_user(
         token = s.serialize({"email": email})
         with app.app_context():
             msg = Message("Hello", recipients=[email])
-            msg.html = (
-                f'<a href="/users/confirm?token={token}">Click here to confirm</a>'
-            )
+            msg.html = f'<a href="/users/confirm?token={token}">Click here to confirm</a>'
             mail.send(msg)
 
     engine = get_engine()

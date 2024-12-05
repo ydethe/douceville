@@ -13,9 +13,7 @@ from . import enseignement_bp
 from ...models import Etablissement, Resultat
 
 
-def etablissement_info_display(
-    etab: Etablissement, year: int | None
-) -> T.Tuple[str, float]:
+def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple[str, float]:
     info = f"<b>{etab.nom}</b>"
 
     if year is not None:
@@ -74,9 +72,7 @@ def enseignement():
     center = [lon, lat]
     iso = calcIsochrone(center, dist, transp)
 
-    stmt = select(Etablissement).where(
-        func.ST_Within(Etablissement.position, iso.getGeom())
-    )
+    stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, iso.getGeom()))
 
     if nature != []:
         stmt = stmt.where(Etablissement.nature.in_(nature))

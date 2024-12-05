@@ -16,9 +16,7 @@ def test_enseignement(client):
     s = Serializer()
     token = s.serialize(req_param)
 
-    response = client.get(
-        "/enseignement", follow_redirects=True, query_string={"token": token}
-    )
+    response = client.get("/enseignement", follow_redirects=True, query_string={"token": token})
 
     return response
 

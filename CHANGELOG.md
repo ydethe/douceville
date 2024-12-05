@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.4...HEAD)</small>
 
+### Added
+
+- Added map layer (wip) ([f6d11a5](https://github.com/ydethe/douceville/commit/f6d11a5fb8a55f09d55f67e8090e105197a11be6) by Yann de The).
+
 ### Fixed
 
 - Fixed conflict ([bc686d3](https://github.com/ydethe/douceville/commit/bc686d3686b88f6ab34570e28fe53855585cd473) by Yann de The).
