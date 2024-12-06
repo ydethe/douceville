@@ -62,4 +62,4 @@ WORKDIR /code
 COPY dist/*.whl /code
 RUN pip install -U /code/*.whl && rm -f /code/*.whl
 EXPOSE 3566
-CMD ["dv-cli", "run"]
+CMD ["hypercorn", "douceville.rest_api_entreypoint:app" "--bind", "0.0.0.0:3566"]

@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from douceville.rest_api_entreypoint import app
 from douceville.helpers import create_access_token
-from douceville.schemas import DvUser, Etablissement, Isochrone
+from douceville.schemas import DvUser, Etablissement, Isochrone, QueryParameters
 
 
 class TestDoucevilleAPI(unittest.TestCase):
@@ -29,8 +29,8 @@ class TestDoucevilleAPI(unittest.TestCase):
 
     def test_isochrone(self):
         params = dict(
-            lat=45,
-            lon=2,
+            lat=43.6085909,
+            lon=1.4401531,
             dist=600,
             transp="driving-car",
         )
@@ -51,6 +51,23 @@ class TestDoucevilleAPI(unittest.TestCase):
         etab = Etablissement(**data)
         assert etab.UAI == "0180766K"
 
+    def test_etablissements_zone(self):
+        params = dict(
+            lat=43.6085909,
+            lon=1.4401531,
+            dist=600,
+            transp="driving-car",
+        )
+        response = self.client.get("/isochrone", params=params)
+        assert response.status_code == 200, response.status_code
+        iso = Isochrone(**response.json())
+
+        body = QueryParameters(year=2020, stat_min=0, iso=iso)
+        response = self.client.post("/etablissements", json=body.model_dump())
+        assert response.status_code == 200, response.status_code
+        data = response.json()
+        assert len(data) > 0
+
 
 if __name__ == "__main__":
     a = TestDoucevilleAPI()
@@ -63,3 +80,6 @@ if __name__ == "__main__":
 
     a.setUp()
     a.test_etablissement()
+
+    a.setUp()
+    a.test_etablissements_zone()

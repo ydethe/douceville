@@ -28,7 +28,8 @@ dependencies = [
     "pyjwt[crypto]>=2.10.1",
     "sqlmodel>=0.0.22",
     "hypercorn>=0.17.3",
-    "openrouteservice>=2.3.3"
+    "openrouteservice>=2.3.3",
+    "asgiref>=3.8.1"
 ]
 requires-python = ">=3.10,<3.12"
 

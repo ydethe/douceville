@@ -203,8 +203,8 @@ class Isochrone(BaseModel):
 
 
 class QueryParameters(BaseModel):
-    year: T.Optional[int]
-    nature: T.Optional[T.List[str]]
-    secteur: T.Optional[T.List[str]]
-    stat_min: T.Optional[int]
+    year: T.Optional[int] = None
+    nature: T.Optional[T.List[str]] = None
+    secteur: T.Optional[T.List[str]] = None
+    stat_min: T.Optional[int] = None
     iso: Isochrone

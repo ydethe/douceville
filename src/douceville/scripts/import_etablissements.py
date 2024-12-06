@@ -1,4 +1,4 @@
-from ..blueprints.isochrone.geographique import findCoordFromAddress
+from ..geographique import findCoordFromAddress
 
 
 def findEtabPosition(etab: dict) -> dict:

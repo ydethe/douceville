@@ -55,19 +55,3 @@ def resultats(path: Path):
     with engine.connect() as conn:
         upsert_df(df, primary_key="idx", table=Resultat, connection=conn)
         conn.commit()
-
-
-# @app.command()
-# def run():
-#     from .. import logger
-#     from ..app import app as flask_app
-
-#     asgi_app = WsgiToAsgi(flask_app)
-#     fixed_app = ProxyFixMiddleware(asgi_app, mode="legacy", trusted_hops=1)
-
-#     cfg = Config()
-#     cfg.bind = ["0.0.0.0:3566"]
-#     cfg.accesslog = logger
-#     cfg.errorlog = logger
-#     asyncio.run(serve(app=fixed_app, config=cfg, mode="asgi"))
-#     # 3566

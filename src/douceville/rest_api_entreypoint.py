@@ -3,7 +3,7 @@ from urllib.parse import urlencode, parse_qsl
 import typing as T
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException, FastAPI
+from fastapi import APIRouter, Depends, FastAPI
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlmodel import select
@@ -22,9 +22,8 @@ from .schemas import (
     GithubUser,
     DvUser,
     Token,
-    get_engine,
 )
-from .crud import get_user_by_login, create_user, get_user, get_etab
+from .crud import get_user_by_login, create_user, get_etab
 from .dependency import get_user_from_header
 
 
@@ -89,11 +88,7 @@ def read_profile(
     user: DvUser = Depends(get_user_from_header),
     db: Session = Depends(get_db),
 ) -> DvUser:
-    db_user = get_user(db, user.id)
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="DvUser not found")
-
-    return db_user
+    return user
 
 
 @router.get("/etablissement/{uai}", response_model=EtablissementPublicAvecResultats)
@@ -102,33 +97,31 @@ def read_etablissement(
     user: DvUser = Depends(get_user_from_header),
     db: Session = Depends(get_db),
 ) -> DvUser:
-    db_user = get_user(db, user.id)
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="DvUser not found")
-
     etab = get_etab(db, uai)
 
     return etab
 
 
-@router.get("/etablissements/", response_model=T.List[EtablissementPublicAvecResultats])
-def etablissement_in_zone(body: QueryParameters):
+@router.post("/etablissements", response_model=T.List[EtablissementPublicAvecResultats])
+def etablissement_in_zone(
+    body: QueryParameters,
+    user: DvUser = Depends(get_user_from_header),
+    db: Session = Depends(get_db),
+):
     stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, body.iso.getGeom()))
 
-    if body.nature != []:
+    if body.nature is not None and body.nature != []:
         stmt = stmt.where(Etablissement.nature.in_(body.nature))
 
-    if body.secteur != []:
+    if body.secteur is not None and body.secteur != []:
         stmt = stmt.where(Etablissement.secteur.in_(body.secteur))
 
-    engine = get_engine()
-    with Session(engine) as session:
-        a = session.scalars(stmt)
+    a = db.scalars(stmt)
 
-        return list(a)
+    return list(a)
 
 
-@router.get("/isochrone/", response_model=Isochrone)
+@router.get("/isochrone", response_model=Isochrone)
 def isochrone(
     lat: float,
     lon: float,
