@@ -8,14 +8,23 @@ from sqlalchemy.orm import Session
 
 from .config import config
 from .helpers import generate_token, create_access_token
-from .schemas import get_db, Url, AuthorizationResponse, GithubUser, DvUser, Token
-from .crud import get_user_by_login, create_user, get_user
+from .schemas import (
+    EtablissementPublicAvecResultats,
+    get_db,
+    Url,
+    AuthorizationResponse,
+    GithubUser,
+    DvUser,
+    Token,
+)
+from .crud import get_user_by_login, create_user, get_user, get_etab
 from .dependency import get_user_from_header
 
 
 # curl http://127.0.0.1:3566/login
-# curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"b5835fee3a98abdcc257","state":"a"}'  -H "Content-Type: application/json"
-# curl http://localhost:3566/me -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiWWFubiBkZSBUaFx1MDBlOSIsImlkIjoxLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzQ5ODUxNz92PTQiLCJhZG1pbiI6ZmFsc2UsImxvZ2luIjoieWRldGhlIiwiY29tcGFueSI6bnVsbCwibG9jYXRpb24iOiJUb3Vsb3VzZSwgRnJhbmNlIiwiZW1haWwiOm51bGwsImhhc2hlZF9wd2QiOm51bGwsImFjdGl2ZSI6ZmFsc2UsImV4cCI6MTczMzQ5OTg0M30.1UWhhf9cTcq_VNkvV8JOmTFfqTTa9_B1i1-QFBXtTxM"
+# curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"dc3606a56ce52309333e","state":"a"}'  -H "Content-Type: application/json"
+# curl http://localhost:3566/me -H "Authorization: Bearer "
+# curl http://localhost:3566/etablissement/1 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlkZXRoZSIsImNvbXBhbnkiOm51bGwsImxvY2F0aW9uIjoiVG91bG91c2UsIEZyYW5jZSIsImVtYWlsIjpudWxsLCJoYXNoZWRfcHdkIjpudWxsLCJhY3RpdmUiOmZhbHNlLCJpZCI6MSwibmFtZSI6Illhbm4gZGUgVGhcdTAwZTkiLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzQ5ODUxNz92PTQiLCJhZG1pbiI6ZmFsc2UsImV4cCI6MTczMzUwMjg3Mn0.W8Hx8PgZFXyxvz87-2KYVFiVdvmcaSPGXshONizDJ8Y"
 
 LOGIN_URL = "https://github.com/login/oauth/authorize"
 REDIRECT_URL = f"{config.PROTOCOL}://{config.HOST}/auth/github"
@@ -26,7 +35,7 @@ app = FastAPI()
 router = APIRouter()
 
 
-@router.get("/login")
+@router.get("/login", response_model=Url)
 def get_login_url() -> Url:
     params = {
         "client_id": config.GITHUB_CLIENT_ID,
@@ -36,12 +45,12 @@ def get_login_url() -> Url:
     return Url(url=f"{LOGIN_URL}?{urlencode(params)}")
 
 
-@router.get("/auth/github")
+@router.get("/auth/github", response_model=AuthorizationResponse)
 def github_callback(state: str, code: str) -> AuthorizationResponse:
     return AuthorizationResponse(state=state, code=code)
 
 
-@router.post("/authorize")
+@router.post("/authorize", response_model=Token)
 async def verify_authorization(body: AuthorizationResponse, db: Session = Depends(get_db)) -> Token:
     params = {
         "client_id": config.GITHUB_CLIENT_ID,
@@ -78,6 +87,19 @@ def read_profile(
     if db_user is None:
         raise HTTPException(status_code=404, detail="DvUser not found")
     return db_user
+
+
+@router.get("/etablissement/{etab_id}", response_model=EtablissementPublicAvecResultats)
+def read_etablissement(
+    etab_id: int,
+    user: DvUser = Depends(get_user_from_header),
+    db: Session = Depends(get_db),
+) -> DvUser:
+    db_user = get_user(db, user.id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="DvUser not found")
+    etab = get_etab(db, etab_id)
+    return etab
 
 
 app.include_router(router)

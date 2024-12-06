@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from .schemas import GithubUser
-from .schemas import DvUser as DvUser
+from .schemas import GithubUser, DvUser, Etablissement
 
 
 def get_user_by_login(db: Session, github_login: str) -> DvUser:
@@ -28,10 +27,21 @@ def create_user(db: Session, github_user: GithubUser) -> DvUser:
     )
     db.add_all([new_user])
     db.commit()
+    return new_user
 
 
 def get_user(db: Session, user_id: int) -> DvUser:
     stmt = select(DvUser).where(DvUser.id == user_id)
+
+    a = list(db.scalars(stmt))
+    if len(a) == 0:
+        return None
+    else:
+        return a[0]
+
+
+def get_etab(db: Session, etab_id: int) -> Etablissement:
+    stmt = select(Etablissement).where(Etablissement.id == etab_id)
 
     a = list(db.scalars(stmt))
     if len(a) == 0:
