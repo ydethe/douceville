@@ -7,7 +7,7 @@ from .config import config
 from .schemas import DvUser
 
 
-def create_access_token(*, data: DvUser, exp: int = None) -> bytes:
+def create_access_token(*, data: DvUser, exp: int = None) -> str:
     to_encode = data.model_dump()
     if exp is not None:
         to_encode.update({"exp": exp})

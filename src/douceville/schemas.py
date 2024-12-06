@@ -191,7 +191,7 @@ class Isochrone(BaseModel):
     lonlat: T.Tuple[float, float]
     dist: float
     transp: str
-    geometry: T.Iterable[T.Tuple[float, float]]
+    geometry: T.List[T.Tuple[float, float]]
 
     def getGeom(self) -> _FunctionGenerator:
         pg = "POLYGON(("

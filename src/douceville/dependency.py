@@ -26,5 +26,6 @@ def get_user_from_header(*, authorization: str = Header(None)) -> DvUser:
             return token_data
         except ValidationError:
             raise credentials_exception
+
     except jwt.PyJWTError:
         raise credentials_exception

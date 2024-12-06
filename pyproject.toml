@@ -102,6 +102,7 @@ doc = [
     "pylint",
 ]
 test = [
+    "httpx",
     "pytest",
     "pytest-cov",
     "pytest-xdist",
