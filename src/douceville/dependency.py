@@ -15,7 +15,7 @@ def get_user_from_header(*, authorization: str = Header(None)) -> DvUser:
     )
 
     scheme, token = get_authorization_scheme_param(authorization)
-    print(scheme, token)
+
     if scheme.lower() != "bearer":
         raise credentials_exception
 
