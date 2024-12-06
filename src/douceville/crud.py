@@ -2,11 +2,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from .schemas import GithubUser
-from .models import User as DbUser
+from .schemas import DvUser as DvUser
 
 
-def get_user_by_login(db: Session, github_login: str) -> DbUser:
-    stmt = select(DbUser).where(DbUser.login == github_login)
+def get_user_by_login(db: Session, github_login: str) -> DvUser:
+    stmt = select(DvUser).where(DvUser.login == github_login)
 
     a = list(db.scalars(stmt))
     if len(a) == 0:
@@ -15,8 +15,8 @@ def get_user_by_login(db: Session, github_login: str) -> DbUser:
         return a[0]
 
 
-def create_user(db: Session, github_user: GithubUser) -> DbUser:
-    new_user = DbUser(
+def create_user(db: Session, github_user: GithubUser) -> DvUser:
+    new_user = DvUser(
         login=github_user.login,
         name=github_user.name,
         company=github_user.company,
@@ -30,8 +30,8 @@ def create_user(db: Session, github_user: GithubUser) -> DbUser:
     db.commit()
 
 
-def get_user(db: Session, user_id: int) -> DbUser:
-    stmt = select(DbUser).where(DbUser.id == user_id)
+def get_user(db: Session, user_id: int) -> DvUser:
+    stmt = select(DvUser).where(DvUser.id == user_id)
 
     a = list(db.scalars(stmt))
     if len(a) == 0:

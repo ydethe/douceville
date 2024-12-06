@@ -11,7 +11,7 @@ from sqlalchemy import select
 
 def buildList(attr: InstrumentedAttribute):
     # TODO: solve this query
-    from ...models import get_engine
+    from ...schemas import get_engine
 
     engine = get_engine()
     with Session(engine) as session:
@@ -24,7 +24,7 @@ def buildList(attr: InstrumentedAttribute):
 
 
 class QueryForm(FlaskForm):
-    from ...models import Etablissement
+    from ...schemas import Etablissement
 
     list_nature: T.List[str] = buildList(Etablissement.nature)
     list_secteur: T.List[str] = buildList(Etablissement.secteur)

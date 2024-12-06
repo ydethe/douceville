@@ -40,7 +40,7 @@ def upsert_df(df: pd.DataFrame, primary_key: str, table, connection: Connection)
 
 @import_app.command()
 def etab(path: Path):
-    from ..models import Etablissement, get_engine
+    from ..schemas import Etablissement, get_engine
 
     engine = get_engine()
     df = pd.read_parquet(path)
@@ -52,7 +52,7 @@ def etab(path: Path):
 
 @import_app.command()
 def resultats(path: Path):
-    from ..models import Resultat, get_engine
+    from ..schemas import Resultat, get_engine
 
     engine = get_engine()
     df = pd.read_parquet(path)

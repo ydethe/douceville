@@ -7,7 +7,7 @@ import rich.progress as rp
 import pandas as pd
 import numpy as np
 
-from .models import Etablissement, Resultat
+from .schemas import Etablissement, Resultat
 from .scripts.import_etablissements import findEtabPosition
 from . import logger
 

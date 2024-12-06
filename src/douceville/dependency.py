@@ -4,10 +4,10 @@ from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import ValidationError
 
 from .config import config
-from .schemas import User
+from .schemas import DvUser
 
 
-def get_user_from_header(*, authorization: str = Header(None)) -> User:
+def get_user_from_header(*, authorization: str = Header(None)) -> DvUser:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -22,7 +22,7 @@ def get_user_from_header(*, authorization: str = Header(None)) -> User:
     try:
         payload = jwt.decode(token, config.SECRET_KEY, algorithms=["HS256"])
         try:
-            token_data = User(**payload)
+            token_data = DvUser(**payload)
             return token_data
         except ValidationError:
             raise credentials_exception

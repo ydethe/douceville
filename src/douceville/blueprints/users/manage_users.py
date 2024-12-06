@@ -18,7 +18,7 @@ def add_user(
 ):
     """Register a user in the base"""
     # logger = logging.getLogger("douceville_logger")
-    from ...models import User, get_engine
+    from ...schemas import DvUser, get_engine
     from ...app import app, bcrypt, mail
     from ...config import config
     from ...utils import Serializer
@@ -28,12 +28,12 @@ def add_user(
     if pwd is None:
         pwd = getpass("password: ")
 
-    q = User.get_by_email(email)
+    q = DvUser.get_by_email(email)
     if q is not None:
         return
 
     hpwd = bcrypt.generate_password_hash(pwd, config.BCRYPT_ROUNDS)
-    user = User(login=login, email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
+    user = DvUser(login=login, email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
 
     if not active:
         s = Serializer()

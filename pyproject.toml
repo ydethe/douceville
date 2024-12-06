@@ -15,52 +15,18 @@ authors = [
     { name = "Yann de Thé", email = "yann@gmail.com" },
 ]
 dependencies = [
-    # Requirements dated 30/01/2021
-    "cryptography",
-    "email-validator",
-    "flask",
-    "flask-admin",
-    "flask-bcrypt",
-    "flask-bootstrap",
-    "flask-login",
-    "flask-mail",
-    "flask-wtf",
-    "flet==0.25.1",
-    "flet-desktop>=0.25.1",
-    "geoalchemy2[shapely]>=0.16.0",
-    "geojson",
-    "itsdangerous",
-    "jinja2",
-    "markupsafe>=3.0.2",
-    "openpyxl",
-    "psycopg2-binary",
-    "pyopenssl",
-    "python-slugify",
-    # "PyYaml",
-    "rdflib",
-    "rdfpandas",
-    "rich",
-    "shapely",
-    "sqlalchemy",
-    "stripe",
-    "typer>=0.13.1",
-    "werkzeug",
-    "wtforms",
-    "xlrd",
-    "flask-nav3>=0.7.2",
     "pydantic-settings>=2.6.1",
-    "logfire[flask]>=2.6.0",
-    "requests>=2.32.3",
-    "pydantic>=2.9.2",
-    "pandas>=2.2.3",
+    "logfire>=2.6.2",
+    "rich>=13.9.4",
+    "psycopg2-binary>=2.9.10",
+    "geoalchemy2[shapely]>=0.16.0",
+    "typer>=0.15.1",
     "fastparquet>=2024.11.0",
-    "joblib>=1.4.2",
+    "pandas>=2.2.3",
     "geopy>=2.4.1",
-    "openrouteservice>=2.3.3",
-    "asgiref>=3.8.1",
-    "hypercorn>=0.17.3",
     "fastapi[standard]>=0.115.6",
     "pyjwt[crypto]>=2.10.1",
+    "sqlmodel>=0.0.22"
 ]
 requires-python = ">=3.10,<3.12"
 
@@ -75,21 +41,6 @@ max-line-length = 100
 [tool.black]
 line-length = 100
 target-version = ['py38']
-
-[tool.flet]
-# org name in reverse domain name notation, e.g. "com.mycompany".
-# Combined with project.name to build bundle ID for iOS and Android apps
-org = "fr.johncloud.douceville"
-# project display name that is used as an app title on Android and iOS home screens,
-# shown in window titles and about app dialogs on desktop.
-product = "douceville"
-# company name to display in about app dialogs
-company = "Hippias"
-# copyright text to display in about app dialogs
-copyright = "Copyright (C) 2024 by Hippias"
-
-[tool.flet.app]
-path = "src"
 
 [tool.pdm.version]
 source = "scm"

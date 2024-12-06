@@ -53,12 +53,12 @@ def profile():
 
 @users_bp.route("/login", methods=["GET", "POST"])
 def login():
-    from ...models import User
+    from ...schemas import DvUser
 
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.get_by_email(form.email.data)
+        user = DvUser.get_by_email(form.email.data)
         if not user or not user.isCorrectPassword(form.password.data):
             flash("Please check your login details and try again.")
             return redirect(
@@ -97,7 +97,7 @@ def signup():
 @users_bp.route("/confirm", methods=["GET"])
 def confirm():
     from ...utils import Serializer
-    from ...models import User, get_engine
+    from ...schemas import DvUser, get_engine
     from .. import logger
 
     token = request.args.get("token", "")
@@ -111,12 +111,12 @@ def confirm():
 
     engine = get_engine()
     with Session(engine) as session:
-        stmt = select(User).where(User.email == verif_email)
+        stmt = select(DvUser).where(DvUser.email == verif_email)
         q = session.scalars(stmt)
         if q.count() == 0:
             logger.error("Aucun utilisateur avec le mail %s" % verif_email)
         else:
-            stmt = update(User)
+            stmt = update(DvUser)
             session.execute(stmt, [maj_user])
             session.commit()
 

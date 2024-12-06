@@ -8,16 +8,14 @@ from sqlalchemy.orm import Session
 
 from .config import config
 from .helpers import generate_token, create_access_token
-from .schemas import Url, AuthorizationResponse, GithubUser, User, Token
+from .schemas import get_db, Url, AuthorizationResponse, GithubUser, DvUser, Token
 from .crud import get_user_by_login, create_user, get_user
 from .dependency import get_user_from_header
-from .models import User as DbUser, get_db
-from .app import app as DvApp  # noqa: F401
 
 
 # curl http://127.0.0.1:3566/login
-# curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"65d51c4041a2dcfb7347","state":"a"}'  -H "Content-Type: application/json"
-# curl http://localhost:3566/me -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJ5ZGV0aGUiLCJuYW1lIjpudWxsLCJjb21wYW55IjpudWxsLCJsb2NhdGlvbiI6bnVsbCwiZW1haWwiOiJ5ZGV0aGVAZ21haWwuY29tIiwiYXZhdGFyX3VybCI6bnVsbCwiaGFzaGVkX3B3ZCI6IiQyYiQxMCQzcTFIQVNOcENOU1pkenVSMlc5cE1laEJ3UWlTUlZRTDdTa0gxMTJOQk9ueHdpU29oSjJ6MiIsImFkbWluIjp0cnVlLCJhY3RpdmUiOnRydWUsInN0cmlwZV9pZCI6bnVsbCwiZXhwIjoxNzMzNDk3NDIzfQ.j2bYZVdVLXAa0-uSer-dylgTIblT2pPzyZHjhWNJPPc"
+# curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"b5835fee3a98abdcc257","state":"a"}'  -H "Content-Type: application/json"
+# curl http://localhost:3566/me -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiWWFubiBkZSBUaFx1MDBlOSIsImlkIjoxLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9hdmF0YXJzLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzQ5ODUxNz92PTQiLCJhZG1pbiI6ZmFsc2UsImxvZ2luIjoieWRldGhlIiwiY29tcGFueSI6bnVsbCwibG9jYXRpb24iOiJUb3Vsb3VzZSwgRnJhbmNlIiwiZW1haWwiOm51bGwsImhhc2hlZF9wd2QiOm51bGwsImFjdGl2ZSI6ZmFsc2UsImV4cCI6MTczMzQ5OTg0M30.1UWhhf9cTcq_VNkvV8JOmTFfqTTa9_B1i1-QFBXtTxM"
 
 LOGIN_URL = "https://github.com/login/oauth/authorize"
 REDIRECT_URL = f"{config.PROTOCOL}://{config.HOST}/auth/github"
@@ -59,27 +57,26 @@ async def verify_authorization(body: AuthorizationResponse, db: Session = Depend
         github_header = {"Authorization": f"token {github_token}"}
         user_request = await client.get(USER_URL, headers=github_header)
         # print(user_request.json())
-        # {'login': 'ydethe', 'id': 498517, 'node_id': 'MDQ6VXNlcjQ5ODUxNw==', 'avatar_url': 'https://avatars.githubusercontent.com/u/498517?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/ydethe', 'html_url': 'https://github.com/ydethe', 'followers_url': 'https://api.github.com/users/ydethe/followers', 'following_url': 'https://api.github.com/users/ydethe/following{/other_user}', 'gists_url': 'https://api.github.com/users/ydethe/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/ydethe/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/ydethe/subscriptions', 'organizations_url': 'https://api.github.com/users/ydethe/orgs', 'repos_url': 'https://api.github.com/users/ydethe/repos', 'events_url': 'https://api.github.com/users/ydethe/events{/privacy}', 'received_events_url': 'https://api.github.com/users/ydethe/received_events', 'type': 'User', 'user_view_type': 'private', 'site_admin': False, 'name': 'Yann de Thé', 'company': None, 'blog': '', 'location': 'Toulouse, France', 'email': None, 'hireable': None, 'bio': 'I love to perform innovative data analysis to provide quantitive assessment of a problem. I love applying it to the space industry !', 'twitter_username': None, 'notification_email': None, 'public_repos': 28, 'public_gists': 0, 'followers': 2, 'following': 1, 'created_at': '2010-11-27T00:40:38Z', 'updated_at': '2024-09-29T17:28:01Z', 'private_gists': 0, 'total_private_repos': 19, 'owned_private_repos': 19, 'disk_usage': 116128, 'collaborators': 0, 'two_factor_authentication': True, 'plan': {'name': 'free', 'space': 976562499, 'collaborators': 0, 'private_repos': 10000}}
+        # {'login': 'ydethe', 'id': 498517, 'node_id': 'MDQ6VXNlcjQ5ODUxNw==', 'avatar_url': 'https://avatars.githubusercontent.com/u/498517?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/ydethe', 'html_url': 'https://github.com/ydethe', 'followers_url': 'https://api.github.com/users/ydethe/followers', 'following_url': 'https://api.github.com/users/ydethe/following{/other_user}', 'gists_url': 'https://api.github.com/users/ydethe/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/ydethe/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/ydethe/subscriptions', 'organizations_url': 'https://api.github.com/users/ydethe/orgs', 'repos_url': 'https://api.github.com/users/ydethe/repos', 'events_url': 'https://api.github.com/users/ydethe/events{/privacy}', 'received_events_url': 'https://api.github.com/users/ydethe/received_events', 'type': 'DvUser', 'user_view_type': 'private', 'site_admin': False, 'name': 'Yann de Thé', 'company': None, 'blog': '', 'location': 'Toulouse, France', 'email': None, 'hireable': None, 'bio': 'I love to perform innovative data analysis to provide quantitive assessment of a problem. I love applying it to the space industry !', 'twitter_username': None, 'notification_email': None, 'public_repos': 28, 'public_gists': 0, 'followers': 2, 'following': 1, 'created_at': '2010-11-27T00:40:38Z', 'updated_at': '2024-09-29T17:28:01Z', 'private_gists': 0, 'total_private_repos': 19, 'owned_private_repos': 19, 'disk_usage': 116128, 'collaborators': 0, 'two_factor_authentication': True, 'plan': {'name': 'free', 'space': 976562499, 'collaborators': 0, 'private_repos': 10000}}
         github_user = GithubUser(**user_request.json())
 
     db_user = get_user_by_login(db, github_user.login)
     if db_user is None:
         db_user = create_user(db, github_user)
 
-    verified_user = User.model_validate(db_user, from_attributes=True)
-    access_token = create_access_token(data=verified_user)
+    access_token = create_access_token(data=db_user)
 
-    return Token(access_token=access_token, token_type="bearer", user=verified_user)
+    return Token(access_token=access_token, token_type="bearer", user=db_user)
 
 
-@router.get("/me", response_model=User)
+@router.get("/me", response_model=DvUser)
 def read_profile(
-    user: User = Depends(get_user_from_header),
+    user: DvUser = Depends(get_user_from_header),
     db: Session = Depends(get_db),
-) -> DbUser:
+) -> DvUser:
     db_user = get_user(db, user.id)
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="DvUser not found")
     return db_user
 
 

@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 
 from . import enseignement_bp
-from ...models import Etablissement, Resultat
+from ...schemas import Etablissement, Resultat
 
 
 def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple[str, float]:
@@ -47,7 +47,7 @@ def etablissement_info_display(etab: Etablissement, year: int | None) -> T.Tuple
 @enseignement_bp.route("/", methods=["GET"])
 @login_required
 def enseignement():
-    from ...models import Etablissement, get_engine
+    from ...schemas import Etablissement, get_engine
     from ...utils import Serializer
     from ...blueprints.isochrone.geographique import calcIsochrone
 
