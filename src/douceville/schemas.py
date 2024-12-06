@@ -4,6 +4,7 @@ import json
 
 from pydantic import field_validator, BaseModel
 import sqlalchemy as sa
+from sqlalchemy.sql.functions import _FunctionGenerator
 from geoalchemy2 import Geometry, WKBElement
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, UniqueConstraint, Column
 
@@ -181,3 +182,29 @@ class ResultatPublicAvecEtablissement(ResultatPublic):
 
 class EtablissementPublicAvecResultats(EtablissementPublic):
     resultats: list[Resultat] = []
+
+
+# ==============================
+# Isochrone objects
+# ==============================
+class Isochrone(BaseModel):
+    lonlat: T.Tuple[float, float]
+    dist: float
+    transp: str
+    geometry: T.Iterable[T.Tuple[float, float]]
+
+    def getGeom(self) -> _FunctionGenerator:
+        pg = "POLYGON(("
+        for lon, lat in self.geometry:
+            pg += "%f %f," % (lon, lat)
+        pg = pg[:-1] + "))"
+
+        return sa.func.ST_GeomFromEWKT(pg)
+
+
+class QueryParameters(BaseModel):
+    year: T.Optional[int]
+    nature: T.Optional[T.List[str]]
+    secteur: T.Optional[T.List[str]]
+    stat_min: T.Optional[int]
+    iso: Isochrone

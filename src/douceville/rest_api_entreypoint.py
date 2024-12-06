@@ -1,21 +1,28 @@
 # https://dev.to/fuegoio/demystifying-authentication-with-fastapi-and-a-frontend-26f5
 from urllib.parse import urlencode, parse_qsl
-from typing import Dict
+import typing as T
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, FastAPI
+from sqlalchemy import func
 from sqlalchemy.orm import Session
+from sqlmodel import select
 
+from .geographique import calcIsochrone
 from .config import config
 from .helpers import generate_token, create_access_token
 from .schemas import (
+    Etablissement,
     EtablissementPublicAvecResultats,
+    Isochrone,
+    QueryParameters,
     get_db,
     Url,
     AuthorizationResponse,
     GithubUser,
     DvUser,
     Token,
+    get_engine,
 )
 from .crud import get_user_by_login, create_user, get_user, get_etab
 from .dependency import get_user_from_header
@@ -62,7 +69,7 @@ async def verify_authorization(body: AuthorizationResponse, db: Session = Depend
 
     async with httpx.AsyncClient() as client:
         token_request = await client.post(TOKEN_URL, params=params)
-        response: Dict[bytes, bytes] = dict(parse_qsl(token_request.content))
+        response: T.Dict[bytes, bytes] = dict(parse_qsl(token_request.content))
         github_token = response[b"access_token"].decode("utf-8")
         github_header = {"Authorization": f"token {github_token}"}
         user_request = await client.get(USER_URL, headers=github_header)
@@ -85,6 +92,7 @@ def read_profile(
     db_user = get_user(db, user.id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="DvUser not found")
+
     return db_user
 
 
@@ -97,8 +105,41 @@ def read_etablissement(
     db_user = get_user(db, user.id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="DvUser not found")
+
     etab = get_etab(db, etab_id)
+
     return etab
+
+
+@router.get("/etablissements/", response_model=T.List[EtablissementPublicAvecResultats])
+def etablissement_in_zone(body: QueryParameters):
+    stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, body.iso.getGeom()))
+
+    if body.nature != []:
+        stmt = stmt.where(Etablissement.nature.in_(body.nature))
+
+    if body.secteur != []:
+        stmt = stmt.where(Etablissement.secteur.in_(body.secteur))
+
+    engine = get_engine()
+    with Session(engine) as session:
+        a = session.scalars(stmt)
+
+        return list(a)
+
+
+@router.get("/isochrone/", response_model=Isochrone)
+def isochrone(
+    lat: float,
+    lon: float,
+    dist: float,
+    transp: str = "driving-car",
+    user: DvUser = Depends(get_user_from_header),
+):
+    center = [lon, lat]
+    iso = calcIsochrone(center, dist, transp)
+
+    return iso
 
 
 app.include_router(router)

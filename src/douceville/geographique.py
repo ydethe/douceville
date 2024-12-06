@@ -2,40 +2,13 @@ from pathlib import Path
 import pickle
 import time
 import typing as T
-from dataclasses import dataclass
 
-from openrouteservice import client, geocode
 import requests
-from sqlalchemy import func
-from sqlalchemy.sql.functions import _FunctionGenerator
+from openrouteservice import client, geocode
 
-from ...config import config
-from ... import logger
-
-
-@dataclass
-class Isochrone:
-    lonlat: T.Tuple[float, float]
-    dist: float
-    transp: T.Literal[
-        "driving-car",
-        "driving-hgv",
-        "foot-walking",
-        "foot-hiking",
-        "cycling-regular",
-        "cycling-road",
-        "cycling-mountain",
-        "cycling-electric",
-    ]
-    geometry: T.Iterable[T.Tuple[float, float]]
-
-    def getGeom(self) -> _FunctionGenerator:
-        pg = "POLYGON(("
-        for lon, lat in self.geometry:
-            pg += "%f %f," % (lon, lat)
-        pg = pg[:-1] + "))"
-
-        return func.ST_GeomFromEWKT(pg)
+from .config import config
+from .schemas import Isochrone
+from . import logger
 
 
 def calcIsochrone(
@@ -260,9 +233,3 @@ def findCoordFromAddress(
         pickle.dump(data, cache_fd)
 
     return etab_maj
-
-
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
