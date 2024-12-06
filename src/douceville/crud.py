@@ -40,8 +40,8 @@ def get_user(db: Session, user_id: int) -> DvUser:
         return a[0]
 
 
-def get_etab(db: Session, etab_id: int) -> Etablissement:
-    stmt = select(Etablissement).where(Etablissement.id == etab_id)
+def get_etab(db: Session, uai: str) -> Etablissement:
+    stmt = select(Etablissement).where(Etablissement.UAI == uai)
 
     a = list(db.scalars(stmt))
     if len(a) == 0:

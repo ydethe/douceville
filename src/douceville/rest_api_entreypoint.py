@@ -96,9 +96,9 @@ def read_profile(
     return db_user
 
 
-@router.get("/etablissement/{etab_id}", response_model=EtablissementPublicAvecResultats)
+@router.get("/etablissement/{uai}", response_model=EtablissementPublicAvecResultats)
 def read_etablissement(
-    etab_id: int,
+    uai: str,
     user: DvUser = Depends(get_user_from_header),
     db: Session = Depends(get_db),
 ) -> DvUser:
@@ -106,7 +106,7 @@ def read_etablissement(
     if db_user is None:
         raise HTTPException(status_code=404, detail="DvUser not found")
 
-    etab = get_etab(db, etab_id)
+    etab = get_etab(db, uai)
 
     return etab
 
