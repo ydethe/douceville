@@ -1,6 +1,6 @@
 import flet as ft
 from flet.auth.providers import GitHubOAuthProvider
-from flet import ElevatedButton, LoginEvent, Page
+from flet import LoginEvent, Page
 import flet.map as fmap
 
 from .config import config
@@ -20,22 +20,22 @@ def main(page: Page):
     # marker_layer_ref = ft.Ref[fmap.MarkerLayer]()
 
     def login_button_click(e):
-        page.login(provider)
+        if page.auth is None:
+            page.login(provider)
+            print("Logged in")
+        else:
+            print("Already logged in")
 
     def on_login(e: LoginEvent):
         if not e.error:
-            toggle_login_buttons()
+            pass
 
     def logout_button_click(e):
         page.logout()
+        print("Logged out")
 
     def on_logout(e):
-        toggle_login_buttons()
-
-    def toggle_login_buttons():
-        login_button.visible = page.auth is None
-        logout_button.visible = page.auth is not None
-        page.update()
+        pass
 
     page.appbar = ft.AppBar(
         leading=ft.Icon(ft.Icons.HOUSE),
@@ -44,6 +44,7 @@ def main(page: Page):
         center_title=False,
         bgcolor=ft.Colors.SURFACE,
         actions=[
+            ft.IconButton(ft.Icons.LOGIN, on_click=login_button_click),
             ft.IconButton(ft.Icons.LOGOUT, on_click=logout_button_click),
         ],
     )
@@ -51,16 +52,16 @@ def main(page: Page):
     page.add(
         ft.Row(
             [
-                ft.Container(
-                    content=ft.Text("Non clickable"),
-                    margin=10,
-                    padding=10,
-                    alignment=ft.alignment.center,
-                    bgcolor=ft.Colors.AMBER,
-                    width=150,
-                    height=150,
-                    border_radius=10,
-                ),
+                # ft.Container(
+                #     content=ft.Text("Non clickable"),
+                #     margin=10,
+                #     padding=10,
+                #     alignment=ft.alignment.center,
+                #     bgcolor=ft.Colors.AMBER,
+                #     width=150,
+                #     height=150,
+                #     border_radius=10,
+                # ),
                 fmap.Map(
                     expand=True,
                     initial_center=fmap.MapLatitudeLongitude(45, 2),
@@ -85,12 +86,8 @@ def main(page: Page):
         ),
     )
 
-    login_button = ElevatedButton("Login with GitHub", on_click=login_button_click)
-    logout_button = ElevatedButton("Logout", on_click=logout_button_click)
-    toggle_login_buttons()
     page.on_login = on_login
     page.on_logout = on_logout
-    page.add(login_button, logout_button)
 
 
 # hypercorn douceville.flet_app:app --bind 0.0.0.0:3566

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added map layer (wip) ([f6d11a5](https://github.com/ydethe/douceville/commit/f6d11a5fb8a55f09d55f67e8090e105197a11be6) by Yann de The).
+- Added map layer (wip) ([bf51d35](https://github.com/ydethe/douceville/commit/bf51d35c66afd997800f6e09dc25fe577f6c01d9) by Yann de The).
 
 ### Fixed
 

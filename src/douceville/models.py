@@ -10,8 +10,14 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.orm import DeclarativeBase, relationship, Session
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    DeclarativeBase,
+    relationship,
+    Session,
+    sessionmaker,
+)
 from geoalchemy2 import Geometry
 import stripe
 from flask_login import UserMixin
@@ -29,6 +35,17 @@ def get_engine() -> Engine:
     return engine
 
 
+def get_db():
+    engine = get_engine()
+    sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+    db = sessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 class ImportStatus(object):
     OK = 0
     COORD_FROM_ADDRESS = 1
@@ -43,8 +60,13 @@ class User(UserMixin, Base):
     __tablename__ = "dvuser"
 
     id: Mapped[int] = mapped_column(nullable=False, primary_key=True)
+    login: Mapped[str] = mapped_column(String(1024), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
+    company: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
+    location: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
     email: Mapped[str] = mapped_column(String(1024), nullable=False, unique=True)
-    hashed_pwd: Mapped[str] = mapped_column(String(128), nullable=False)
+    avatar_url: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
+    hashed_pwd: Mapped[str] = mapped_column(String(1024), nullable=True)
     admin: Mapped[str] = mapped_column(nullable=False, default=False)
     active: Mapped[str] = mapped_column(nullable=False, default=False)
     stripe_id: Mapped[str] = mapped_column(String(191), nullable=True, unique=True)
