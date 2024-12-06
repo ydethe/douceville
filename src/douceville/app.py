@@ -84,6 +84,7 @@ if not test_db_filled():
     Base.metadata.create_all(engine)
 
     add_user(
+        login="ydethe",
         email=config.ADMIN_EMAIL,
         pwd=config.ADMIN_PASSWORD,
         admin=True,

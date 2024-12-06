@@ -8,11 +8,11 @@ from .models import User as DbUser
 def get_user_by_login(db: Session, github_login: str) -> DbUser:
     stmt = select(DbUser).where(DbUser.login == github_login)
 
-    a = db.scalars(stmt)
-    if a.count() == 0:
+    a = list(db.scalars(stmt))
+    if len(a) == 0:
         return None
     else:
-        return a.first()
+        return a[0]
 
 
 def create_user(db: Session, github_user: GithubUser) -> DbUser:
@@ -33,8 +33,8 @@ def create_user(db: Session, github_user: GithubUser) -> DbUser:
 def get_user(db: Session, user_id: int) -> DbUser:
     stmt = select(DbUser).where(DbUser.id == user_id)
 
-    a = db.scalars(stmt)
-    if a.count() == 0:
+    a = list(db.scalars(stmt))
+    if len(a) == 0:
         return None
     else:
-        return a.first()
+        return a[0]

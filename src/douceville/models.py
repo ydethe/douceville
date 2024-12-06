@@ -64,11 +64,11 @@ class User(UserMixin, Base):
     name: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
     company: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
     location: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
-    email: Mapped[str] = mapped_column(String(1024), nullable=False, unique=True)
+    email: Mapped[str] = mapped_column(String(1024), nullable=True, unique=True)
     avatar_url: Mapped[str] = mapped_column(String(1024), nullable=True, unique=False)
     hashed_pwd: Mapped[str] = mapped_column(String(1024), nullable=True)
-    admin: Mapped[str] = mapped_column(nullable=False, default=False)
-    active: Mapped[str] = mapped_column(nullable=False, default=False)
+    admin: Mapped[bool] = mapped_column(nullable=False, default=False)
+    active: Mapped[bool] = mapped_column(nullable=False, default=False)
     stripe_id: Mapped[str] = mapped_column(String(191), nullable=True, unique=True)
 
     @classmethod

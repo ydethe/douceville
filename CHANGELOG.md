@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added auth proto ([986a1de](https://github.com/ydethe/douceville/commit/986a1debaddf6c752d90bfc7746cbb01fb0ad290) by Yann de The).
 - Added map layer (wip) ([bf51d35](https://github.com/ydethe/douceville/commit/bf51d35c66afd997800f6e09dc25fe577f6c01d9) by Yann de The).
 
 ### Fixed

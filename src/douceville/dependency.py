@@ -15,11 +15,12 @@ def get_user_from_header(*, authorization: str = Header(None)) -> User:
     )
 
     scheme, token = get_authorization_scheme_param(authorization)
+    print(scheme, token)
     if scheme.lower() != "bearer":
         raise credentials_exception
 
     try:
-        payload = jwt.decode(token, config.SECRET_KEY)
+        payload = jwt.decode(token, config.SECRET_KEY, algorithms=["HS256"])
         try:
             token_data = User(**payload)
             return token_data

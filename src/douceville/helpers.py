@@ -14,7 +14,7 @@ def create_access_token(*, data: User, exp: int = None) -> bytes:
     else:
         expire = datetime.now(tz=timezone.utc) + timedelta(minutes=60)
         to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, config.SECRET_KEY)
+    encoded_jwt = jwt.encode(to_encode, config.SECRET_KEY, algorithm="HS256")
     return encoded_jwt
 
 

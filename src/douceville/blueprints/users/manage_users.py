@@ -10,6 +10,7 @@ tapp = typer.Typer()
 
 @tapp.command()
 def add_user(
+    login: str = typer.Argument(None, help="Github login"),
     email: str = typer.Argument(None, help="Email"),
     pwd: str = typer.Argument(None, help="Password"),
     admin: bool = typer.Option(False, help="Falg to grant the user admin privilege"),
@@ -32,7 +33,7 @@ def add_user(
         return
 
     hpwd = bcrypt.generate_password_hash(pwd, config.BCRYPT_ROUNDS)
-    user = User(email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
+    user = User(login=login, email=email, hashed_pwd=hpwd.decode(), admin=admin, active=active)
 
     if not active:
         s = Serializer()

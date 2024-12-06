@@ -1,3 +1,5 @@
+import typing as T
+
 from pydantic import BaseModel
 
 
@@ -13,20 +15,24 @@ class AuthorizationResponse(BaseModel):
 class GithubUser(BaseModel):
     login: str
     name: str
-    company: str
-    location: str
-    email: str
-    avatar_url: str
+    company: T.Optional[str]
+    location: T.Optional[str]
+    email: T.Optional[str]
+    avatar_url: T.Optional[str]
 
 
 class User(BaseModel):
     id: int
     login: str
-    name: str
-    company: str
-    location: str
-    email: str
-    picture: str
+    name: T.Optional[str]
+    company: T.Optional[str]
+    location: T.Optional[str]
+    email: T.Optional[str]
+    avatar_url: T.Optional[str]
+    hashed_pwd: T.Optional[str]
+    admin: bool
+    active: bool
+    stripe_id: T.Optional[str]
 
     class Config:
         orm_mode = True
