@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed doc ([a651cd2](https://github.com/ydethe/douceville/commit/a651cd294b2bc14bb962e29775f61abb83b937f1) by Yann de The).
 - Fixed conflict ([bc686d3](https://github.com/ydethe/douceville/commit/bc686d3686b88f6ab34570e28fe53855585cd473) by Yann de The).
 
 <!-- insertion marker -->
