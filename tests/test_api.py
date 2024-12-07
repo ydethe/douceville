@@ -68,18 +68,31 @@ class TestDoucevilleAPI(unittest.TestCase):
         data = response.json()
         assert len(data) > 0
 
+    def test_login(self):
+        # curl http://127.0.0.1:3566/login
+        # curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"<your_code_here>","state":"a"}'  -H "Content-Type: application/json"
+        # curl http://localhost:3566/me -H "Authorization: Bearer <your_token_here>"
+        # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
+        client = TestClient(app)
+        response = client.get("/login")
+        assert response.status_code == 200, response.status_code
+        url = response.json()["url"]
+        assert len(url) > 0, url
+
 
 if __name__ == "__main__":
     a = TestDoucevilleAPI()
 
-    a.setUp()
-    a.test_me_with_auth()
+    a.test_login()
 
-    a.setUp()
-    a.test_isochrone()
+    # a.setUp()
+    # a.test_me_with_auth()
 
-    a.setUp()
-    a.test_etablissement()
+    # a.setUp()
+    # a.test_isochrone()
 
-    a.setUp()
-    a.test_etablissements_zone()
+    # a.setUp()
+    # a.test_etablissement()
+
+    # a.setUp()
+    # a.test_etablissements_zone()
