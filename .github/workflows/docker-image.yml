@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ydethe/douceville
+          images: ydethe/douceville-backend
 
       - name: Build and push Docker image
         id: push
