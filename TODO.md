@@ -1,1 +1,1 @@
-- [src/douceville/models.py#L94](src/douceville/models.py#L94): solve instance update with sqlalchemy
+- [src/douceville/rest_api_entreypoint.py#L101](src/douceville/rest_api_entreypoint.py#L101): Handle the case where no etablissement is found. Return NOT FOUND error
