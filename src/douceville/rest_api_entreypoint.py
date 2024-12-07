@@ -98,7 +98,7 @@ def read_etablissement(
     db: Session = Depends(get_db),
 ) -> DvUser:
     etab = get_etab(db, uai)
-
+    # TODO: Handle the case where no etablissement is found
     return etab
 
 
