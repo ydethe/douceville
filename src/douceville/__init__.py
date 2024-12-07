@@ -1,7 +1,29 @@
 """
-   Manipulation of algebraic numbers
-   Y. de The
+
+.. include:: ../../README.md
+
+# CLI usage
+
+douceville comes with a CLI tool called dv-cli.
+
+# Testing
+
+## Run the tests
+
+To run tests, just run:
+
+    pdm run pytest
+
+## Test reports
+
+[See test report](../tests/report.html)
+
+[See coverage](../coverage/index.html)
+
+.. include:: ../../CHANGELOG.md
+
 """
+
 
 import logging
 from logging.handlers import RotatingFileHandler

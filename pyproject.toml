@@ -72,21 +72,15 @@ test = [
 ]
 
 [tool.pdm.scripts]
-site_packages = true
 test.shell = """\
     mkdir -p build/htmldoc/tests
-    pytest --html=build/htmldoc/tests/report.html --self-contained-html --junitxml=build/junit.xml --cov-config=.coveragerc --cov douceville tests --doctest-modules douceville
+    pytest --html=build/htmldoc/tests/report.html --self-contained-html --junitxml=build/junit.xml --cov-config=.coveragerc --cov src/douceville tests --doctest-modules src/douceville
     coverage html -d build/htmldoc/coverage
 """
 doc.shell = """\
     mkdir -p build/htmldoc/douceville
-    mkdir -p build/htmldoc/examples
-    python -m ipykernel install --user
-    python examples/__init__.py
-    cp examples/quadcopter.png build/htmldoc/examples
-    pdoc --html --force --config latex_math=True --template-dir dev/template -o build/htmldoc douceville examples
-    pyreverse -s0 douceville -k --colorized -p douceville -m no --ignore=exceptions.py,LogFormatter.py,CSVLogger.py,PickleLogger.py,XlsLogger.py -d build/htmldoc
-    dot -Tpng build/htmldoc/classes_douceville.dot -o build/htmldoc/douceville/classes.png
+    pdoc --html --force --config latex_math=True -o build/htmldoc douceville
+    pyreverse -s0 douceville -k --colorized -p douceville -m no -d build/htmldoc
 """
 [project.scripts]
 dv-cli = "douceville.scripts:app"

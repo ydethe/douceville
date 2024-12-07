@@ -162,16 +162,17 @@ def findCoordFromAddress(
     commune: str = None,
     lat: float = None,
     lon: float = None,
-):
+) -> dict:
     """
-
-    Examples:
-    >>> findCoordFromAddress(nom='Lycee Henri Matisse',cp='31270',commune='Cugnaux')
-    (1.352366, 43.530729)
-    >>> # findCoordFromAddress(nom='Cours Des Frères Montgolfier',adresse='12 Place Georges Pompidou',cp='93165',commune='Noisy-Le-Grand')
-    # (2.551383, 48.838077)
-    >>> # findCoordFromAddress(nom='Ecole Alternative Du Pays De Gex',adresse='Place',cp='1280',commune='Préssin-Moëns')
-    # (2.551383, 48.838077)
+    pyth
+        Examples:
+        >>> res=findCoordFromAddress(nom='Lycee Henri Matisse',cp='31270',commune='Cugnaux')
+        >>> res['latitude']
+        43.5313895
+        >>> # findCoordFromAddress(nom='Cours Des Frères Montgolfier',adresse='12 Place Georges Pompidou',cp='93165',commune='Noisy-Le-Grand')
+        # (2.551383, 48.838077)
+        >>> # findCoordFromAddress(nom='Ecole Alternative Du Pays De Gex',adresse='Place',cp='1280',commune='Préssin-Moëns')
+        # (2.551383, 48.838077)
 
     """
     cache_pth = Path(".cache")
