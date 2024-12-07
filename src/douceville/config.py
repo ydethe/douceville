@@ -40,6 +40,7 @@ class Config(BaseSettings):
     POSTGRES_PASSWORD: str
     HOST: str
     PROTOCOL: str
+    API_PATH: str
     PRICE_ID: str
 
     GITHUB_CLIENT_ID: str

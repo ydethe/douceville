@@ -2,6 +2,7 @@
 from urllib.parse import urlencode, parse_qsl
 import typing as T
 
+import logfire
 import httpx
 from fastapi import APIRouter, Depends, FastAPI
 from sqlalchemy import func
@@ -34,12 +35,14 @@ from .dependency import get_user_from_header
 # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
 
 LOGIN_URL = "https://github.com/login/oauth/authorize"
-REDIRECT_URL = f"{config.PROTOCOL}://{config.HOST}/auth/github"
+REDIRECT_URL = f"{config.PROTOCOL}://{config.HOST}/{config.API_PATH}/auth/github"
 TOKEN_URL = "https://github.com/login/oauth/access_token"
 USER_URL = "https://api.github.com/user"
 
 app = FastAPI()
 router = APIRouter()
+
+logfire.instrument_fastapi(app)
 
 
 @router.get("/login", response_model=Url)
