@@ -10,13 +10,11 @@ from .config import config
 from .schemas import DvUser
 
 
-def create_access_token(*, data: DvUser, exp: int = None) -> str:
+def create_access_token(*, data: DvUser) -> str:
     to_encode = data.model_dump()
-    if exp is not None:
-        to_encode.update({"exp": exp})
-    else:
-        expire = datetime.now(tz=timezone.utc) + timedelta(minutes=60)
-        to_encode.update({"exp": expire})
+    dt_now = datetime.now(tz=timezone.utc)
+    expire = dt_now + timedelta(day=1)
+    to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, config.SECRET_KEY, algorithm="HS256")
     return encoded_jwt
 
@@ -39,9 +37,22 @@ def get_user_from_header(*, authorization: str = Header(None)) -> DvUser:
 
     try:
         payload = jwt.decode(token, config.SECRET_KEY, algorithms=["HS256"])
-        print(payload)
         try:
+            exp = payload.pop("exp", None)
             token_data = DvUser(**payload)
+            dt_now = datetime.now(tz=timezone.utc)
+            if dt_now > exp:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Token expired",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            if not token_data.active:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="User not active",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
             return token_data
         except ValidationError:
             raise credentials_exception
