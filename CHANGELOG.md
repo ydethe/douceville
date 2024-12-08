@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v1.3.6](https://github.com/ydethe/douceville/releases/tag/v1.3.6) - 2024-12-07
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.4...HEAD)</small>
+<small>[Compare with v1.3.4](https://github.com/ydethe/douceville/compare/v1.3.4...v1.3.6)</small>
 
 ### Added
 
@@ -21,7 +21,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed doc ([a651cd2](https://github.com/ydethe/douceville/commit/a651cd294b2bc14bb962e29775f61abb83b937f1) by Yann de The).
 - Fixed conflict ([bc686d3](https://github.com/ydethe/douceville/commit/bc686d3686b88f6ab34570e28fe53855585cd473) by Yann de The).
 
-<!-- insertion marker -->
 ## [v1.3.4](https://github.com/ydethe/douceville/releases/tag/v1.3.4) - 2024-12-05
 
 <small>[Compare with v1.3.3](https://github.com/ydethe/douceville/compare/v1.3.3...v1.3.4)</small>

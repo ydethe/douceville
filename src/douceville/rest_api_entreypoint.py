@@ -11,7 +11,7 @@ from sqlmodel import select
 
 from .geographique import calcIsochrone
 from .config import config
-from .helpers import generate_token, create_access_token
+from .helpers import generate_token, create_access_token, get_user_from_header
 from .schemas import (
     Etablissement,
     EtablissementPublicAvecResultats,
@@ -25,7 +25,6 @@ from .schemas import (
     Token,
 )
 from .crud import get_user_by_login, create_user, get_etab
-from .dependency import get_user_from_header
 
 
 # hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566
@@ -39,7 +38,7 @@ REDIRECT_URL = f"{config.PROTOCOL}://{config.HOST}/{config.API_PATH}/auth/github
 TOKEN_URL = "https://github.com/login/oauth/access_token"
 USER_URL = "https://api.github.com/user"
 
-app = FastAPI()
+app = FastAPI(openapi_url=f"/{config.API_PATH}/openapi.json")
 router = APIRouter()
 
 logfire.instrument_fastapi(app)
