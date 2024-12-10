@@ -22,14 +22,14 @@ from .crud import get_etab
 from .auth import auth
 
 
-# hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566
+# hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566 --reload
 # curl http://127.0.0.1:3566/login
 # curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"<your_code_here>","state":"a"}'  -H "Content-Type: application/json"
 # curl http://localhost:3566/me -H "Authorization: Bearer <your_token_here>"
 # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
 
 
-app = FastAPI(openapi_url=f"{config.API_PATH}/openapi.json")
+app = FastAPI(openapi_url=f"{config.API_PATH}/openapi.json".replace("//", "/"))
 router = APIRouter()
 
 logfire.instrument_fastapi(app)

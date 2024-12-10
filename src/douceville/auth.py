@@ -18,5 +18,5 @@ scheme = OAuth2AuthorizationCodeBearer(
     auto_error=False,
 )
 
-
+# https://docs.fief.dev/integrate/python/fastapi/#checking-for-permissions
 auth = FiefAuth(fief, scheme)
