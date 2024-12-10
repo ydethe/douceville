@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM python:3.11-alpine
+FROM python:3.11
 
 ARG LOGIN_DISABLED
 ARG LOGFIRE_TOKEN
@@ -61,7 +61,7 @@ ENV FIEF_CLIENT_SECRET=$FIEF_CLIENT_SECRET
 
 ENV SQLALCHEMY_TRACK_MODIFICATIONS=False
 
-RUN apk add --no-cache gcc musl-dev linux-headers postgresql-dev geos-dev
+RUN apt update && apt install gcc libpq-dev libgeos-dev
 
 WORKDIR /code
 
