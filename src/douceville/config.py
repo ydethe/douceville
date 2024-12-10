@@ -43,8 +43,8 @@ class Config(BaseSettings):
     API_PATH: str
     PRICE_ID: str
 
-    GITHUB_CLIENT_ID: str
-    GITHUB_CLIENT_SECRET: str
+    FIEF_CLIENT_ID: str
+    FIEF_CLIENT_SECRET: str
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:

@@ -36,15 +36,6 @@ def create_db_and_tables():
 # ==============================
 # Authentication objects
 # ==============================
-class Url(BaseModel):
-    url: str
-
-
-class AuthorizationResponse(BaseModel):
-    state: str
-    code: str
-
-
 class DvUser(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     login: str = Field(nullable=False, unique=True)
@@ -56,21 +47,6 @@ class DvUser(SQLModel, table=True):
     hashed_pwd: str = Field(nullable=True)
     admin: bool = Field(nullable=False, default=False)
     active: bool = Field(nullable=False, default=False)
-
-
-class GithubUser(BaseModel):
-    login: str
-    name: str
-    company: T.Optional[str]
-    location: T.Optional[str]
-    email: T.Optional[str]
-    avatar_url: T.Optional[str]
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-    user: DvUser
 
 
 # ==============================
