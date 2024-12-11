@@ -2,8 +2,7 @@ import typing as T
 
 import logfire
 from fastapi import APIRouter, Depends, FastAPI
-from fief_client import FiefUserInfo
-from fief_client import FiefAccessTokenInfo
+from fief_client import FiefUserInfo, FiefAccessTokenInfo
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlmodel import select
@@ -29,7 +28,13 @@ from .auth import auth
 # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
 
 
-app = FastAPI(root_path=config.API_PATH)
+app = FastAPI(
+    title="Douceville API",
+    summary="Taux de réussite des écoles",
+    description="RestFul API pour lister les écoles et leurs taux de réussite aux examens nationaux",
+    version="1.0.0",
+    root_path=config.API_PATH,
+)
 router = APIRouter()
 
 logfire.instrument_fastapi(app)
@@ -84,7 +89,7 @@ async def isochrone(
 
 @router.get("/user", response_model=DvUser)
 async def get_user(
-    # access_token_info: FiefAccessTokenInfo = Depends(auth.authenticated()),
+    access_token_info: FiefAccessTokenInfo = Depends(auth.authenticated()),
     fief_user: FiefUserInfo = Depends(auth.current_user()),
 ) -> DvUser:
     user = DvUser(
@@ -93,6 +98,12 @@ async def get_user(
         admin=True,
         active=True,
     )
+
+    # scope: list[str] = access_token_info["scope"]
+    # acr: FiefACR = access_token_info["acr"]
+    # permissions: list[str] = access_token_info["permissions"]
+    # access_token: str = access_token_info["access_token"]
+
     return user
 
 
