@@ -47,11 +47,11 @@ services:
       - "traefik.http.services.$COMPOSE_PROJECT_NAME.loadbalancer.server.port=3566"
       - "traefik.http.middlewares.$COMPOSE_PROJECT_NAME-stripprefix.stripprefix.prefixes=$API_PATH"
       - "traefik.http.middlewares.$COMPOSE_PROJECT_NAME-stripprefix.stripprefix.forceSlash=false"
-      # - "homepage.group=$HOME_GROUP"
-      # - "homepage.name=$HOME_NAME"
-      # - "homepage.icon=$HOME_ICON"
-      # - "homepage.href=https://$HOST"
-      # - "homepage.description=$HOME_DESCRIPTION"
+      - "homepage.group=$HOME_GROUP"
+      - "homepage.name=$HOME_NAME"
+      - "homepage.icon=$HOME_ICON"
+      - "homepage.href=https://${HOST}${API_PATH}/docs"
+      - "homepage.description=$HOME_DESCRIPTION"
 
   db:
     image: postgis/postgis

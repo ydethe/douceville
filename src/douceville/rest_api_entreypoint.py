@@ -29,7 +29,7 @@ from .auth import auth
 # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
 
 
-app = FastAPI(openapi_url=f"{config.API_PATH}/openapi.json".replace("//", "/"))
+app = FastAPI(root_path=config.API_PATH)
 router = APIRouter()
 
 logfire.instrument_fastapi(app)
