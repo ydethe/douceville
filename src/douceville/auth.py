@@ -6,9 +6,10 @@ from .config import config
 
 
 fief = FiefAsync(
-    "https://fief.johncloud.fr",
-    config.FIEF_CLIENT_ID,
-    config.FIEF_CLIENT_SECRET,
+    base_url="https://fief.johncloud.fr",
+    client_id=config.FIEF_CLIENT_ID,
+    client_secret=config.FIEF_CLIENT_SECRET,
+    encryption_key=config.SECRET_KEY,
 )
 
 scheme = OAuth2AuthorizationCodeBearer(

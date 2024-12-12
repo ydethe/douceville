@@ -12,7 +12,7 @@ douceville comes with a CLI tool called dv-cli.
 
 To run tests, just run:
 
-    pdm run pytest
+    uv run pytest
 
 ## Test reports
 

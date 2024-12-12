@@ -24,6 +24,7 @@ logs/
 instance
 htmlcov
 storage/
+.python-version
 
 # Generated files
 *.bin
