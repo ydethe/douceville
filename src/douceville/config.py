@@ -1,6 +1,7 @@
 import os
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from kinde_sdk.kinde_api_client import GrantType
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -17,7 +18,6 @@ class Config(BaseSettings):
     LOGLEVEL: str
     FLASK_ADMIN_SWATCH: str
     BCRYPT_ROUNDS: int
-    SECRET_KEY: str
     OPENROUTESERVICE_KEY: str
     STRIPE_SECRET_KEY: str
     STRIPE_PUBLISHABLE_KEY: str
@@ -43,8 +43,17 @@ class Config(BaseSettings):
     API_PATH: str
     PRICE_ID: str
 
-    FIEF_CLIENT_ID: str
-    FIEF_CLIENT_SECRET: str
+    KINDE_ISSUER_URL: str
+    KINDE_CALLBACK_URL: str
+    LOGOUT_REDIRECT_URL: str
+    CLIENT_ID: str
+    CLIENT_SECRET: str
+    CODE_VERIFIER: str = "joasd923nsad09823noaguesr9u3qtewrnaio90eutgersgdsfg"
+    TEMPLATES_AUTO_RELOAD: bool = True
+    SESSION_TYPE: str = "filesystem"
+    SESSION_PERMANENT: bool = False
+    SECRET_KEY: str
+    GRANT_TYPE: GrantType = GrantType.AUTHORIZATION_CODE_WITH_PKCE
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:

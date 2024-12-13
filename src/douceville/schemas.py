@@ -36,17 +36,16 @@ def create_db_and_tables():
 # ==============================
 # Authentication objects
 # ==============================
-class DvUser(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    login: str = Field(nullable=False, unique=True)
-    name: str = Field(nullable=True, unique=False)
-    company: str = Field(nullable=True, unique=False)
-    location: str = Field(nullable=True, unique=False)
-    email: str = Field(nullable=True, unique=True)
-    avatar_url: str = Field(nullable=True, unique=False)
-    hashed_pwd: str = Field(nullable=True)
-    admin: bool = Field(nullable=False, default=False)
-    active: bool = Field(nullable=False, default=False)
+class DvUser(SQLModel):
+    id: str | None = None
+    login: str = None
+    name: str | None = None
+    company: str | None = None
+    location: str | None = None
+    email: str | None = None
+    avatar_url: str | None = None
+    admin: bool = None
+    active: bool = None
 
 
 # ==============================

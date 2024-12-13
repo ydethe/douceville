@@ -12,22 +12,24 @@ authors = [
     { name = "Yann de Thé", email = "yann@gmail.com" },
 ]
 dependencies = [
-    "asgiref>=3.8.1",
-    "fastapi[standard]>=0.115.6",
-    "fastparquet>=2024.11.0",
-    "fief-client[fastapi]>=0.20.0",
-    "geoalchemy2[shapely]>=0.16.0",
-    "geopy>=2.4.1",
-    "hypercorn>=0.17.3",
-    "logfire[fastapi]>=2.7.0",
-    "openrouteservice>=2.3.3",
-    "pandas>=2.2.3",
-    "psycopg2-binary>=2.9.10",
-    "pydantic-settings>=2.6.1",
-    "pyjwt[crypto]>=2.10.1",
-    "rich>=13.9.4",
-    "sqlmodel>=0.0.22",
-    "typer>=0.15.1",
+    "asgiref>=3.0.0",
+    "fastapi[standard]>=0.115",
+    "fastparquet>=2022",
+    "geoalchemy2[shapely]>=0.14.6",
+    "geopy>=0.93",
+    "hypercorn>=0.15",
+    "itsdangerous>=2.2.0",
+    "kinde-python-sdk>=1.2.4",
+    "logfire[fastapi]>=2",
+    "numpy>=2",
+    "openrouteservice>=0.1",
+    "pandas>=2",
+    "psycopg2-binary>=2.9.6",
+    "pydantic-settings>=2.0.0",
+    "pyjwt[crypto]>=2.8.0",
+    "rich>=13.4.2",
+    "sqlmodel>=0.0.14",
+    "typer>=0.12.3",
 ]
 
 [project.urls]
@@ -41,6 +43,9 @@ max-line-length = 100
 [tool.black]
 line-length = 100
 target-version = ['py38']
+
+[tool.uv]
+resolution = "highest"
 
 [project.scripts]
 dv-cli = "douceville.scripts:app"
