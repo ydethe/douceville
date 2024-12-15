@@ -48,6 +48,9 @@ class Config(BaseSettings):
     SUPABASE_KEY: str
     SUPABASE_TEST_USER: str
     SUPABASE_TEST_PASSWORD: str
+    SUPABASE_ADMIN_USER: str
+    SUPABASE_ADMIN_PASSWORD: str
+    SUPABASE_JWT_SECRET: str
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:

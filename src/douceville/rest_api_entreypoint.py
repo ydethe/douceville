@@ -1,13 +1,10 @@
 import typing as T
 
 import logfire
-from fastapi import HTTPException, APIRouter, status, Depends, FastAPI, Request
-from fastapi.responses import RedirectResponse
-from kinde_sdk.kinde_api_client import KindeApiClient
+from fastapi import APIRouter, Depends, FastAPI
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlmodel import select
-from starlette.middleware.sessions import SessionMiddleware
 
 from .geographique import calcIsochrone
 from .config import config
@@ -20,7 +17,7 @@ from .schemas import (
     get_db,
 )
 from .crud import get_etab
-from .auth import get_kinde_client, kinde_api_client_params, user_clients
+from .auth import get_token_user
 
 
 # hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566 --reload
@@ -37,7 +34,6 @@ app = FastAPI(
     version="1.0.0",
     root_path=config.API_PATH,
 )
-app.add_middleware(SessionMiddleware, secret_key=config.SECRET_KEY)
 router = APIRouter()
 
 logfire.instrument_fastapi(app)
@@ -46,7 +42,7 @@ logfire.instrument_fastapi(app)
 @router.get("/etablissement/{uai}", response_model=EtablissementPublicAvecResultats)
 async def read_etablissement(
     uai: str,
-    kinde_client: KindeApiClient = Depends(get_kinde_client),
+    kinde_client: DvUser = Depends(get_token_user),
     db: Session = Depends(get_db),
 ) -> EtablissementPublicAvecResultats:
     etab = get_etab(db, uai)
@@ -57,7 +53,7 @@ async def read_etablissement(
 @router.post("/etablissements", response_model=T.List[EtablissementPublicAvecResultats])
 async def etablissement_in_zone(
     body: QueryParameters,
-    kinde_client: KindeApiClient = Depends(get_kinde_client),
+    kinde_client: DvUser = Depends(get_token_user),
     db: Session = Depends(get_db),
 ) -> T.List[EtablissementPublicAvecResultats]:
     stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, body.iso.getGeom()))
@@ -79,7 +75,7 @@ async def isochrone(
     lon: float,
     dist: float,
     transp: str = "driving-car",
-    kinde_client: KindeApiClient = Depends(get_kinde_client),
+    kinde_client: DvUser = Depends(get_token_user),
 ) -> Isochrone:
     center = [lon, lat]
     iso = calcIsochrone(center, dist, transp)
@@ -89,55 +85,9 @@ async def isochrone(
 
 @router.get("/user", response_model=DvUser)
 async def get_user(
-    kinde_client: KindeApiClient = Depends(get_kinde_client),
+    user: DvUser = Depends(get_token_user),
 ) -> DvUser:
-    user = DvUser(
-        id=kinde_client.client_id,
-        login=kinde_client.client_id,
-        admin=True,
-        active=True,
-    )
-
     return user
-
-
-# Login endpoint
-@app.get("/api/auth/login")
-def login(request: Request):
-    kinde_client = KindeApiClient(**kinde_api_client_params)
-    login_url = kinde_client.get_login_url()
-    return RedirectResponse(login_url)
-
-
-# Register endpoint
-@app.get("/api/auth/register")
-def register(request: Request):
-    kinde_client = KindeApiClient(**kinde_api_client_params)
-    register_url = kinde_client.get_register_url()
-    return RedirectResponse(register_url)
-
-
-@app.get("/api/auth/kinde_callback")
-def callback(request: Request):
-    kinde_client = KindeApiClient(**kinde_api_client_params)
-    kinde_client.fetch_token(authorization_response=str(request.url))
-    user = kinde_client.get_user_details()
-    request.session["user_id"] = user.get("id")
-    user_clients[user.get("id")] = kinde_client
-    return RedirectResponse(router.url_path_for("read_root"))
-
-
-# Logout endpoint
-@app.get("/api/auth/logout")
-def logout(request: Request):
-    user_id = request.session.get("user_id")
-    if user_id in user_clients:
-        kinde_client = user_clients[user_id]
-        logout_url = kinde_client.logout(redirect_to=config.LOGOUT_REDIRECT_URL)
-        del user_clients[user_id]
-        request.session.pop("user_id", None)
-        return RedirectResponse(logout_url)
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
 
 app.include_router(router)

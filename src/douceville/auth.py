@@ -1,43 +1,38 @@
 from fastapi import HTTPException, status, Request
-from kinde_sdk.kinde_api_client import KindeApiClient, GrantType
-from kinde_sdk import Configuration
+from supabase import create_client, Client
+from jose import jwt
 
+from .schemas import DvUser
 from .config import config
 
 
-# https://pypi.org/project/auth0_fastapi/
-# https://stytch.com/dashboard/user-management?env=test
+def get_token_user(request: Request) -> DvUser:
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Bearer not found")
 
-# Initialize Kinde client with configuration
-configuration = Configuration(host=config.KINDE_ISSUER_URL)
-kinde_api_client_params = {
-    "configuration": configuration,
-    "domain": config.KINDE_ISSUER_URL,
-    "client_id": config.CLIENT_ID,
-    "client_secret": config.CLIENT_SECRET,
-    "grant_type": config.GRANT_TYPE,
-    "callback_url": config.KINDE_CALLBACK_URL,
-}
-if config.GRANT_TYPE == GrantType.AUTHORIZATION_CODE_WITH_PKCE:
-    kinde_api_client_params["code_verifier"] = config.CODE_VERIFIER
+    token = auth_header[7:]
 
+    payload = jwt.decode(token, config.SUPABASE_JWT_SECRET, audience="authenticated")
+    user_id = payload["sub"]
+    user_email = payload["email"]
 
-# User clients dictionary to store Kinde clients for each user
-user_clients = {}
+    supabase: Client = create_client(config.SUPABASE_URL, config.SUPABASE_KEY)
+    supabase.auth.sign_in_with_password(
+        {"email": config.SUPABASE_TEST_USER, "password": config.SUPABASE_TEST_PASSWORD}
+    )
 
-# Dependency to get the current user's KindeApiClient instance
-def get_kinde_client(request: Request) -> KindeApiClient:
-    user_id = request.session.get("user_id")
-    if user_id is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    response = supabase.table("users").select("*").eq("id", user_id).execute()
+    user_data = response.data[0]
 
-    if user_id not in user_clients:
-        # If the client does not exist, create a new instance
-        user_clients[user_id] = KindeApiClient()
+    supabase.auth.sign_out()
 
-    kinde_client = user_clients[user_id]
-    # Ensure the client is authenticated
-    if not kinde_client.is_authenticated():
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    user = DvUser(
+        id=user_id,
+        last_name=user_data["last_name"],
+        first_name=user_data["first_name"],
+        login=user_email,
+        permissions=user_data["permissions"],
+    )
 
-    return kinde_client
+    return user

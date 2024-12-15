@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.12...HEAD)</small>
 
+### Fixed
+
+- Fixed supabasefreeze ([188ab3a](https://github.com/ydethe/douceville/commit/188ab3a4c346aef8b99b810547379f6a0fdcc130) by Yann de The).
+
 <!-- insertion marker -->
 ## [v1.3.12](https://github.com/ydethe/douceville/releases/tag/v1.3.12) - 2024-12-12
 
