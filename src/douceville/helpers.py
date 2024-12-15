@@ -1,29 +1,22 @@
-from datetime import datetime, timedelta
-from datetime import timezone
-from random import randint
-
-import jwt
 from fastapi import Header, HTTPException, status
 from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import ValidationError
+from supabase import create_client, Client
+from jose import jwt
 
 from .config import config
 from .schemas import DvUser
 
 
-def generate_random_string(size: int) -> str:
-    bytes_array = [randint(48, 91) for _ in range(size)]
-    return "".join([chr(x) for x in bytes_array])
+def create_access_token() -> str:
+    supabase: Client = create_client(config.SUPABASE_URL, config.SUPABASE_KEY)
+    response = supabase.auth.sign_in_with_password(
+        {"email": config.SUPABASE_TEST_USER, "password": config.SUPABASE_TEST_PASSWORD}
+    )
 
-
-def create_access_token(*, data: DvUser, expire: datetime = None) -> str:
-    to_encode = data.model_dump()
-    dt_now = datetime.now(tz=timezone.utc)
-    if expire is None:
-        expire = dt_now + timedelta(days=1)
-    to_encode.update({"exp": expire, "salt": generate_random_string(30)})
-    encoded_jwt = jwt.encode(to_encode, config.SECRET_KEY, algorithm="HS256")
-    return encoded_jwt
+    token = response.session.access_token
+    supabase.auth.sign_out()
+    return token
 
 
 def generate_token() -> str:

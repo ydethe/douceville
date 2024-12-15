@@ -2,30 +2,25 @@ import unittest
 
 from fastapi.testclient import TestClient
 
+from douceville import config
 from douceville.rest_api_entreypoint import app
 from douceville.helpers import create_access_token
-from douceville.schemas import DvUser, Etablissement, Isochrone, QueryParameters
+from douceville.schemas import Etablissement, Isochrone, QueryParameters
 
 
 class TestDoucevilleAPI(unittest.TestCase):
     def setUp(self):
         super().setUp()
 
-        test_user = DvUser(
-            id=2,
-            login="test",
-            admin=False,
-            active=True,
-        )
-        token = create_access_token(data=test_user)
+        token = create_access_token()
         self.client = TestClient(app, headers={"Authorization": f"Bearer {token}"})
 
     def test_me_with_auth(self):
-        response = self.client.get("/me")
+        response = self.client.get("/user")
         assert response.status_code == 200, response.status_code
         usr = response.json()
-        assert usr["login"] == "test"
-        assert usr["id"] == 2
+
+        assert usr["login"] == config.SUPABASE_TEST_USER
 
     def test_isochrone(self):
         params = dict(
@@ -68,31 +63,18 @@ class TestDoucevilleAPI(unittest.TestCase):
         data = response.json()
         assert len(data) > 0
 
-    def test_login(self):
-        # curl http://127.0.0.1:3566/login
-        # curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"<your_code_here>","state":"a"}'  -H "Content-Type: application/json"
-        # curl http://localhost:3566/me -H "Authorization: Bearer <your_token_here>"
-        # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
-        client = TestClient(app)
-        response = client.get("/login")
-        assert response.status_code == 200, response.status_code
-        url = response.json()["url"]
-        assert len(url) > 0, url
-
 
 if __name__ == "__main__":
     a = TestDoucevilleAPI()
 
-    a.test_login()
+    a.setUp()
+    a.test_me_with_auth()
 
-    # a.setUp()
-    # a.test_me_with_auth()
+    a.setUp()
+    a.test_isochrone()
 
-    # a.setUp()
-    # a.test_isochrone()
+    a.setUp()
+    a.test_etablissement()
 
-    # a.setUp()
-    # a.test_etablissement()
-
-    # a.setUp()
-    # a.test_etablissements_zone()
+    a.setUp()
+    a.test_etablissements_zone()

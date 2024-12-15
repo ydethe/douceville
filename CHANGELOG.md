@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.12...HEAD)</small>
 
+### Added
+
+- Added supabase user management ([0852bd8](https://github.com/ydethe/douceville/commit/0852bd88a31317ab7883e46e1d3a3b527f94afb3) by Yann de The).
+
 ### Fixed
 
 - Fixed supabasefreeze ([188ab3a](https://github.com/ydethe/douceville/commit/188ab3a4c346aef8b99b810547379f6a0fdcc130) by Yann de The).
