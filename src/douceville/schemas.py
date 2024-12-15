@@ -39,13 +39,11 @@ def create_db_and_tables():
 class DvUser(SQLModel):
     id: str | None = None
     login: str = None
-    name: str | None = None
-    company: str | None = None
-    location: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
     email: str | None = None
     avatar_url: str | None = None
-    admin: bool = None
-    active: bool = None
+    permissions: list[str] = None
 
 
 # ==============================

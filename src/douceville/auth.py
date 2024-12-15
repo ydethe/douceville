@@ -5,6 +5,9 @@ from kinde_sdk import Configuration
 from .config import config
 
 
+# https://pypi.org/project/auth0_fastapi/
+# https://stytch.com/dashboard/user-management?env=test
+
 # Initialize Kinde client with configuration
 configuration = Configuration(host=config.KINDE_ISSUER_URL)
 kinde_api_client_params = {

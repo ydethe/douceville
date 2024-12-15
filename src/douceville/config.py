@@ -1,7 +1,6 @@
 import os
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from kinde_sdk.kinde_api_client import GrantType
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -43,17 +42,12 @@ class Config(BaseSettings):
     API_PATH: str
     PRICE_ID: str
 
-    KINDE_ISSUER_URL: str
-    KINDE_CALLBACK_URL: str
-    LOGOUT_REDIRECT_URL: str
-    CLIENT_ID: str
-    CLIENT_SECRET: str
-    CODE_VERIFIER: str = "joasd923nsad09823noaguesr9u3qtewrnaio90eutgersgdsfg"
-    TEMPLATES_AUTO_RELOAD: bool = True
-    SESSION_TYPE: str = "filesystem"
-    SESSION_PERMANENT: bool = False
-    SECRET_KEY: str
-    GRANT_TYPE: GrantType = GrantType.AUTHORIZATION_CODE_WITH_PKCE
+    # https://supabase.com/docs/reference/python/initializing
+    # https://github.com/orgs/supabase/discussions/226#discussioncomment-89148
+    SUPABASE_URL: str
+    SUPABASE_KEY: str
+    SUPABASE_TEST_USER: str
+    SUPABASE_TEST_PASSWORD: str
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:

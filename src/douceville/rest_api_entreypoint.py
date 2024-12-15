@@ -28,7 +28,7 @@ from .auth import get_kinde_client, kinde_api_client_params, user_clients
 # curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"<your_code_here>","state":"a"}'  -H "Content-Type: application/json"
 # curl http://localhost:3566/me -H "Authorization: Bearer <your_token_here>"
 # curl http://localhost:3566/etablissement/0180766K -H "Authorization: Bearer <your_token_here>"
-
+# https://kinde.com/blog/engineering/how-to-protect-your-fastapi-routes-with-kinde-authentication/
 
 app = FastAPI(
     title="Douceville API",
