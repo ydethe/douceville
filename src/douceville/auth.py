@@ -2,6 +2,7 @@ from fastapi import HTTPException, status, Request
 from supabase import create_client
 from supabase.lib.client_options import ClientOptions
 from jose import jwt
+from jose.exceptions import JOSEError
 
 from .schemas import DvUser
 from .config import config
@@ -14,8 +15,11 @@ def get_token_user(request: Request) -> DvUser:
 
     token = auth_header[7:]
 
-    payload = jwt.decode(token, config.SUPABASE_JWT_SECRET, audience="authenticated")
-    print(payload)
+    try:
+        payload = jwt.decode(token, config.SUPABASE_JWT_SECRET, audience="authenticated")
+    except JOSEError as e:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"{e}")
+
     user_id = payload["sub"]
     user_email = payload["email"]
     # dt_exp=datetime.fromtimestamp(payload['exp'])
