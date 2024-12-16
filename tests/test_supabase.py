@@ -1,12 +1,15 @@
 from supabase import create_client, Client
-from supabase.lib.client_options import ClientOptions
-from jose import jwt
+from fastapi import Request
+from starlette.datastructures import Headers
 
 from douceville.config import config
-from douceville.schemas import DvUser
+from douceville.auth import get_token_user
 
 
 def test_supabase():
+    # ==========================
+    # Frontend behaviour
+    # ==========================
     supabase: Client = create_client(config.SUPABASE_URL, config.SUPABASE_KEY)
     response = supabase.auth.sign_in_with_password(
         {"email": config.SUPABASE_TEST_USER, "password": config.SUPABASE_TEST_PASSWORD}
@@ -17,31 +20,12 @@ def test_supabase():
 
     supabase.auth.sign_out()
 
-    payload = jwt.decode(token, config.SUPABASE_JWT_SECRET, audience="authenticated")
-    user_id = payload["sub"]
-    user_email = payload["email"]
-
-    supabase = create_client(
-        config.SUPABASE_URL,
-        config.SUPABASE_ADMIN_KEY,
-        options=ClientOptions(
-            auto_refresh_token=False,
-            persist_session=False,
-        ),
-    )
-
-    response = supabase.table("users").select("*").eq("id", user_id).execute()
-    user_data = response.data[0]
-
-    supabase.auth.sign_out()
-
-    user = DvUser(
-        id=user_id,
-        last_name=user_data["last_name"],
-        first_name=user_data["first_name"],
-        login=user_email,
-        permissions=user_data["permissions"],
-    )
+    # ==========================
+    # Backend behaviour
+    # ==========================
+    request = Request(scope={"type": "http"})
+    request._headers = Headers(headers={"Authorization": f"Bearer {token}"})
+    user = get_token_user(request)
 
     print(user)
 

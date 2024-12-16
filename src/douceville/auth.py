@@ -15,9 +15,13 @@ def get_token_user(request: Request) -> DvUser:
     token = auth_header[7:]
 
     payload = jwt.decode(token, config.SUPABASE_JWT_SECRET, audience="authenticated")
+    print(payload)
     user_id = payload["sub"]
     user_email = payload["email"]
+    # dt_exp=datetime.fromtimestamp(payload['exp'])
+    # print(dt_exp)
 
+    # https://supabase.com/docs/reference/python/admin-api
     supabase = create_client(
         config.SUPABASE_URL,
         config.SUPABASE_ADMIN_KEY,

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed supabase check ([4174715](https://github.com/ydethe/douceville/commit/417471585f130f5ee611a211e0e3a5b61aef124b) by Yann de The).
 - Fixed supabasefreeze ([188ab3a](https://github.com/ydethe/douceville/commit/188ab3a4c346aef8b99b810547379f6a0fdcc130) by Yann de The).
 
 <!-- insertion marker -->
