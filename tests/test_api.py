@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from douceville import config
 from douceville.rest_api_entreypoint import app
-from douceville.helpers import create_access_token
+from douceville.auth import create_access_token
 from douceville.schemas import Etablissement, Isochrone, QueryParameters
 
 

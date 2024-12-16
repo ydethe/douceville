@@ -6,7 +6,7 @@ from starlette.datastructures import Headers
 
 from douceville.config import config
 from douceville.auth import SupabaseAuth
-from douceville.helpers import create_access_token
+from douceville.auth import create_access_token
 
 
 @pytest.mark.asyncio

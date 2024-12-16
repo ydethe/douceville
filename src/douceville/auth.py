@@ -6,7 +6,7 @@ from fastapi import HTTPException, status, Request
 from fastapi.security.http import HTTPBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from fastapi.openapi.models import HTTPBearer as HTTPBearerModel
-from supabase import create_client
+from supabase import create_client, Client
 from supabase.lib.client_options import ClientOptions
 from jose import jwt
 from jose.exceptions import JOSEError
@@ -147,6 +147,17 @@ class SupabaseAuth(HTTPBearer):
         )
 
         return user
+
+
+def create_access_token() -> str:
+    supabase: Client = create_client(config.SUPABASE_URL, config.SUPABASE_KEY)
+    response = supabase.auth.sign_in_with_password(
+        {"email": config.SUPABASE_TEST_USER, "password": config.SUPABASE_TEST_PASSWORD}
+    )
+
+    token = response.session.access_token
+    supabase.auth.sign_out()
+    return token
 
 
 supabase_auth = SupabaseAuth(
