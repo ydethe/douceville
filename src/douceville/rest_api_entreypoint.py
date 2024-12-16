@@ -1,7 +1,8 @@
 import typing as T
 
 import logfire
-from fastapi import APIRouter, Depends, FastAPI, Security
+from fastapi import APIRouter, status, Depends, FastAPI, Security
+from fastapi import HTTPException
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlmodel import select
@@ -16,7 +17,6 @@ from .schemas import (
     QueryParameters,
     get_db,
 )
-from .crud import get_etab
 from .auth import supabase_auth
 
 
@@ -45,7 +45,14 @@ async def read_etablissement(
     user: DvUser = Security(supabase_auth),
     db: Session = Depends(get_db),
 ) -> EtablissementPublicAvecResultats:
-    etab = get_etab(db, uai)
+    stmt = select(Etablissement).where(Etablissement.UAI == uai)
+
+    a = list(db.scalars(stmt))
+    if len(a) == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not authenticated")
+    else:
+        etab = a[0]
+
     # TODO: Handle the case where no etablissement is found. Return NOT FOUND error
     return etab
 

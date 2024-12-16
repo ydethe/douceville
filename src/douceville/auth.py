@@ -1,7 +1,6 @@
 from typing_extensions import Annotated, Doc
 import typing as T
 
-from starlette.status import HTTP_403_FORBIDDEN
 from fastapi import HTTPException, status, Request
 from fastapi.security.http import HTTPBearer
 from fastapi.security.utils import get_authorization_scheme_param
@@ -97,11 +96,11 @@ class SupabaseAuth(HTTPBearer):
         scheme, credentials = get_authorization_scheme_param(authorization)
 
         if not (authorization and scheme and credentials):
-            raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Not authenticated")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
 
         if scheme.lower() != "bearer":
             raise HTTPException(
-                status_code=HTTP_403_FORBIDDEN,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail="Invalid authentication credentials",
             )
 
