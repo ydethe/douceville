@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## Unreleased
+
+<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.15...HEAD)</small>
+
+### Fixed
+
+- Fixed openapi doc ([c201d46](https://github.com/ydethe/douceville/commit/c201d465d5ea29fb9b9eef958225206f4c7ee248) by Yann de The).
+
+<!-- insertion marker -->
 ## [v1.3.15](https://github.com/ydethe/douceville/releases/tag/v1.3.15) - 2024-12-16
 
 <small>[Compare with v1.3.13](https://github.com/ydethe/douceville/compare/v1.3.13...v1.3.15)</small>

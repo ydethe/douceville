@@ -22,6 +22,10 @@ class TestDoucevilleAPI(unittest.TestCase):
 
         assert usr["login"] == config.SUPABASE_TEST_USER
 
+    def test_openapi(self):
+        response = self.client.get("/openapi.json")
+        assert response.status_code == 200, response.status_code
+
     def test_isochrone(self):
         params = dict(
             lat=43.6085909,
@@ -68,13 +72,16 @@ if __name__ == "__main__":
     a = TestDoucevilleAPI()
 
     a.setUp()
-    a.test_me_with_auth()
+    a.test_openapi()
 
-    a.setUp()
-    a.test_isochrone()
+    # a.setUp()
+    # a.test_me_with_auth()
 
-    a.setUp()
-    a.test_etablissement()
+    # a.setUp()
+    # a.test_isochrone()
 
-    a.setUp()
-    a.test_etablissements_zone()
+    # a.setUp()
+    # a.test_etablissement()
+
+    # a.setUp()
+    # a.test_etablissements_zone()
