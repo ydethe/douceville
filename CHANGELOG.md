@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v1.3.13](https://github.com/ydethe/douceville/releases/tag/v1.3.13) - 2024-12-16
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.3.12...HEAD)</small>
+<small>[Compare with v1.3.12](https://github.com/ydethe/douceville/compare/v1.3.12...v1.3.13)</small>
 
 ### Added
 
@@ -16,10 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed errorhandling ([5cd0a1f](https://github.com/ydethe/douceville/commit/5cd0a1f2be42a13d46636d82bbcf99c4a81f437f) by Yann de The).
 - Fixed supabase check ([4174715](https://github.com/ydethe/douceville/commit/417471585f130f5ee611a211e0e3a5b61aef124b) by Yann de The).
 - Fixed supabasefreeze ([188ab3a](https://github.com/ydethe/douceville/commit/188ab3a4c346aef8b99b810547379f6a0fdcc130) by Yann de The).
 
-<!-- insertion marker -->
 ## [v1.3.12](https://github.com/ydethe/douceville/releases/tag/v1.3.12) - 2024-12-12
 
 <small>[Compare with v1.3.11](https://github.com/ydethe/douceville/compare/v1.3.11...v1.3.12)</small>

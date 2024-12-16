@@ -17,7 +17,7 @@ from .schemas import (
     get_db,
 )
 from .crud import get_etab
-from .auth import get_token_user
+from .auth import SupabaseAuth
 
 
 # hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566 --reload
@@ -38,11 +38,18 @@ router = APIRouter()
 
 logfire.instrument_fastapi(app)
 
+supabase_auth = SupabaseAuth(
+    scheme_name="scheme_name",
+    supabase_jwt_secret=config.SUPABASE_JWT_SECRET,
+    supabase_url=config.SUPABASE_URL,
+    supabase_admin_key=config.SUPABASE_ADMIN_KEY,
+)
+
 
 @router.get("/etablissement/{uai}", response_model=EtablissementPublicAvecResultats)
 async def read_etablissement(
     uai: str,
-    kinde_client: DvUser = Depends(get_token_user),
+    user: DvUser = Depends(supabase_auth),
     db: Session = Depends(get_db),
 ) -> EtablissementPublicAvecResultats:
     etab = get_etab(db, uai)
@@ -53,7 +60,7 @@ async def read_etablissement(
 @router.post("/etablissements", response_model=T.List[EtablissementPublicAvecResultats])
 async def etablissement_in_zone(
     body: QueryParameters,
-    kinde_client: DvUser = Depends(get_token_user),
+    user: DvUser = Depends(supabase_auth),
     db: Session = Depends(get_db),
 ) -> T.List[EtablissementPublicAvecResultats]:
     stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, body.iso.getGeom()))
@@ -75,7 +82,7 @@ async def isochrone(
     lon: float,
     dist: float,
     transp: str = "driving-car",
-    kinde_client: DvUser = Depends(get_token_user),
+    user: DvUser = Depends(supabase_auth),
 ) -> Isochrone:
     center = [lon, lat]
     iso = calcIsochrone(center, dist, transp)
@@ -85,7 +92,7 @@ async def isochrone(
 
 @router.get("/user", response_model=DvUser)
 async def get_user(
-    user: DvUser = Depends(get_token_user),
+    user: DvUser = Depends(supabase_auth),
 ) -> DvUser:
     return user
 
