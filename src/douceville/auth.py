@@ -1,5 +1,6 @@
 from fastapi import HTTPException, status, Request
-from supabase import create_client, Client
+from supabase import create_client
+from supabase.lib.client_options import ClientOptions
 from jose import jwt
 
 from .schemas import DvUser
@@ -17,9 +18,13 @@ def get_token_user(request: Request) -> DvUser:
     user_id = payload["sub"]
     user_email = payload["email"]
 
-    supabase: Client = create_client(config.SUPABASE_URL, config.SUPABASE_KEY)
-    supabase.auth.sign_in_with_password(
-        {"email": config.SUPABASE_TEST_USER, "password": config.SUPABASE_TEST_PASSWORD}
+    supabase = create_client(
+        config.SUPABASE_URL,
+        config.SUPABASE_ADMIN_KEY,
+        options=ClientOptions(
+            auto_refresh_token=False,
+            persist_session=False,
+        ),
     )
 
     response = supabase.table("users").select("*").eq("id", user_id).execute()

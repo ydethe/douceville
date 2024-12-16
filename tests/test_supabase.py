@@ -1,4 +1,5 @@
 from supabase import create_client, Client
+from supabase.lib.client_options import ClientOptions
 from jose import jwt
 
 from douceville.config import config
@@ -12,15 +13,21 @@ def test_supabase():
     )
 
     token = response.session.access_token
+    print(token)
+
     supabase.auth.sign_out()
 
     payload = jwt.decode(token, config.SUPABASE_JWT_SECRET, audience="authenticated")
     user_id = payload["sub"]
     user_email = payload["email"]
 
-    supabase: Client = create_client(config.SUPABASE_URL, config.SUPABASE_KEY)
-    supabase.auth.sign_in_with_password(
-        {"email": config.SUPABASE_TEST_USER, "password": config.SUPABASE_TEST_PASSWORD}
+    supabase = create_client(
+        config.SUPABASE_URL,
+        config.SUPABASE_ADMIN_KEY,
+        options=ClientOptions(
+            auto_refresh_token=False,
+            persist_session=False,
+        ),
     )
 
     response = supabase.table("users").select("*").eq("id", user_id).execute()
