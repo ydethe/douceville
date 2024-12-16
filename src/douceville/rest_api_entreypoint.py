@@ -17,7 +17,7 @@ from .schemas import (
     get_db,
 )
 from .crud import get_etab
-from .auth import SupabaseAuth
+from .auth import supabase_auth
 
 
 # hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566 --reload
@@ -37,13 +37,6 @@ app = FastAPI(
 router = APIRouter()
 
 logfire.instrument_fastapi(app)
-
-supabase_auth = SupabaseAuth(
-    scheme_name="scheme_name",
-    supabase_jwt_secret=config.SUPABASE_JWT_SECRET,
-    supabase_url=config.SUPABASE_URL,
-    supabase_admin_key=config.SUPABASE_ADMIN_KEY,
-)
 
 
 @router.get("/etablissement/{uai}", response_model=EtablissementPublicAvecResultats)

@@ -11,6 +11,7 @@ from jose import jwt
 from jose.exceptions import JOSEError
 
 from .schemas import DvUser
+from .config import config
 
 
 class SupabaseAuth(SecurityBase):
@@ -139,3 +140,11 @@ class SupabaseAuth(SecurityBase):
         )
 
         return user
+
+
+supabase_auth = SupabaseAuth(
+    scheme_name="scheme_name",
+    supabase_jwt_secret=config.SUPABASE_JWT_SECRET,
+    supabase_url=config.SUPABASE_URL,
+    supabase_admin_key=config.SUPABASE_ADMIN_KEY,
+)
