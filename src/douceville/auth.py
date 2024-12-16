@@ -3,7 +3,7 @@ import typing as T
 
 from starlette.status import HTTP_403_FORBIDDEN
 from fastapi import HTTPException, status, Request
-from fastapi.security.base import SecurityBase
+from fastapi.security import HTTPBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from supabase import create_client
 from supabase.lib.client_options import ClientOptions
@@ -14,40 +14,10 @@ from .schemas import DvUser
 from .config import config
 
 
-class SupabaseAuth(SecurityBase):
+class SupabaseAuth(HTTPBearer):
     def __init__(
         self,
         *,
-        scheme_name: Annotated[
-            T.Optional[str],
-            Doc(
-                """
-                Security scheme name.
-
-                It will be included in the generated OpenAPI (e.g. visible at `/docs`).
-                """
-            ),
-        ] = None,
-        auto_error: Annotated[
-            bool,
-            Doc(
-                """
-                By default, if the HTTP Bearer token is not provided (in an
-                `Authorization` header), `HTTPBearer` will automatically cancel the
-                request and send the client an error.
-
-                If `auto_error` is set to `False`, when the HTTP Bearer token
-                is not available, instead of erroring out, the dependency result will
-                be `None`.
-
-                This is useful when you want to have optional authentication.
-
-                It is also useful when you want to have authentication that can be
-                provided in one of multiple optional ways (for example, in an HTTP
-                Bearer token or in a cookie).
-                """
-            ),
-        ] = True,
         supabase_jwt_secret: Annotated[
             str,
             Doc(
@@ -73,8 +43,6 @@ class SupabaseAuth(SecurityBase):
             ),
         ] = None,
     ):
-        self.scheme_name = scheme_name
-        self.auto_error = auto_error
         self.supabase_jwt_secret = supabase_jwt_secret
         self.supabase_url = supabase_url
         self.supabase_admin_key = supabase_admin_key
@@ -84,19 +52,13 @@ class SupabaseAuth(SecurityBase):
         scheme, credentials = get_authorization_scheme_param(authorization)
 
         if not (authorization and scheme and credentials):
-            if self.auto_error:
-                raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Not authenticated")
-            else:
-                return None
+            raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Not authenticated")
 
         if scheme.lower() != "bearer":
-            if self.auto_error:
-                raise HTTPException(
-                    status_code=HTTP_403_FORBIDDEN,
-                    detail="Invalid authentication credentials",
-                )
-            else:
-                return None
+            raise HTTPException(
+                status_code=HTTP_403_FORBIDDEN,
+                detail="Invalid authentication credentials",
+            )
 
         user = await self.get_token_user(credentials)
 
@@ -143,7 +105,6 @@ class SupabaseAuth(SecurityBase):
 
 
 supabase_auth = SupabaseAuth(
-    scheme_name="scheme_name",
     supabase_jwt_secret=config.SUPABASE_JWT_SECRET,
     supabase_url=config.SUPABASE_URL,
     supabase_admin_key=config.SUPABASE_ADMIN_KEY,

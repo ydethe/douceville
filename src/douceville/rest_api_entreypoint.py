@@ -1,7 +1,7 @@
 import typing as T
 
 import logfire
-from fastapi import APIRouter, Depends, FastAPI
+from fastapi import APIRouter, Depends, FastAPI, Security
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlmodel import select
@@ -42,7 +42,7 @@ logfire.instrument_fastapi(app)
 @router.get("/etablissement/{uai}", response_model=EtablissementPublicAvecResultats)
 async def read_etablissement(
     uai: str,
-    user: DvUser = Depends(supabase_auth),
+    user: DvUser = Security(supabase_auth),
     db: Session = Depends(get_db),
 ) -> EtablissementPublicAvecResultats:
     etab = get_etab(db, uai)
@@ -53,7 +53,7 @@ async def read_etablissement(
 @router.post("/etablissements", response_model=T.List[EtablissementPublicAvecResultats])
 async def etablissement_in_zone(
     body: QueryParameters,
-    user: DvUser = Depends(supabase_auth),
+    user: DvUser = Security(supabase_auth),
     db: Session = Depends(get_db),
 ) -> T.List[EtablissementPublicAvecResultats]:
     stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, body.iso.getGeom()))
@@ -75,7 +75,7 @@ async def isochrone(
     lon: float,
     dist: float,
     transp: str = "driving-car",
-    user: DvUser = Depends(supabase_auth),
+    user: DvUser = Security(supabase_auth),
 ) -> Isochrone:
     center = [lon, lat]
     iso = calcIsochrone(center, dist, transp)
@@ -85,7 +85,7 @@ async def isochrone(
 
 @router.get("/user", response_model=DvUser)
 async def get_user(
-    user: DvUser = Depends(supabase_auth),
+    user: DvUser = Security(supabase_auth),
 ) -> DvUser:
     return user
 
