@@ -2,8 +2,8 @@ name: Docker Image CI
 
 on:
   push:
-    tags:
-      - '**'
+    # tags:
+    #   - '**'
 
 jobs:
   build_wheel:
@@ -13,10 +13,20 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version-file: "pyproject.toml"
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+
+      - name: Run tests
+        # For example, using `pytest`
+        run: uv run pytest tests
 
       - name: Build wheel and install
         run: |
