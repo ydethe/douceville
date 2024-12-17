@@ -11,36 +11,16 @@ class Config(BaseSettings):
         case_sensitive=True, env_file=".env", env_file_encoding="utf-8", extra="allow"
     )
 
-    LOGIN_DISABLED: bool
-
     LOGFIRE_TOKEN: str
     LOGLEVEL: str
-    FLASK_ADMIN_SWATCH: str
-    BCRYPT_ROUNDS: int
     OPENROUTESERVICE_KEY: str
-    STRIPE_SECRET_KEY: str
-    STRIPE_PUBLISHABLE_KEY: str
 
-    ADMIN_EMAIL: str
-    ADMIN_PASSWORD: str
-
-    MAIL_SERVER: str
-    MAIL_PORT: int
-    MAIL_USE_TLS: bool
-    MAIL_USE_SSL: bool
-    MAIL_USERNAME: str
-    MAIL_PASSWORD: str
-    MAIL_DEFAULT_SENDER: str
-
-    POSTGRES_HOST: str
     ADDOK_HOST: str
+    POSTGRES_HOST: str
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-    HOST: str
-    PROTOCOL: str
     API_PATH: str
-    PRICE_ID: str
 
     # https://supabase.com/docs/reference/python/initializing
     # https://github.com/orgs/supabase/discussions/226#discussioncomment-89148
@@ -53,7 +33,49 @@ class Config(BaseSettings):
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        return f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}/{self.POSTGRES_DB}"
+        if self.POSTGRES_HOST == "<test>":
+            db_uri = "sqlite:///tests/test.db"
+            init_sqlite(db_uri)
+            return db_uri
+        else:
+            return f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}/{self.POSTGRES_DB}"
+
+
+def init_sqlite(db_uri: str):
+    from geoalchemy2 import load_spatialite
+    from sqlalchemy import create_engine, select
+    from sqlalchemy.event import listen
+    from sqlalchemy.orm import Session
+    from douceville.schemas import Etablissement, Resultat
+    import os
+
+    os.environ["SPATIALITE_LIBRARY_PATH"] = "/usr/lib/x86_64-linux-gnu/mod_spatialite.so"
+    engine = create_engine(db_uri, echo=True)
+    listen(engine, "connect", load_spatialite)
+    with Session(engine) as session:
+        stmt = select(Etablissement)
+        nb_found = len(list(session.scalars(stmt)))
+        if nb_found == 0:
+            etab = Etablissement(
+                id=1,
+                UAI="X42Y",
+                nom="FooBar school",
+                code_postal="31000",
+                commune="Toulouse",
+                position="POINT(1 32)",
+                departement="31",
+                secteur="public",
+                nature="lycée",
+            )
+            session.add_all([etab])
+            session.commit()
+
+        stmt = select(Resultat)
+        nb_found = len(list(session.scalars(stmt)))
+        if nb_found == 0:
+            resultat = Resultat(id=1, diplome="Brevet", annee=2024, etablissement_uai="X42Y")
+            session.add_all([resultat])
+            session.commit()
 
 
 config = Config()

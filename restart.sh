@@ -1,7 +1,7 @@
 #! /bin/sh
 
 
-rm -f *.whl *.log
+rm -rf *.whl *.log dist
 uv build
 cp dist/*.whl .
 uv export --no-editable --no-emit-project -o requirements.txt > /dev/null
