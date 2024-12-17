@@ -40,10 +40,11 @@ class Config(BaseSettings):
 
 
 def init_test_db(db_uri: str):
-    from sqlmodel import Session, create_engine, select
+    from sqlmodel import Session, create_engine, select, SQLModel
     from douceville.schemas import Etablissement, Resultat
 
     engine = create_engine(db_uri, echo=True)
+    SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
         stmt = select(Etablissement).where(Etablissement.UAI == "X42Y")
         nb_found = len(list(session.scalars(stmt)))
