@@ -14,7 +14,12 @@ async def test_supabase():
     # ==========================
     # Frontend behaviour
     # ==========================
-    token = create_access_token()
+    token = create_access_token(
+        config.SUPABASE_URL,
+        config.SUPABASE_KEY,
+        config.SUPABASE_TEST_USER,
+        config.SUPABASE_TEST_PASSWORD,
+    )
     print(token)
 
     # ==========================

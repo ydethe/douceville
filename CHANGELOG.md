@@ -6,142 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v1.4.1](https://github.com/ydethe/douceville/releases/tag/v1.4.1) - 2024-12-17
 
-<small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.4.0...HEAD)</small>
+<small>[Compare with first commit](https://github.com/ydethe/douceville/compare/6448a3f07741a43017c3c9e4af931f4e038e2c28...v1.4.1)</small>
 
 ### Added
 
 - Added database in github action ([770391d](https://github.com/ydethe/douceville/commit/770391dc2518bc1f198998daa91456b0ec664aeb) by Yann de The).
-
-<!-- insertion marker -->
-## [v1.4.0](https://github.com/ydethe/douceville/releases/tag/v1.4.0) - 2024-12-16
-
-<small>[Compare with v1.3.16](https://github.com/ydethe/douceville/compare/v1.3.16...v1.4.0)</small>
-
-## [v1.3.16](https://github.com/ydethe/douceville/releases/tag/v1.3.16) - 2024-12-16
-
-<small>[Compare with v1.3.15](https://github.com/ydethe/douceville/compare/v1.3.15...v1.3.16)</small>
-
-### Fixed
-
-- Fixed openapi doc ([f91d322](https://github.com/ydethe/douceville/commit/f91d3225234d2ff0002649b9a6405236437d15af) by Yann de The).
-
-## [v1.3.15](https://github.com/ydethe/douceville/releases/tag/v1.3.15) - 2024-12-16
-
-<small>[Compare with v1.3.13](https://github.com/ydethe/douceville/compare/v1.3.13...v1.3.15)</small>
-
-### Fixed
-
-- Fixed douceville env ([9c50043](https://github.com/ydethe/douceville/commit/9c50043d2967e6e8533cd1341aaf56551bf19fa8) by Yann de The).
-
-## [v1.3.13](https://github.com/ydethe/douceville/releases/tag/v1.3.13) - 2024-12-16
-
-<small>[Compare with v1.3.12](https://github.com/ydethe/douceville/compare/v1.3.12...v1.3.13)</small>
-
-### Added
-
 - Added supabase user management ([0852bd8](https://github.com/ydethe/douceville/commit/0852bd88a31317ab7883e46e1d3a3b527f94afb3) by Yann de The).
-
-### Fixed
-
-- Fixed errorhandling ([5cd0a1f](https://github.com/ydethe/douceville/commit/5cd0a1f2be42a13d46636d82bbcf99c4a81f437f) by Yann de The).
-- Fixed supabase check ([4174715](https://github.com/ydethe/douceville/commit/417471585f130f5ee611a211e0e3a5b61aef124b) by Yann de The).
-- Fixed supabasefreeze ([188ab3a](https://github.com/ydethe/douceville/commit/188ab3a4c346aef8b99b810547379f6a0fdcc130) by Yann de The).
-
-## [v1.3.12](https://github.com/ydethe/douceville/releases/tag/v1.3.12) - 2024-12-12
-
-<small>[Compare with v1.3.11](https://github.com/ydethe/douceville/compare/v1.3.11...v1.3.12)</small>
-
-### Added
-
 - Added API metadata ([3bbb596](https://github.com/ydethe/douceville/commit/3bbb59629bc04f4affcdd45cad5d71c701e19ae7) by Yann de The).
-
-## [v1.3.11](https://github.com/ydethe/douceville/releases/tag/v1.3.11) - 2024-12-11
-
-<small>[Compare with v1.3.10](https://github.com/ydethe/douceville/compare/v1.3.10...v1.3.11)</small>
-
-### Fixed
-
-- Fixed routing ([fbd0c54](https://github.com/ydethe/douceville/commit/fbd0c5418fd152f5a5367ddda7a2c67b35a55a49) by Yann de The).
-
-## [v1.3.10](https://github.com/ydethe/douceville/releases/tag/v1.3.10) - 2024-12-10
-
-<small>[Compare with v1.3.9](https://github.com/ydethe/douceville/compare/v1.3.9...v1.3.10)</small>
-
-## [v1.3.9](https://github.com/ydethe/douceville/releases/tag/v1.3.9) - 2024-12-10
-
-<small>[Compare with v1.3.8](https://github.com/ydethe/douceville/compare/v1.3.8...v1.3.9)</small>
-
-## [v1.3.8](https://github.com/ydethe/douceville/releases/tag/v1.3.8) - 2024-12-09
-
-<small>[Compare with v1.3.7](https://github.com/ydethe/douceville/compare/v1.3.7...v1.3.8)</small>
-
-### Added
-
 - Added salt to token ([0935c65](https://github.com/ydethe/douceville/commit/0935c65acc8fc981c7b77162821994b77ec27f3a) by Yann de The).
-
-## [v1.3.7](https://github.com/ydethe/douceville/releases/tag/v1.3.7) - 2024-12-08
-
-<small>[Compare with v1.3.6](https://github.com/ydethe/douceville/compare/v1.3.6...v1.3.7)</small>
-
-### Fixed
-
-- Fixed doc ([5be3bbb](https://github.com/ydethe/douceville/commit/5be3bbb1b833da79b55b51cedcee931a8c0d935c) by Yann de The).
-
-## [v1.3.6](https://github.com/ydethe/douceville/releases/tag/v1.3.6) - 2024-12-07
-
-<small>[Compare with v1.3.4](https://github.com/ydethe/douceville/compare/v1.3.4...v1.3.6)</small>
-
-### Added
-
 - Added tests ([f351ca4](https://github.com/ydethe/douceville/commit/f351ca489d6ff453929d23323d71e8b44aadaddd) by Yann de The).
 - Added auth proto ([986a1de](https://github.com/ydethe/douceville/commit/986a1debaddf6c752d90bfc7746cbb01fb0ad290) by Yann de The).
 - Added map layer (wip) ([bf51d35](https://github.com/ydethe/douceville/commit/bf51d35c66afd997800f6e09dc25fe577f6c01d9) by Yann de The).
-
-### Fixed
-
-- Fixed doc ([a651cd2](https://github.com/ydethe/douceville/commit/a651cd294b2bc14bb962e29775f61abb83b937f1) by Yann de The).
-- Fixed conflict ([bc686d3](https://github.com/ydethe/douceville/commit/bc686d3686b88f6ab34570e28fe53855585cd473) by Yann de The).
-
-## [v1.3.4](https://github.com/ydethe/douceville/releases/tag/v1.3.4) - 2024-12-05
-
-<small>[Compare with v1.3.3](https://github.com/ydethe/douceville/compare/v1.3.3...v1.3.4)</small>
-
-## [v1.3.3](https://github.com/ydethe/douceville/releases/tag/v1.3.3) - 2024-12-05
-
-<small>[Compare with v1.3.2](https://github.com/ydethe/douceville/compare/v1.3.2...v1.3.3)</small>
-
-### Fixed
-
-- Fixed etablissement info ([50bda34](https://github.com/ydethe/douceville/commit/50bda3480980b7cc6835b80881c84d5964455bd1) by Yann de The).
-
-## [v1.3.2](https://github.com/ydethe/douceville/releases/tag/v1.3.2) - 2024-12-04
-
-<small>[Compare with v1.3.1](https://github.com/ydethe/douceville/compare/v1.3.1...v1.3.2)</small>
-
-## [v1.3.1](https://github.com/ydethe/douceville/releases/tag/v1.3.1) - 2024-12-04
-
-<small>[Compare with v1.3.0](https://github.com/ydethe/douceville/compare/v1.3.0...v1.3.1)</small>
-
-## [v1.3.0](https://github.com/ydethe/douceville/releases/tag/v1.3.0) - 2024-12-04
-
-<small>[Compare with v1.2.0](https://github.com/ydethe/douceville/compare/v1.2.0...v1.3.0)</small>
-
-## [v1.2.0](https://github.com/ydethe/douceville/releases/tag/v1.2.0) - 2024-12-03
-
-<small>[Compare with v1.1.4](https://github.com/ydethe/douceville/compare/v1.1.4...v1.2.0)</small>
-
-### Added
-
 - Added logfire telemetry ([679a3c2](https://github.com/ydethe/douceville/commit/679a3c26dc2dbb243edf25d2bb4da0c015bff293) by Yann de The).
-
-## [v1.1.4](https://github.com/ydethe/douceville/releases/tag/v1.1.4) - 2024-12-03
-
-<small>[Compare with v1.0.0](https://github.com/ydethe/douceville/compare/v1.0.0...v1.1.4)</small>
-
-### Added
-
 - Added BAN ([b654f09](https://github.com/ydethe/douceville/commit/b654f09f35fae9ea1b41aaf464ea212e1bf3fb47) by Yann de The).
 - Added link to ors doc ([dce02a3](https://github.com/ydethe/douceville/commit/dce02a3e3d3378bd5d3c542f0ae882c089a61b4a) by Yann de Thé).
 - Added bac results parsing ([fc44044](https://github.com/ydethe/douceville/commit/fc44044bd2a1a7e29e7e9886e64f2ea4a4d5607d) by Yann de The).
@@ -154,6 +32,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed pipeline ([c559eb1](https://github.com/ydethe/douceville/commit/c559eb1af8af026c7ea84120e9e1d26ca9d864eb) by Yann de The).
+- Fixed openapi doc ([f91d322](https://github.com/ydethe/douceville/commit/f91d3225234d2ff0002649b9a6405236437d15af) by Yann de The).
+- Fixed douceville env ([9c50043](https://github.com/ydethe/douceville/commit/9c50043d2967e6e8533cd1341aaf56551bf19fa8) by Yann de The).
+- Fixed errorhandling ([5cd0a1f](https://github.com/ydethe/douceville/commit/5cd0a1f2be42a13d46636d82bbcf99c4a81f437f) by Yann de The).
+- Fixed supabase check ([4174715](https://github.com/ydethe/douceville/commit/417471585f130f5ee611a211e0e3a5b61aef124b) by Yann de The).
+- Fixed supabasefreeze ([188ab3a](https://github.com/ydethe/douceville/commit/188ab3a4c346aef8b99b810547379f6a0fdcc130) by Yann de The).
+- Fixed routing ([fbd0c54](https://github.com/ydethe/douceville/commit/fbd0c5418fd152f5a5367ddda7a2c67b35a55a49) by Yann de The).
+- Fixed doc ([5be3bbb](https://github.com/ydethe/douceville/commit/5be3bbb1b833da79b55b51cedcee931a8c0d935c) by Yann de The).
+- Fixed conflict ([bc686d3](https://github.com/ydethe/douceville/commit/bc686d3686b88f6ab34570e28fe53855585cd473) by Yann de The).
+- Fixed etablissement info ([50bda34](https://github.com/ydethe/douceville/commit/50bda3480980b7cc6835b80881c84d5964455bd1) by Yann de The).
 - Fixed form ([ff7b6a8](https://github.com/ydethe/douceville/commit/ff7b6a843e22ab3d93312341aad30a54bd2b4b17) by Yann de The).
 - Fixed image version in compose file ([3c404f8](https://github.com/ydethe/douceville/commit/3c404f8e514e9026d67a54501b864045e09d39ed) by Yann de The).
 - Fixed image verison in compose file ([7217af1](https://github.com/ydethe/douceville/commit/7217af1c0a2472b27b60028b51d6da51568e202a) by Yann de The).
@@ -173,8 +61,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Removed print calls ([a1b24c4](https://github.com/ydethe/douceville/commit/a1b24c4fc0b07e463fd87558035d79e12dda978c) by Yann de The).
 - Removed PROTOCOL and PORT ([db5409f](https://github.com/ydethe/douceville/commit/db5409f9e7339aad3a26f3aa27f6dc714e4cb957) by Yann de The).
 - Removed hardcoding of parquet paths ([b53f946](https://github.com/ydethe/douceville/commit/b53f9467519bfda5a1207e14104381fad8373417) by Yann de The).
-
-## [v1.0.0](https://github.com/ydethe/douceville/releases/tag/v1.0.0) - 2020-11-16
-
-<small>[Compare with first commit](https://github.com/ydethe/douceville/compare/6448a3f07741a43017c3c9e4af931f4e038e2c28...v1.0.0)</small>
 

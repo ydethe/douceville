@@ -3,7 +3,7 @@ import unittest
 from fastapi.testclient import TestClient
 
 from douceville import config
-from douceville.rest_api_entreypoint import app
+from douceville.server import app
 from douceville.auth import create_access_token
 from douceville.schemas import Etablissement, Isochrone, QueryParameters
 
@@ -12,7 +12,12 @@ class TestDoucevilleAPI(unittest.TestCase):
     def setUp(self):
         super().setUp()
 
-        token = create_access_token()
+        token = create_access_token(
+            config.SUPABASE_URL,
+            config.SUPABASE_KEY,
+            config.SUPABASE_TEST_USER,
+            config.SUPABASE_TEST_PASSWORD,
+        )
         self.client = TestClient(app, headers={"Authorization": f"Bearer {token}"})
 
     def test_me_with_auth(self):

@@ -50,7 +50,6 @@ def init_test_db(db_uri: str):
         nb_found = len(list(session.scalars(stmt)))
         if nb_found == 0:
             etab = Etablissement(
-                id=1,
                 UAI="X42Y",
                 nom="FooBar Test School",
                 code_postal="31000",

@@ -20,7 +20,7 @@ from .schemas import (
 from .auth import supabase_auth
 
 
-# hypercorn douceville.rest_api_entreypoint:app --bind 0.0.0.0:3566 --reload
+# hypercorn douceville.server:app --bind 0.0.0.0:3566 --reload
 # curl http://127.0.0.1:3566/login
 # curl http://127.0.0.1:3566/authorize -X POST -d '{"code":"<your_code_here>","state":"a"}'  -H "Content-Type: application/json"
 # curl http://localhost:3566/me -H "Authorization: Bearer <your_token_here>"
@@ -49,7 +49,9 @@ async def read_etablissement(
 
     a = list(db.scalars(stmt))
     if len(a) == 0:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not authenticated")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Etablissement '{uai}' not found"
+        )
     else:
         etab = a[0]
 
