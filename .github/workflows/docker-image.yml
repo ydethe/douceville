@@ -44,21 +44,21 @@ jobs:
         # For example, using `pytest`
         run: uv run pytest
         env:
-          LOGFIRE_TOKEN: ${{ vars.LOGFIRE_TOKEN }}
+          LOGFIRE_TOKEN: ${{ secrets.LOGFIRE_TOKEN }}
           LOGLEVEL: ${{ vars.LOGLEVEL }}
-          OPENROUTESERVICE_KEY: ${{ vars.OPENROUTESERVICE_KEY }}
+          OPENROUTESERVICE_KEY: ${{ secrets.OPENROUTESERVICE_KEY }}
           POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
           ADDOK_HOST: ${{ vars.ADDOK_HOST }}
           POSTGRES_DB: ${{ vars.POSTGRES_DB }}
           POSTGRES_USER: ${{ vars.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
           API_PATH: ${{ vars.API_PATH }}
-          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           SUPABASE_TEST_USER: ${{ vars.SUPABASE_TEST_USER }}
-          SUPABASE_TEST_PASSWORD: ${{ vars.SUPABASE_TEST_PASSWORD }}
-          SUPABASE_JWT_SECRET: ${{ vars.SUPABASE_JWT_SECRET }}
-          SUPABASE_ADMIN_KEY: ${{ vars.SUPABASE_ADMIN_KEY }}
+          SUPABASE_TEST_PASSWORD: ${{ secrets.SUPABASE_TEST_PASSWORD }}
+          SUPABASE_JWT_SECRET: ${{ secrets.SUPABASE_JWT_SECRET }}
+          SUPABASE_ADMIN_KEY: ${{ secrets.SUPABASE_ADMIN_KEY }}
 
       - name: Build wheel and install
         run: |
