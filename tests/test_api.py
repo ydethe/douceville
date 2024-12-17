@@ -43,18 +43,18 @@ class TestDoucevilleAPI(unittest.TestCase):
         assert len(iso.geometry) >= 3
 
     def test_etablissement(self):
-        response = self.client.get("/etablissement/0180766K")
+        response = self.client.get("/etablissement/X42Y")
         assert response.status_code == 200, response.status_code
         data = response.json()
         data.pop("resultats", [])
         etab = Etablissement(**data)
-        assert etab.UAI == "0180766K"
+        assert etab.UAI == "X42Y"
 
     def test_etablissements_zone(self):
         params = dict(
-            lat=43.6085909,
-            lon=1.4401531,
-            dist=600,
+            lat=45,
+            lon=2,
+            dist=60,
             transp="driving-car",
         )
         response = self.client.get("/isochrone", params=params)
