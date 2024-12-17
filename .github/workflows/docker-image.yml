@@ -9,6 +9,24 @@ jobs:
   build_wheel:
     name: Publication workflow
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis
+
+        env:
+          POSTGRES_PASSWORD: douceville
+          POSTGRES_USER: douceville
+          POSTGRES_DB: douceville
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4

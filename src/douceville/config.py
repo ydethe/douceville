@@ -33,33 +33,25 @@ class Config(BaseSettings):
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        if self.POSTGRES_HOST == "<test>":
-            db_uri = "sqlite:///tests/test.db"
-            init_sqlite(db_uri)
-            return db_uri
-        else:
-            return f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}/{self.POSTGRES_DB}"
+        db_uri = f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}/{self.POSTGRES_DB}"
+        if self.POSTGRES_HOST == "localhost":
+            init_test_db(db_uri)
+        return db_uri
 
 
-def init_sqlite(db_uri: str):
-    from geoalchemy2 import load_spatialite
-    from sqlalchemy import create_engine, select
-    from sqlalchemy.event import listen
-    from sqlalchemy.orm import Session
+def init_test_db(db_uri: str):
+    from sqlmodel import Session, create_engine, select
     from douceville.schemas import Etablissement, Resultat
-    import os
 
-    os.environ["SPATIALITE_LIBRARY_PATH"] = "/usr/lib/x86_64-linux-gnu/mod_spatialite.so"
     engine = create_engine(db_uri, echo=True)
-    listen(engine, "connect", load_spatialite)
     with Session(engine) as session:
-        stmt = select(Etablissement)
+        stmt = select(Etablissement).where(Etablissement.UAI == "X42Y")
         nb_found = len(list(session.scalars(stmt)))
         if nb_found == 0:
             etab = Etablissement(
                 id=1,
                 UAI="X42Y",
-                nom="FooBar school",
+                nom="FooBar Test School",
                 code_postal="31000",
                 commune="Toulouse",
                 position="POINT(1 32)",
@@ -70,7 +62,7 @@ def init_sqlite(db_uri: str):
             session.add_all([etab])
             session.commit()
 
-        stmt = select(Resultat)
+        stmt = select(Resultat).where(Resultat.etablissement_uai == "X42Y")
         nb_found = len(list(session.scalars(stmt)))
         if nb_found == 0:
             resultat = Resultat(id=1, diplome="Brevet", annee=2024, etablissement_uai="X42Y")
