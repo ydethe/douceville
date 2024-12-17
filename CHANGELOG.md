@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <small>[Compare with latest](https://github.com/ydethe/douceville/compare/v1.4.0...HEAD)</small>
 
+### Added
+
+- Added database in github action ([3c2dd0b](https://github.com/ydethe/douceville/commit/3c2dd0be2e03414683f234b9a492ffad2d45d741) by Yann de The).
+
 <!-- insertion marker -->
 ## [v1.4.0](https://github.com/ydethe/douceville/releases/tag/v1.4.0) - 2024-12-16
 
