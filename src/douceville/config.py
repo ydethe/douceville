@@ -55,7 +55,7 @@ def init_test_db(db_uri: str):
                 nom="FooBar Test School",
                 code_postal="31000",
                 commune="Toulouse",
-                position="POINT(2 45)",
+                position="POINT(1.4401531 43.6085909)",
                 departement="31",
                 secteur="public",
                 nature="lycée",

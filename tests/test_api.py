@@ -52,9 +52,9 @@ class TestDoucevilleAPI(unittest.TestCase):
 
     def test_etablissements_zone(self):
         params = dict(
-            lat=45,
-            lon=2,
-            dist=60,
+            lat=43.6085909,
+            lon=1.4401531,
+            dist=600,
             transp="driving-car",
         )
         response = self.client.get("/isochrone", params=params)

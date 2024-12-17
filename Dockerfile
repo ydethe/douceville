@@ -35,7 +35,7 @@ ENV SUPABASE_ADMIN_KEY=$SUPABASE_ADMIN_KEY
 
 ENV SQLALCHEMY_TRACK_MODIFICATIONS=False
 
-RUN apt update && apt install libsqlite3-mod-spatialite gcc libpq-dev libgeos-dev
+RUN apt update && apt install gcc libpq-dev libgeos-dev
 
 WORKDIR /code
 
