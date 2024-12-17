@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added database in github action ([3c2dd0b](https://github.com/ydethe/douceville/commit/3c2dd0be2e03414683f234b9a492ffad2d45d741) by Yann de The).
+- Added database in github action ([624b402](https://github.com/ydethe/douceville/commit/624b402b667e1a60f2e980c352105d28144d65f6) by Yann de The).
 
 <!-- insertion marker -->
 ## [v1.4.0](https://github.com/ydethe/douceville/releases/tag/v1.4.0) - 2024-12-16
