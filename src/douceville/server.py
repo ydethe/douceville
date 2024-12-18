@@ -55,7 +55,6 @@ async def read_etablissement(
     else:
         etab = a[0]
 
-    # TODO: Handle the case where no etablissement is found. Return NOT FOUND error
     return etab
 
 
