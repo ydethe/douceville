@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v1.4.2](https://github.com/ydethe/douceville/releases/tag/v1.4.2) - 2024-12-17
+
+<small>[Compare with v1.4.1](https://github.com/ydethe/douceville/compare/v1.4.1...v1.4.2)</small>
+
 ## [v1.4.1](https://github.com/ydethe/douceville/releases/tag/v1.4.1) - 2024-12-17
 
 <small>[Compare with first commit](https://github.com/ydethe/douceville/compare/6448a3f07741a43017c3c9e4af931f4e038e2c28...v1.4.1)</small>

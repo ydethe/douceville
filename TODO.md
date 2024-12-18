@@ -1,0 +1,1 @@
+- [src/douceville/server.py#L58](src/douceville/server.py#L58): Handle the case where no etablissement is found. Return NOT FOUND error
