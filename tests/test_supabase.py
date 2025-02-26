@@ -15,8 +15,8 @@ async def test_supabase():
     # Frontend behaviour
     # ==========================
     token = create_access_token(
-        config.SUPABASE_URL,
-        config.SUPABASE_KEY,
+        config.NEXT_PUBLIC_SUPABASE_URL,
+        config.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         config.SUPABASE_TEST_USER,
         config.SUPABASE_TEST_PASSWORD,
     )
@@ -30,7 +30,7 @@ async def test_supabase():
     auth = SupabaseAuth(
         scheme_name="scheme_name",
         supabase_jwt_secret=config.SUPABASE_JWT_SECRET,
-        supabase_url=config.SUPABASE_URL,
+        supabase_url=config.NEXT_PUBLIC_SUPABASE_URL,
         supabase_admin_key=config.SUPABASE_ADMIN_KEY,
     )
     user = await auth(request)

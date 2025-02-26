@@ -74,7 +74,9 @@ def create_token(
         email = config.SUPABASE_TEST_USER
         password = config.SUPABASE_TEST_PASSWORD
 
-    token = create_access_token(config.SUPABASE_URL, config.SUPABASE_KEY, email, password)
+    token = create_access_token(
+        config.NEXT_PUBLIC_SUPABASE_URL, config.NEXT_PUBLIC_SUPABASE_ANON_KEY, email, password
+    )
 
     logger.info(f"Created token for user '{email}'")
     print(token)
@@ -83,7 +85,10 @@ def create_token(
 @token_app.command(name="check")
 def check_token(token: Annotated[str, typer.Argument(help="Token to check")]):
     user = auth_check_token(
-        token, config.SUPABASE_JWT_SECRET, config.SUPABASE_URL, config.SUPABASE_ADMIN_KEY
+        token,
+        config.SUPABASE_JWT_SECRET,
+        config.NEXT_PUBLIC_SUPABASE_URL,
+        config.SUPABASE_ADMIN_KEY,
     )
 
     logger.info(f"Checked token for user : '{user}'")

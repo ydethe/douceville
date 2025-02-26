@@ -13,8 +13,8 @@ class TestDoucevilleAPI(unittest.TestCase):
         super().setUp()
 
         token = create_access_token(
-            config.SUPABASE_URL,
-            config.SUPABASE_KEY,
+            config.NEXT_PUBLIC_SUPABASE_URL,
+            config.NEXT_PUBLIC_SUPABASE_ANON_KEY,
             config.SUPABASE_TEST_USER,
             config.SUPABASE_TEST_PASSWORD,
         )
@@ -56,21 +56,27 @@ class TestDoucevilleAPI(unittest.TestCase):
         assert etab.UAI == "X42Y"
 
     def test_etablissements_zone(self):
-        params = dict(
-            lat=43.6085909,
-            lon=1.4401531,
+        # params = dict(
+        #     lat=43.6085909,
+        #     lon=1.4401531,
+        #     dist=600,
+        #     transp="driving-car",
+        # )
+        # response = self.client.get("/isochrone", params=params)
+        # assert response.status_code == 200, response.status_code
+        # iso = Isochrone(**response.json())
+
+        body = QueryParameters(
+            year=2020,
+            stat_min=0,
+            adresse="29 avenue de Bel Horizon, 31650 Saint Orens de Gameville",
             dist=600,
             transp="driving-car",
         )
-        response = self.client.get("/isochrone", params=params)
-        assert response.status_code == 200, response.status_code
-        iso = Isochrone(**response.json())
-
-        body = QueryParameters(year=2020, stat_min=0, iso=iso)
         response = self.client.post("/etablissements", json=body.model_dump())
         assert response.status_code == 200, response.status_code
         data = response.json()
-        assert len(data) > 0
+        assert len(data["etablissements"]) > 0
 
 
 if __name__ == "__main__":

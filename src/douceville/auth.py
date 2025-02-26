@@ -169,6 +169,6 @@ def create_access_token(supabase_url: str, supabase_key: str, email: str, passwo
 
 supabase_auth = SupabaseAuth(
     supabase_jwt_secret=config.SUPABASE_JWT_SECRET,
-    supabase_url=config.SUPABASE_URL,
+    supabase_url=config.NEXT_PUBLIC_SUPABASE_URL,
     supabase_admin_key=config.SUPABASE_ADMIN_KEY,
 )

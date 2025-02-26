@@ -17,8 +17,8 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - API_PATH=$API_PATH
-      - SUPABASE_URL=$SUPABASE_URL
-      - SUPABASE_KEY=$SUPABASE_KEY
+      - NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
       - SUPABASE_TEST_USER=$SUPABASE_TEST_USER
       - SUPABASE_TEST_PASSWORD=$SUPABASE_TEST_PASSWORD
       - SUPABASE_JWT_SECRET=$SUPABASE_JWT_SECRET
@@ -53,29 +53,29 @@ services:
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
 
-  addok:
-    # https://github.com/BaseAdresseNationale/addok-docker
-    # curl "http://localhost:7878/search?q=1+rue+de+la+paix+paris"
-    image: etalab/addok
-    depends_on:
-    - addok-redis
-    volumes:
-    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.conf:/etc/addok/addok.conf
-    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.db:/data/addok.db
-    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/logs:/logs
-    links:
-    - addok-redis:redis
-    environment:
-      WORKERS: 1
-      WORKER_TIMEOUT: 30
-      LOG_QUERIES: 1
-      LOG_NOT_FOUND: 1
-      SLOW_QUERIES: 200
+  # addok:
+  #   # https://github.com/BaseAdresseNationale/addok-docker
+  #   # curl "http://localhost:7878/search?q=1+rue+de+la+paix+paris"
+  #   image: etalab/addok
+  #   depends_on:
+  #   - addok-redis
+  #   volumes:
+  #   - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.conf:/etc/addok/addok.conf
+  #   - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/addok.db:/data/addok.db
+  #   - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/logs:/logs
+  #   links:
+  #   - addok-redis:redis
+  #   environment:
+  #     WORKERS: 1
+  #     WORKER_TIMEOUT: 30
+  #     LOG_QUERIES: 1
+  #     LOG_NOT_FOUND: 1
+  #     SLOW_QUERIES: 200
 
-  addok-redis:
-    image: etalab/addok-redis
-    volumes:
-    - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/dump.rdb:/data/dump.rdb
+  # addok-redis:
+  #   image: etalab/addok-redis
+  #   volumes:
+  #   - $JOHNCLOUD_ROOT/$COMPOSE_PROJECT_NAME/addok/dump.rdb:/data/dump.rdb
 
 networks:
   default:

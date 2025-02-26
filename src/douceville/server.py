@@ -7,6 +7,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlmodel import select
 
+from .france_ban import requete_ban
 from .geographique import calcIsochrone
 from .config import config
 from .schemas import (
@@ -14,6 +15,7 @@ from .schemas import (
     EtablissementPublicAvecResultats,
     DvUser,
     Isochrone,
+    ListeEtablissementPublicAvecResultatsEtIsochrone,
     QueryParameters,
     get_db,
 )
@@ -63,8 +65,12 @@ async def etablissement_in_zone(
     body: QueryParameters,
     user: DvUser = Security(supabase_auth),
     db: Session = Depends(get_db),
-) -> T.List[EtablissementPublicAvecResultats]:
-    stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, body.iso.getGeom()))
+) -> ListeEtablissementPublicAvecResultatsEtIsochrone:
+    res_ban = requete_ban(body.adresse)
+    lonlat = (res_ban.longitude, res_ban.latitude)
+    iso = calcIsochrone(lonlat, body.dist, body.transp)
+
+    stmt = select(Etablissement).where(func.ST_Within(Etablissement.position, iso.getGeom()))
 
     if body.nature is not None and body.nature != []:
         stmt = stmt.where(Etablissement.nature.in_(body.nature))
@@ -74,7 +80,8 @@ async def etablissement_in_zone(
 
     a = db.scalars(stmt)
 
-    return list(a)
+    res = ListeEtablissementPublicAvecResultatsEtIsochrone(etablissements=list(a), isochrone=iso)
+    return res
 
 
 @router.get("/isochrone", response_model=Isochrone)

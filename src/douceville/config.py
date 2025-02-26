@@ -1,9 +1,4 @@
-import os
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(BaseSettings):
@@ -24,8 +19,8 @@ class Config(BaseSettings):
 
     # https://supabase.com/docs/reference/python/initializing
     # https://github.com/orgs/supabase/discussions/226#discussioncomment-89148
-    SUPABASE_URL: str
-    SUPABASE_KEY: str
+    NEXT_PUBLIC_SUPABASE_URL: str
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: str
     SUPABASE_TEST_USER: str
     SUPABASE_TEST_PASSWORD: str
     SUPABASE_JWT_SECRET: str
@@ -41,7 +36,7 @@ class Config(BaseSettings):
 
 def init_test_db(db_uri: str):
     from sqlmodel import Session, create_engine, select, SQLModel
-    from douceville.schemas import Etablissement, Resultat
+    from .schemas import Etablissement, Resultat
 
     engine = create_engine(db_uri, echo=True)
     SQLModel.metadata.create_all(engine)

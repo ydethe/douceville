@@ -175,9 +175,16 @@ class Isochrone(BaseModel):
         return sa.func.ST_GeomFromEWKT(pg)
 
 
+class ListeEtablissementPublicAvecResultatsEtIsochrone(SQLModel, table=False):
+    etablissements: list[EtablissementPublicAvecResultats]
+    isochrone: Isochrone
+
+
 class QueryParameters(BaseModel):
     year: T.Optional[int] = None
     nature: T.Optional[T.List[str]] = None
     secteur: T.Optional[T.List[str]] = None
     stat_min: T.Optional[int] = None
-    iso: Isochrone
+    adresse: str
+    dist: float
+    transp: T.Optional[str] = "driving-car"
